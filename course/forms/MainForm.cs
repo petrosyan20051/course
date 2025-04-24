@@ -14,6 +14,7 @@ namespace course {
 
         private Button _closeBtn, _rollBtn, _expandBtn;
         private Panel _controlPnl;
+        private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
         public MainForm() {
             InitializeComponent();
@@ -116,6 +117,30 @@ namespace course {
                 } else {
                     this.Cursor = Cursors.Default;
                 }
+            }
+        }
+
+        private void expandBtn_Click(object sender, EventArgs e) {
+            this.WindowState = this.WindowState == FormWindowState.Maximized ?
+                FormWindowState.Normal :
+                FormWindowState.Maximized;
+            // Обновляем позиции кнопок управления
+            _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
+            _expandBtn.Location = new Point(this.Width - 144, _expandBtn.Location.Y);
+            _rollBtn.Location = new Point(this.Width - 222, _rollBtn.Location.Y);
+        }
+
+        private void rollBtn_Click(object sender, EventArgs e) {
+            switch (this.WindowState) {
+                case FormWindowState.Maximized:
+                case FormWindowState.Normal:
+                    this.WindowState = FormWindowState.Minimized; // минимизируем
+                    formWindowState = this.WindowState; // запоминаем предыдущее состояние
+                    break;
+
+                default:
+                    this.WindowState = formWindowState; // возвращаем состояние как было
+                    break;
             }
         }
 

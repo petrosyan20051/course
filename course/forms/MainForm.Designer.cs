@@ -78,6 +78,7 @@
             this.expandBtn.TabIndex = 1;
             this.expandBtn.Text = "▭";
             this.expandBtn.UseVisualStyleBackColor = false;
+            this.expandBtn.Click += new System.EventHandler(this.expandBtn_Click);
             this.expandBtn.MouseEnter += new System.EventHandler(this.expandBtn_MouseEnter);
             this.expandBtn.MouseLeave += new System.EventHandler(this.expandBtn_MouseLeave);
             // 
@@ -95,6 +96,7 @@
             this.rollBtn.TabIndex = 2;
             this.rollBtn.Text = "—";
             this.rollBtn.UseVisualStyleBackColor = false;
+            this.rollBtn.Click += new System.EventHandler(this.rollBtn_Click);
             this.rollBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
             this.rollBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
             // 
