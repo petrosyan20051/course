@@ -47,10 +47,10 @@
             // 
             // closeBtn
             // 
-            this.closeBtn.BackColor = System.Drawing.Color.Black;
+            this.closeBtn.BackColor = System.Drawing.Color.Transparent;
             this.closeBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
             this.closeBtn.FlatAppearance.BorderSize = 0;
-            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.closeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.closeBtn.Location = new System.Drawing.Point(924, 3);
