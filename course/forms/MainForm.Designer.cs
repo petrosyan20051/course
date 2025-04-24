@@ -42,7 +42,7 @@
             this.controlPnl.Dock = System.Windows.Forms.DockStyle.Top;
             this.controlPnl.Location = new System.Drawing.Point(0, 0);
             this.controlPnl.Name = "controlPnl";
-            this.controlPnl.Size = new System.Drawing.Size(989, 32);
+            this.controlPnl.Size = new System.Drawing.Size(1000, 32);
             this.controlPnl.TabIndex = 0;
             this.controlPnl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseDown);
             this.controlPnl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseMove);
@@ -50,13 +50,14 @@
             // 
             // closeBtn
             // 
+            this.closeBtn.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.closeBtn.BackColor = System.Drawing.Color.Transparent;
             this.closeBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
             this.closeBtn.FlatAppearance.BorderSize = 0;
             this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.closeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.closeBtn.Location = new System.Drawing.Point(924, 3);
+            this.closeBtn.Location = new System.Drawing.Point(935, 3);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(62, 26);
             this.closeBtn.TabIndex = 0;
@@ -89,14 +90,13 @@
             this.rollBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
             this.rollBtn.FlatAppearance.BorderSize = 0;
             this.rollBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rollBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.rollBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.rollBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.rollBtn.Location = new System.Drawing.Point(788, 3);
             this.rollBtn.Name = "rollBtn";
             this.rollBtn.Size = new System.Drawing.Size(62, 26);
             this.rollBtn.TabIndex = 2;
-            this.rollBtn.Text = "-";
-            this.rollBtn.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.rollBtn.Text = "—";
             this.rollBtn.UseVisualStyleBackColor = false;
             this.rollBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
             this.rollBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
@@ -107,7 +107,7 @@
             this.label});
             this.statusStrip1.Location = new System.Drawing.Point(0, 644);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(989, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1000, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -123,17 +123,21 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
-            this.ClientSize = new System.Drawing.Size(989, 666);
+            this.ClientSize = new System.Drawing.Size(1000, 666);
             this.ControlBox = false;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.controlPnl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.MinimumSize = new System.Drawing.Size(400, 300);
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.Text = "Курсовая работа";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.controlPnl.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

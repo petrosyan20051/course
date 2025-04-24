@@ -12,8 +12,18 @@ namespace course {
         private Point startPoint; // точка начала перемещения
         private Point resizeStartPoint; // точка начала изменения размера
 
+        private Button _closeBtn, _rollBtn, _expandBtn;
+        private Panel _controlPnl;
+
         public MainForm() {
             InitializeComponent();
+        }
+
+        private void InitVariables() {
+            _closeBtn = this.closeBtn;
+            _rollBtn = this.rollBtn;
+            _expandBtn = this.expandBtn;
+            _controlPnl = this.controlPnl;
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -24,6 +34,8 @@ namespace course {
 
             var _form = sender as Form;
             _form.BackColor = Design.FormDefaultColor;
+
+            this.InitVariables();
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
@@ -77,6 +89,42 @@ namespace course {
                 Point newPoint = this.PointToScreen(new Point(e.X, e.Y)); // новая точка, куда перемещаем
                 newPoint.Offset(-startPoint.X, -startPoint.Y); // смещение новой точки относительно старой
                 this.Location = newPoint;
+            }
+        }
+
+        private void MainForm_MouseMove(object sender, MouseEventArgs e) {
+            // Изменение значка курсора при масштабировании
+            if (isResizing) {
+                this.Size = new Size(
+                    Math.Max(this.MinimumSize.Width, e.X),
+                    Math.Max(this.MinimumSize.Height, e.Y)
+                );
+
+                // Обновляем позиции кнопок управления
+                _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
+                _expandBtn.Location = new Point(this.Width - 144, _expandBtn.Location.Y);
+                _rollBtn.Location = new Point(this.Width - 222, _rollBtn.Location.Y);
+            } else {
+                if (e.X >= this.ClientSize.Width - 10 && e.Y <= this.ClientSize.Height - _controlPnl.Height - 5) {
+                    this.Cursor = Cursors.SizeWE;
+                } else {
+                    this.Cursor = Cursors.Default;
+                }
+            }
+        }
+
+        private void MainForm_MouseUp(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Left) {
+                isResizing = false;
+            }
+        }
+
+        private void MainForm_MouseDown(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Left && (
+                Cursor.Current == Cursors.SizeWE ||
+                Cursor.Current == Cursors.SizeNWSE)) {
+                isResizing = true;
+                resizeStartPoint = new Point(e.X, e.Y);
             }
         }
     }
