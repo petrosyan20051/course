@@ -27,10 +27,7 @@
             this.closeBtn = new System.Windows.Forms.Button();
             this.expandBtn = new System.Windows.Forms.Button();
             this.rollBtn = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.label = new System.Windows.Forms.ToolStripStatusLabel();
             this.controlPnl.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // controlPnl
@@ -101,23 +98,6 @@
             this.rollBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
             this.rollBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.label});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 644);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1000, 22);
-            this.statusStrip1.TabIndex = 1;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // label
-            // 
-            this.label.ForeColor = System.Drawing.SystemColors.Control;
-            this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(32, 17);
-            this.label.Text = "label";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -125,7 +105,6 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
             this.ClientSize = new System.Drawing.Size(1000, 666);
             this.ControlBox = false;
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.controlPnl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -139,10 +118,7 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.controlPnl.ResumeLayout(false);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -152,8 +128,6 @@
         private System.Windows.Forms.Button closeBtn;
         private System.Windows.Forms.Button expandBtn;
         private System.Windows.Forms.Button rollBtn;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel label;
     }
 }
 

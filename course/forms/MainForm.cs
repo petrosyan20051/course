@@ -91,8 +91,8 @@ namespace course {
                 this.Location = newPoint;
             }
 
-            label.Text = e.X.ToString();
-            if (e.X >= this.Width - 3 || e.X <= 3) {
+            // Переход с формы на панель в крайнем правом и левом положении должен сбрасывать иконку курсора
+            if (e.X >= this.Width - 5 || e.X <= 5) {
                 this.Cursor = Cursors.Default;
             }
         }
