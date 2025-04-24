@@ -90,6 +90,11 @@ namespace course {
                 newPoint.Offset(-startPoint.X, -startPoint.Y); // смещение новой точки относительно старой
                 this.Location = newPoint;
             }
+
+            label.Text = e.X.ToString();
+            if (e.X >= this.Width - 3 || e.X <= 3) {
+                this.Cursor = Cursors.Default;
+            }
         }
 
         private void MainForm_MouseMove(object sender, MouseEventArgs e) {
@@ -105,7 +110,8 @@ namespace course {
                 _expandBtn.Location = new Point(this.Width - 144, _expandBtn.Location.Y);
                 _rollBtn.Location = new Point(this.Width - 222, _rollBtn.Location.Y);
             } else {
-                if (e.X >= this.ClientSize.Width - 10 && e.Y <= this.ClientSize.Height - _controlPnl.Height - 5) {
+                if ((e.X >= this.ClientSize.Width - 10 || e.X <= 10) &&
+                    e.Y <= this.ClientSize.Height - _controlPnl.Height - 5) {
                     this.Cursor = Cursors.SizeWE;
                 } else {
                     this.Cursor = Cursors.Default;
