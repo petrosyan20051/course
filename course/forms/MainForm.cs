@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using course.classes;
 
 namespace course {
+
     public partial class MainForm : Form {
         private bool isDragging = false; // форма находится в состоянии перемещения
         private bool isResizing = false; // форма находится в состоянии изменения размера
@@ -23,7 +24,6 @@ namespace course {
 
             var _form = sender as Form;
             _form.BackColor = Design.FormDefaultColor;
-
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
@@ -61,20 +61,21 @@ namespace course {
         }
 
         private void controlPnl_MouseDown(object sender, MouseEventArgs e) {
+            // Щелчок ЛКМ по панели порождает перемещение формы
             if (e.Button == MouseButtons.Left) {
-                isDragging = true;
+                isDragging = true; // начинаем перемещение
                 startPoint = new Point(e.X, e.Y);
             }
         }
 
         private void controlPnl_MouseUp(object sender, MouseEventArgs e) {
-            isDragging = false;
+            isDragging = false; // Отпускание ЛКМ останавливает перемещение формы
         }
 
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {
-            if (isDragging) {
-                Point newPoint = this.PointToScreen(new Point(e.X, e.Y));
-                newPoint.Offset(-startPoint.X, -startPoint.Y);
+            if (isDragging) { // Перемещаем форму
+                Point newPoint = this.PointToScreen(new Point(e.X, e.Y)); // новая точка, куда перемещаем
+                newPoint.Offset(-startPoint.X, -startPoint.Y); // смещение новой точки относительно старой
                 this.Location = newPoint;
             }
         }
