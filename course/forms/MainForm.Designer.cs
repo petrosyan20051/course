@@ -41,6 +41,9 @@
             this.controlPnl.Name = "controlPnl";
             this.controlPnl.Size = new System.Drawing.Size(989, 32);
             this.controlPnl.TabIndex = 0;
+            this.controlPnl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseDown);
+            this.controlPnl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseMove);
+            this.controlPnl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseUp);
             // 
             // closeBtn
             // 
@@ -110,9 +113,6 @@
             this.ShowIcon = false;
             this.Text = "Курсовая работа";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseDown);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.controlPnl.ResumeLayout(false);
             this.ResumeLayout(false);
 
