@@ -27,6 +27,9 @@
             this.closeBtn = new System.Windows.Forms.Button();
             this.expandBtn = new System.Windows.Forms.Button();
             this.rollBtn = new System.Windows.Forms.Button();
+            this.menuPnl = new System.Windows.Forms.Panel();
+            this.menuSpl = new System.Windows.Forms.Splitter();
+            this.controlSpl = new System.Windows.Forms.Splitter();
             this.controlPnl.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -100,13 +103,43 @@
             this.rollBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
             this.rollBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
             // 
+            // menuPnl
+            // 
+            this.menuPnl.Dock = System.Windows.Forms.DockStyle.Left;
+            this.menuPnl.Location = new System.Drawing.Point(0, 32);
+            this.menuPnl.Name = "menuPnl";
+            this.menuPnl.Size = new System.Drawing.Size(200, 634);
+            this.menuPnl.TabIndex = 1;
+            // 
+            // menuSpl
+            // 
+            this.menuSpl.BackColor = System.Drawing.Color.IndianRed;
+            this.menuSpl.Cursor = System.Windows.Forms.Cursors.Default;
+            this.menuSpl.Location = new System.Drawing.Point(200, 32);
+            this.menuSpl.Name = "menuSpl";
+            this.menuSpl.Size = new System.Drawing.Size(2, 634);
+            this.menuSpl.TabIndex = 2;
+            this.menuSpl.TabStop = false;
+            // 
+            // controlSpl
+            // 
+            this.controlSpl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.controlSpl.Location = new System.Drawing.Point(202, 32);
+            this.controlSpl.Name = "controlSpl";
+            this.controlSpl.Size = new System.Drawing.Size(798, 2);
+            this.controlSpl.TabIndex = 3;
+            this.controlSpl.TabStop = false;
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
             this.ClientSize = new System.Drawing.Size(1000, 666);
             this.ControlBox = false;
+            this.Controls.Add(this.controlSpl);
+            this.Controls.Add(this.menuSpl);
+            this.Controls.Add(this.menuPnl);
             this.Controls.Add(this.controlPnl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -130,6 +163,9 @@
         private System.Windows.Forms.Button closeBtn;
         private System.Windows.Forms.Button expandBtn;
         private System.Windows.Forms.Button rollBtn;
+        private System.Windows.Forms.Panel menuPnl;
+        private System.Windows.Forms.Splitter menuSpl;
+        private System.Windows.Forms.Splitter controlSpl;
     }
 }
 

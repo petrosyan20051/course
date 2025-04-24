@@ -10,10 +10,10 @@ namespace course {
         private bool isResizing = false; // форма находится в состоянии изменения размера
 
         private Point startPoint; // точка начала перемещения
-        private Point resizeStartPoint; // точка начала изменения размера
 
         private Button _closeBtn, _rollBtn, _expandBtn;
-        private Panel _controlPnl;
+        private Panel _controlPnl, _menuPnl;
+        private Splitter _menuSpl, _controlSpl;
         private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
         public MainForm() {
@@ -25,18 +25,25 @@ namespace course {
             _rollBtn = this.rollBtn;
             _expandBtn = this.expandBtn;
             _controlPnl = this.controlPnl;
+            _menuPnl = this.menuPnl;
+            _menuSpl = this.menuSpl;
+            _controlSpl = this.controlSpl;
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
-            controlPnl.BackColor = Design.PanelDefaultColor;
-            closeBtn.BackColor = Design.PanelDefaultColor;
-            expandBtn.BackColor = Design.PanelDefaultColor;
-            rollBtn.BackColor = Design.PanelDefaultColor;
-
-            var _form = sender as Form;
-            _form.BackColor = Design.FormDefaultColor;
-
             this.InitVariables();
+
+            _controlPnl.BackColor = Design.ControlPanelDefaultColor;
+            _menuPnl.BackColor = Design.MenuPanelDefaultColor;
+
+            _closeBtn.BackColor = Design.ControlPanelDefaultColor;
+            _expandBtn.BackColor = Design.ControlPanelDefaultColor;
+            _rollBtn.BackColor = Design.ControlPanelDefaultColor;
+
+            _menuSpl.BackColor = Design.SplitterDefaulColor;
+            _controlSpl.BackColor = Design.SplitterDefaulColor;
+
+            (sender as Form).BackColor = Design.FormDefaultColor;
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
@@ -50,12 +57,12 @@ namespace course {
 
         private void closeBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
-            _btn.BackColor = Design.PanelDefaultColor;
+            _btn.BackColor = Design.ControlPanelDefaultColor;
         }
 
         private void rollBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
-            _btn.BackColor = Design.PanelDefaultColor;
+            _btn.BackColor = Design.ControlPanelDefaultColor;
         }
 
         private void rollBtn_MouseEnter(object sender, EventArgs e) {
@@ -70,7 +77,7 @@ namespace course {
 
         private void expandBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
-            _btn.BackColor = Design.PanelDefaultColor;
+            _btn.BackColor = Design.ControlPanelDefaultColor;
         }
 
         private void controlPnl_MouseDown(object sender, MouseEventArgs e) {
@@ -101,10 +108,14 @@ namespace course {
         private void MainForm_MouseMove(object sender, MouseEventArgs e) {
             // Изменение значка курсора при масштабировании
             if (isResizing) {
-                this.Size = new Size(
-                    Math.Max(this.MinimumSize.Width, e.X),
-                    Math.Max(this.MinimumSize.Height, e.Y)
-                );
+                if (this.Cursor == Cursors.SizeWE) { 
+                    this.Size = new Size(
+                        Math.Max(this.MinimumSize.Width, e.X),
+                        this.Size.Height
+                    );
+                }
+                
+                
 
                 // Обновляем позиции кнопок управления
                 _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
@@ -155,7 +166,6 @@ namespace course {
                 Cursor.Current == Cursors.SizeWE ||
                 Cursor.Current == Cursors.SizeNWSE)) {
                 isResizing = true;
-                resizeStartPoint = new Point(e.X, e.Y);
             }
         }
     }
