@@ -1,0 +1,4 @@
+# Ignore build files
+.vs/
+course/bin
+course/obj
