@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using course.classes;
+using course.Properties;
 
 namespace course {
 
@@ -44,6 +46,12 @@ namespace course {
             _controlSpl.BackColor = Design.SplitterDefaulColor;
 
             (sender as Form).BackColor = Design.FormDefaultColor;
+
+            
+            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
+            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
+            closeBtn.Image = 
+                Image.FromFile(Path.Combine(imagePath, "closeBtn1.png"));
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
