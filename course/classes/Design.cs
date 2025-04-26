@@ -16,5 +16,8 @@ namespace course.classes {
         public static Color ButtonCloseEnterColor = Color.Red;
         public static Color ButtonExpandEnterColor = Color.MediumBlue;
         public static Color ButtonRollEnterColor = Color.Gray;
+
+        public static Color DefaultTextColor = Color.FromArgb(150, 150, 150);
+        public static Color EnterPanelColor = Color.FromArgb(45, 45, 45);
     }
 }

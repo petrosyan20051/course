@@ -23,15 +23,21 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.controlPnl = new System.Windows.Forms.Panel();
             this.closeBtn = new System.Windows.Forms.Button();
             this.expandBtn = new System.Windows.Forms.Button();
             this.minimizeBtn = new System.Windows.Forms.Button();
             this.menuPnl = new System.Windows.Forms.Panel();
+            this.mainPnl = new System.Windows.Forms.Panel();
+            this.mainLbl = new System.Windows.Forms.Label();
+            this.mainImage = new System.Windows.Forms.PictureBox();
             this.menuSpl = new System.Windows.Forms.Splitter();
             this.controlSpl = new System.Windows.Forms.Splitter();
+            this.mainPnlGrid = new System.Windows.Forms.Panel();
             this.controlPnl.SuspendLayout();
+            this.menuPnl.SuspendLayout();
+            this.mainPnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainImage)).BeginInit();
             this.SuspendLayout();
             // 
             // controlPnl
@@ -58,7 +64,6 @@
             this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.closeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.closeBtn.Image = ((System.Drawing.Image)(resources.GetObject("closeBtn.Image")));
             this.closeBtn.Location = new System.Drawing.Point(935, 3);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(62, 26);
@@ -104,17 +109,51 @@
             // 
             // menuPnl
             // 
+            this.menuPnl.Controls.Add(this.mainPnl);
             this.menuPnl.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPnl.Location = new System.Drawing.Point(0, 32);
             this.menuPnl.Name = "menuPnl";
-            this.menuPnl.Size = new System.Drawing.Size(200, 634);
+            this.menuPnl.Size = new System.Drawing.Size(174, 634);
             this.menuPnl.TabIndex = 1;
+            // 
+            // mainPnl
+            // 
+            this.mainPnl.BackColor = System.Drawing.Color.Transparent;
+            this.mainPnl.Controls.Add(this.mainLbl);
+            this.mainPnl.Controls.Add(this.mainImage);
+            this.mainPnl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.mainPnl.Location = new System.Drawing.Point(0, 55);
+            this.mainPnl.Name = "mainPnl";
+            this.mainPnl.Size = new System.Drawing.Size(176, 89);
+            this.mainPnl.TabIndex = 0;
+            this.mainPnl.MouseEnter += new System.EventHandler(this.mainPnl_MouseEnter);
+            this.mainPnl.MouseLeave += new System.EventHandler(this.mainPnl_MouseLeave);
+            // 
+            // mainLbl
+            // 
+            this.mainLbl.AutoSize = true;
+            this.mainLbl.BackColor = System.Drawing.SystemColors.Menu;
+            this.mainLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.mainLbl.Location = new System.Drawing.Point(70, 20);
+            this.mainLbl.Name = "mainLbl";
+            this.mainLbl.Size = new System.Drawing.Size(137, 37);
+            this.mainLbl.TabIndex = 1;
+            this.mainLbl.Text = "Главная";
+            // 
+            // mainImage
+            // 
+            this.mainImage.Location = new System.Drawing.Point(24, 20);
+            this.mainImage.Name = "mainImage";
+            this.mainImage.Size = new System.Drawing.Size(32, 32);
+            this.mainImage.TabIndex = 0;
+            this.mainImage.TabStop = false;
             // 
             // menuSpl
             // 
             this.menuSpl.BackColor = System.Drawing.Color.IndianRed;
             this.menuSpl.Cursor = System.Windows.Forms.Cursors.Default;
-            this.menuSpl.Location = new System.Drawing.Point(200, 32);
+            this.menuSpl.Enabled = false;
+            this.menuSpl.Location = new System.Drawing.Point(174, 32);
             this.menuSpl.Name = "menuSpl";
             this.menuSpl.Size = new System.Drawing.Size(2, 634);
             this.menuSpl.TabIndex = 2;
@@ -123,11 +162,20 @@
             // controlSpl
             // 
             this.controlSpl.Dock = System.Windows.Forms.DockStyle.Top;
-            this.controlSpl.Location = new System.Drawing.Point(202, 32);
+            this.controlSpl.Enabled = false;
+            this.controlSpl.Location = new System.Drawing.Point(176, 32);
             this.controlSpl.Name = "controlSpl";
-            this.controlSpl.Size = new System.Drawing.Size(798, 2);
+            this.controlSpl.Size = new System.Drawing.Size(824, 2);
             this.controlSpl.TabIndex = 3;
             this.controlSpl.TabStop = false;
+            // 
+            // mainPnlGrid
+            // 
+            this.mainPnlGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPnlGrid.Location = new System.Drawing.Point(176, 34);
+            this.mainPnlGrid.Name = "mainPnlGrid";
+            this.mainPnlGrid.Size = new System.Drawing.Size(824, 632);
+            this.mainPnlGrid.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -136,6 +184,7 @@
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
             this.ClientSize = new System.Drawing.Size(1000, 666);
             this.ControlBox = false;
+            this.Controls.Add(this.mainPnlGrid);
             this.Controls.Add(this.controlSpl);
             this.Controls.Add(this.menuSpl);
             this.Controls.Add(this.menuPnl);
@@ -152,6 +201,10 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.controlPnl.ResumeLayout(false);
+            this.menuPnl.ResumeLayout(false);
+            this.mainPnl.ResumeLayout(false);
+            this.mainPnl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainImage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -165,6 +218,10 @@
         private System.Windows.Forms.Panel menuPnl;
         private System.Windows.Forms.Splitter menuSpl;
         private System.Windows.Forms.Splitter controlSpl;
+        private System.Windows.Forms.Panel mainPnl;
+        private System.Windows.Forms.PictureBox mainImage;
+        private System.Windows.Forms.Label mainLbl;
+        private System.Windows.Forms.Panel mainPnlGrid;
     }
 }
 
