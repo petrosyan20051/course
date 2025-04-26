@@ -13,7 +13,7 @@ namespace course {
 
         private Point startPoint; // точка начала перемещения
 
-        private Button _closeBtn, _rollBtn, _expandBtn;
+        private Button _closeBtn, _minimizeBtn, _expandBtn;
         private Panel _controlPnl, _menuPnl;
         private Splitter _menuSpl, _controlSpl;
         private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
@@ -24,7 +24,7 @@ namespace course {
 
         private void InitVariables() {
             _closeBtn = this.closeBtn;
-            _rollBtn = this.rollBtn;
+            _minimizeBtn = this.minimizeBtn;
             _expandBtn = this.expandBtn;
             _controlPnl = this.controlPnl;
             _menuPnl = this.menuPnl;
@@ -40,7 +40,7 @@ namespace course {
 
             _closeBtn.BackColor = Design.ControlPanelDefaultColor;
             _expandBtn.BackColor = Design.ControlPanelDefaultColor;
-            _rollBtn.BackColor = Design.ControlPanelDefaultColor;
+            _minimizeBtn.BackColor = Design.ControlPanelDefaultColor;
 
             _menuSpl.BackColor = Design.SplitterDefaulColor;
             _controlSpl.BackColor = Design.SplitterDefaulColor;
@@ -50,8 +50,12 @@ namespace course {
             
             string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
             string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
-            closeBtn.Image = 
-                Image.FromFile(Path.Combine(imagePath, "closeBtn1.png"));
+            _closeBtn.Image = 
+                Image.FromFile(Path.Combine(imagePath, "closeButton.png"));
+            _minimizeBtn.Image =
+                Image.FromFile(Path.Combine(imagePath, "minimizeButton.png"));
+            _expandBtn.Image =
+                Image.FromFile(Path.Combine(imagePath, "expandButton.png"));
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
@@ -128,7 +132,7 @@ namespace course {
                 // Обновляем позиции кнопок управления
                 _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
                 _expandBtn.Location = new Point(this.Width - 144, _expandBtn.Location.Y);
-                _rollBtn.Location = new Point(this.Width - 222, _rollBtn.Location.Y);
+                _minimizeBtn.Location = new Point(this.Width - 222, _minimizeBtn.Location.Y);
             } else {
                 if ((e.X >= this.ClientSize.Width - 10 || e.X <= 10) &&
                     e.Y <= this.ClientSize.Height - _controlPnl.Height - 5) {
@@ -146,7 +150,7 @@ namespace course {
             // Обновляем позиции кнопок управления
             _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
             _expandBtn.Location = new Point(this.Width - 144, _expandBtn.Location.Y);
-            _rollBtn.Location = new Point(this.Width - 222, _rollBtn.Location.Y);
+            _minimizeBtn.Location = new Point(this.Width - 222, _minimizeBtn.Location.Y);
         }
 
         private void rollBtn_Click(object sender, EventArgs e) {

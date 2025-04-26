@@ -27,7 +27,7 @@
             this.controlPnl = new System.Windows.Forms.Panel();
             this.closeBtn = new System.Windows.Forms.Button();
             this.expandBtn = new System.Windows.Forms.Button();
-            this.rollBtn = new System.Windows.Forms.Button();
+            this.minimizeBtn = new System.Windows.Forms.Button();
             this.menuPnl = new System.Windows.Forms.Panel();
             this.menuSpl = new System.Windows.Forms.Splitter();
             this.controlSpl = new System.Windows.Forms.Splitter();
@@ -39,7 +39,7 @@
             this.controlPnl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
             this.controlPnl.Controls.Add(this.closeBtn);
             this.controlPnl.Controls.Add(this.expandBtn);
-            this.controlPnl.Controls.Add(this.rollBtn);
+            this.controlPnl.Controls.Add(this.minimizeBtn);
             this.controlPnl.Dock = System.Windows.Forms.DockStyle.Top;
             this.controlPnl.Location = new System.Drawing.Point(0, 0);
             this.controlPnl.Name = "controlPnl";
@@ -80,29 +80,27 @@
             this.expandBtn.Name = "expandBtn";
             this.expandBtn.Size = new System.Drawing.Size(62, 26);
             this.expandBtn.TabIndex = 1;
-            this.expandBtn.Text = "▭";
             this.expandBtn.UseVisualStyleBackColor = false;
             this.expandBtn.Click += new System.EventHandler(this.expandBtn_Click);
             this.expandBtn.MouseEnter += new System.EventHandler(this.expandBtn_MouseEnter);
             this.expandBtn.MouseLeave += new System.EventHandler(this.expandBtn_MouseLeave);
             // 
-            // rollBtn
+            // minimizeBtn
             // 
-            this.rollBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.rollBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.rollBtn.FlatAppearance.BorderSize = 0;
-            this.rollBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.rollBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.rollBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.rollBtn.Location = new System.Drawing.Point(788, 3);
-            this.rollBtn.Name = "rollBtn";
-            this.rollBtn.Size = new System.Drawing.Size(62, 26);
-            this.rollBtn.TabIndex = 2;
-            this.rollBtn.Text = "—";
-            this.rollBtn.UseVisualStyleBackColor = false;
-            this.rollBtn.Click += new System.EventHandler(this.rollBtn_Click);
-            this.rollBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
-            this.rollBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
+            this.minimizeBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
+            this.minimizeBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
+            this.minimizeBtn.FlatAppearance.BorderSize = 0;
+            this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.minimizeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.minimizeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.minimizeBtn.Location = new System.Drawing.Point(788, 3);
+            this.minimizeBtn.Name = "minimizeBtn";
+            this.minimizeBtn.Size = new System.Drawing.Size(62, 26);
+            this.minimizeBtn.TabIndex = 2;
+            this.minimizeBtn.UseVisualStyleBackColor = false;
+            this.minimizeBtn.Click += new System.EventHandler(this.rollBtn_Click);
+            this.minimizeBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
+            this.minimizeBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
             // 
             // menuPnl
             // 
@@ -163,7 +161,7 @@
         private System.Windows.Forms.Panel controlPnl;
         private System.Windows.Forms.Button closeBtn;
         private System.Windows.Forms.Button expandBtn;
-        private System.Windows.Forms.Button rollBtn;
+        private System.Windows.Forms.Button minimizeBtn;
         private System.Windows.Forms.Panel menuPnl;
         private System.Windows.Forms.Splitter menuSpl;
         private System.Windows.Forms.Splitter controlSpl;
