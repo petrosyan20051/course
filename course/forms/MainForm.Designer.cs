@@ -34,10 +34,15 @@
             this.menuSpl = new System.Windows.Forms.Splitter();
             this.controlSpl = new System.Windows.Forms.Splitter();
             this.mainPnlGrid = new System.Windows.Forms.Panel();
+            this.gridPnl = new System.Windows.Forms.Panel();
+            this.gridLbl = new System.Windows.Forms.Label();
+            this.gridImage = new System.Windows.Forms.PictureBox();
             this.controlPnl.SuspendLayout();
             this.menuPnl.SuspendLayout();
             this.mainPnl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainImage)).BeginInit();
+            this.gridPnl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridImage)).BeginInit();
             this.SuspendLayout();
             // 
             // controlPnl
@@ -109,6 +114,7 @@
             // 
             // menuPnl
             // 
+            this.menuPnl.Controls.Add(this.gridPnl);
             this.menuPnl.Controls.Add(this.mainPnl);
             this.menuPnl.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPnl.Location = new System.Drawing.Point(0, 32);
@@ -126,8 +132,6 @@
             this.mainPnl.Name = "mainPnl";
             this.mainPnl.Size = new System.Drawing.Size(176, 89);
             this.mainPnl.TabIndex = 0;
-            this.mainPnl.MouseEnter += new System.EventHandler(this.mainPnl_MouseEnter);
-            this.mainPnl.MouseLeave += new System.EventHandler(this.mainPnl_MouseLeave);
             // 
             // mainLbl
             // 
@@ -177,6 +181,37 @@
             this.mainPnlGrid.Size = new System.Drawing.Size(824, 632);
             this.mainPnlGrid.TabIndex = 4;
             // 
+            // gridPnl
+            // 
+            this.gridPnl.BackColor = System.Drawing.Color.Transparent;
+            this.gridPnl.Controls.Add(this.gridLbl);
+            this.gridPnl.Controls.Add(this.gridImage);
+            this.gridPnl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.gridPnl.Location = new System.Drawing.Point(-1, 144);
+            this.gridPnl.Name = "gridPnl";
+            this.gridPnl.Size = new System.Drawing.Size(176, 79);
+            this.gridPnl.TabIndex = 1;
+            this.gridPnl.Click += new System.EventHandler(this.gridPnl_Click);
+            // 
+            // gridLbl
+            // 
+            this.gridLbl.AutoSize = true;
+            this.gridLbl.BackColor = System.Drawing.SystemColors.Menu;
+            this.gridLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.gridLbl.Location = new System.Drawing.Point(70, 20);
+            this.gridLbl.Name = "gridLbl";
+            this.gridLbl.Size = new System.Drawing.Size(145, 37);
+            this.gridLbl.TabIndex = 1;
+            this.gridLbl.Text = "Таблицы";
+            // 
+            // gridImage
+            // 
+            this.gridImage.Location = new System.Drawing.Point(24, 20);
+            this.gridImage.Name = "gridImage";
+            this.gridImage.Size = new System.Drawing.Size(32, 32);
+            this.gridImage.TabIndex = 0;
+            this.gridImage.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
@@ -205,6 +240,9 @@
             this.mainPnl.ResumeLayout(false);
             this.mainPnl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainImage)).EndInit();
+            this.gridPnl.ResumeLayout(false);
+            this.gridPnl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridImage)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -222,6 +260,9 @@
         private System.Windows.Forms.PictureBox mainImage;
         private System.Windows.Forms.Label mainLbl;
         private System.Windows.Forms.Panel mainPnlGrid;
+        private System.Windows.Forms.Panel gridPnl;
+        private System.Windows.Forms.Label gridLbl;
+        private System.Windows.Forms.PictureBox gridImage;
     }
 }
 

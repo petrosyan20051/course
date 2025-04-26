@@ -16,8 +16,8 @@ namespace course {
         private Button _closeBtn, _minimizeBtn, _expandBtn;
         private Panel _controlPnl, _menuPnl;
         private Splitter _menuSpl, _controlSpl;
-        private PictureBox _mainImage;
-        private Label _mainLabel;
+        private PictureBox _mainImage, _gridImage;
+        private Label _mainLabel, _gridLabel;
         private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
         public MainForm() {
@@ -34,6 +34,8 @@ namespace course {
             _controlSpl = this.controlSpl;
             _mainImage = this.mainImage;
             _mainLabel = this.mainLbl;
+            _gridImage = this.gridImage;
+            _gridLabel = this.gridLbl;
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -50,10 +52,17 @@ namespace course {
             _controlSpl.BackColor = Design.SplitterDefaulColor;
 
             _mainLabel.BackColor = Design.MenuPanelDefaultColor;
-            _mainLabel.ForeColor = Design.DefaultTextColor;
+            _mainLabel.ForeColor = Design.onEnterPanelColor;
             _mainLabel.Location = new Point(
                     _mainLabel.Location.X,
                     (_mainImage.Location.Y + _mainLabel.Height) / 2 + 9
+                );
+
+            _gridLabel.BackColor = Design.MenuPanelDefaultColor;
+            _gridLabel.ForeColor = Design.DefaultTextColor;
+            _gridLabel.Location = new Point(
+                    _gridLabel.Location.X,
+                    (_gridImage.Location.Y + _gridLabel.Height) / 2 + 9
                 );
 
             (sender as Form).BackColor = Design.FormDefaultColor;
@@ -68,7 +77,9 @@ namespace course {
             _expandBtn.Image =
                 Image.FromFile(Path.Combine(imagePath, "expandButton.png"));
             _mainImage.Image =
-                Image.FromFile(Path.Combine(imagePath, "mainIconDefault.png"));
+                Image.FromFile(Path.Combine(imagePath, "mainIconChosen.png"));
+            _gridImage.Image =
+                Image.FromFile(Path.Combine(imagePath, "gridIconDefault.png"));
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
@@ -117,6 +128,17 @@ namespace course {
             isDragging = false; // Отпускание ЛКМ останавливает перемещение формы
         }
 
+        private void gridPnl_Click(object sender, EventArgs e) {
+            _gridLabel.ForeColor = Design.onEnterPanelColor;
+
+            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
+            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
+            _gridImage.Image =
+                Image.FromFile(Path.Combine(imagePath, "gridIconChosen.png"));
+
+
+        }
+
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {
             if (isDragging) { // Перемещаем форму
                 Point newPoint = this.PointToScreen(new Point(e.X, e.Y)); // новая точка, куда перемещаем
@@ -139,8 +161,6 @@ namespace course {
                         this.Size.Height
                     );
                 }
-                
-                
 
                 // Обновляем позиции кнопок управления
                 _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
@@ -154,22 +174,6 @@ namespace course {
                     this.Cursor = Cursors.Default;
                 }
             }
-        }
-
-        private void mainPnl_MouseEnter(object sender, EventArgs e) {
-            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
-            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
-            _mainImage.Image =
-                Image.FromFile(Path.Combine(imagePath, "mainIconChosen.png"));
-            _mainLabel.ForeColor = Color.White;
-        }
-
-        private void mainPnl_MouseLeave(object sender, EventArgs e) {
-            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
-            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
-            _mainImage.Image =
-                Image.FromFile(Path.Combine(imagePath, "mainIconDefault.png"));
-            _mainLabel.ForeColor = Design.DefaultTextColor;
         }
 
         private void expandBtn_Click(object sender, EventArgs e) {

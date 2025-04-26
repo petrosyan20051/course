@@ -17,7 +17,7 @@ namespace course.classes {
         public static Color ButtonExpandEnterColor = Color.MediumBlue;
         public static Color ButtonRollEnterColor = Color.Gray;
 
-        public static Color DefaultTextColor = Color.FromArgb(150, 150, 150);
-        public static Color EnterPanelColor = Color.FromArgb(45, 45, 45);
+        public static Color DefaultTextColor = Color.FromArgb(100, 100, 100); // текст не выбран
+        public static Color onEnterPanelColor = Color.FromArgb(200, 200, 200); // фокус на панеле
     }
 }
