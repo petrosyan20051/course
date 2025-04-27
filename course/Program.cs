@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace course {
+namespace course.forms {
     internal static class Program {
         /// <summary>
         /// The main entry point for the application.

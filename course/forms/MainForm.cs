@@ -1,11 +1,10 @@
-﻿using System;
+﻿using course.classes;
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using course.classes;
-using course.Properties;
 
-namespace course {
+namespace course.forms {
 
     public partial class MainForm : Form {
         private bool isDragging = false; // форма находится в состоянии перемещения
@@ -41,6 +40,7 @@ namespace course {
         private void MainForm_Load(object sender, EventArgs e) {
             this.InitVariables();
 
+            // Установка цвета фона компонентов
             _controlPnl.BackColor = Design.ControlPanelDefaultColor;
             _menuPnl.BackColor = Design.MenuPanelDefaultColor;
 
@@ -53,6 +53,7 @@ namespace course {
 
             _mainLabel.BackColor = Design.MenuPanelDefaultColor;
             _mainLabel.ForeColor = Design.onEnterPanelColor;
+            // Установка расположения label
             _mainLabel.Location = new Point(
                     _mainLabel.Location.X,
                     (_mainImage.Location.Y + _mainLabel.Height) / 2 + 9
@@ -65,12 +66,13 @@ namespace course {
                     (_gridImage.Location.Y + _gridLabel.Height) / 2 + 9
                 );
 
+            // Установка цвета формы фона
             (sender as Form).BackColor = Design.FormDefaultColor;
 
-            
+            // Гибкая установка иконок PictureBox
             string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
             string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
-            _closeBtn.Image = 
+            _closeBtn.Image =
                 Image.FromFile(Path.Combine(imagePath, "closeButton.png"));
             _minimizeBtn.Image =
                 Image.FromFile(Path.Combine(imagePath, "minimizeButton.png"));
@@ -128,17 +130,6 @@ namespace course {
             isDragging = false; // Отпускание ЛКМ останавливает перемещение формы
         }
 
-        private void gridPnl_Click(object sender, EventArgs e) {
-            _gridLabel.ForeColor = Design.onEnterPanelColor;
-
-            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
-            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
-            _gridImage.Image =
-                Image.FromFile(Path.Combine(imagePath, "gridIconChosen.png"));
-
-
-        }
-
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {
             if (isDragging) { // Перемещаем форму
                 Point newPoint = this.PointToScreen(new Point(e.X, e.Y)); // новая точка, куда перемещаем
@@ -155,7 +146,7 @@ namespace course {
         private void MainForm_MouseMove(object sender, MouseEventArgs e) {
             // Изменение значка курсора при масштабировании
             if (isResizing) {
-                if (this.Cursor == Cursors.SizeWE) { 
+                if (this.Cursor == Cursors.SizeWE) {
                     this.Size = new Size(
                         Math.Max(this.MinimumSize.Width, e.X),
                         this.Size.Height
