@@ -47,14 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classes\Design.cs" />
+    <Compile Include="forms\MainFormMenuPanel.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="forms\MainFormMenuPanel.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -85,8 +85,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="icons\" />
     <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icons\closeButton.png" />
+    <Content Include="icons\expandButton.png" />
+    <Content Include="icons\gridIconChosen.png" />
+    <Content Include="icons\gridIconDefault.png" />
+    <Content Include="icons\mainIconChosen.png" />
+    <Content Include="icons\mainIconDefault.png" />
+    <Content Include="icons\minimizeButton.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
