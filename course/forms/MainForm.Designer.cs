@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.controlPnl = new System.Windows.Forms.Panel();
             this.closeBtn = new System.Windows.Forms.Button();
             this.expandBtn = new System.Windows.Forms.Button();
@@ -69,6 +70,7 @@
             this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.closeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.closeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.closeBtn.Image = ((System.Drawing.Image)(resources.GetObject("closeBtn.Image")));
             this.closeBtn.Location = new System.Drawing.Point(935, 3);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(62, 26);
@@ -86,6 +88,7 @@
             this.expandBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.expandBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.expandBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.expandBtn.Image = ((System.Drawing.Image)(resources.GetObject("expandBtn.Image")));
             this.expandBtn.Location = new System.Drawing.Point(856, 3);
             this.expandBtn.Name = "expandBtn";
             this.expandBtn.Size = new System.Drawing.Size(62, 26);
@@ -103,6 +106,7 @@
             this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.minimizeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.minimizeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.minimizeBtn.Image = ((System.Drawing.Image)(resources.GetObject("minimizeBtn.Image")));
             this.minimizeBtn.Location = new System.Drawing.Point(788, 3);
             this.minimizeBtn.Name = "minimizeBtn";
             this.minimizeBtn.Size = new System.Drawing.Size(62, 26);
@@ -141,13 +145,14 @@
             this.gridLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.gridLbl.Location = new System.Drawing.Point(70, 20);
             this.gridLbl.Name = "gridLbl";
-            this.gridLbl.Size = new System.Drawing.Size(145, 37);
+            this.gridLbl.Size = new System.Drawing.Size(82, 20);
             this.gridLbl.TabIndex = 1;
             this.gridLbl.Text = "Таблицы";
             this.gridLbl.Click += new System.EventHandler(this.gridPnl_Click);
             // 
             // gridImage
             // 
+            this.gridImage.Image = ((System.Drawing.Image)(resources.GetObject("gridImage.Image")));
             this.gridImage.Location = new System.Drawing.Point(24, 20);
             this.gridImage.Name = "gridImage";
             this.gridImage.Size = new System.Drawing.Size(32, 32);
@@ -174,13 +179,14 @@
             this.mainLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.mainLbl.Location = new System.Drawing.Point(70, 20);
             this.mainLbl.Name = "mainLbl";
-            this.mainLbl.Size = new System.Drawing.Size(137, 37);
+            this.mainLbl.Size = new System.Drawing.Size(80, 20);
             this.mainLbl.TabIndex = 1;
             this.mainLbl.Text = "Главная";
             this.mainLbl.Click += new System.EventHandler(this.mainPnl_Click);
             // 
             // mainImage
             // 
+            this.mainImage.Image = ((System.Drawing.Image)(resources.GetObject("mainImage.Image")));
             this.mainImage.Location = new System.Drawing.Point(24, 20);
             this.mainImage.Name = "mainImage";
             this.mainImage.Size = new System.Drawing.Size(32, 32);
@@ -219,7 +225,7 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(19F, 37F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(26)))), ((int)(((byte)(26)))), ((int)(((byte)(26)))));
             this.ClientSize = new System.Drawing.Size(1000, 666);

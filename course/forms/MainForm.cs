@@ -69,7 +69,7 @@ namespace course.forms {
             // Установка цвета формы фона
             (sender as Form).BackColor = Design.FormDefaultColor;
 
-            // Гибкая установка иконок PictureBox
+            /*// Гибкая установка иконок PictureBox
             string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
             string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
             _closeBtn.Image =
@@ -81,7 +81,7 @@ namespace course.forms {
             _mainImage.Image =
                 Image.FromFile(Path.Combine(imagePath, "mainIconChosen.png"));
             _gridImage.Image =
-                Image.FromFile(Path.Combine(imagePath, "gridIconDefault.png"));
+                Image.FromFile(Path.Combine(imagePath, "gridIconDefault.png"));*/
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
