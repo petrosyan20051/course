@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.controlPnl = new System.Windows.Forms.Panel();
+            this.styleBtn = new System.Windows.Forms.Button();
             this.closeBtn = new System.Windows.Forms.Button();
             this.expandBtn = new System.Windows.Forms.Button();
             this.minimizeBtn = new System.Windows.Forms.Button();
@@ -49,6 +50,7 @@
             // controlPnl
             // 
             this.controlPnl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
+            this.controlPnl.Controls.Add(this.styleBtn);
             this.controlPnl.Controls.Add(this.closeBtn);
             this.controlPnl.Controls.Add(this.expandBtn);
             this.controlPnl.Controls.Add(this.minimizeBtn);
@@ -60,6 +62,23 @@
             this.controlPnl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseDown);
             this.controlPnl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseMove);
             this.controlPnl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseUp);
+            // 
+            // styleBtn
+            // 
+            this.styleBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
+            this.styleBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
+            this.styleBtn.FlatAppearance.BorderSize = 0;
+            this.styleBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.styleBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.styleBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("styleBtn.Image")));
+            this.styleBtn.Location = new System.Drawing.Point(720, 3);
+            this.styleBtn.Name = "styleBtn";
+            this.styleBtn.Size = new System.Drawing.Size(62, 26);
+            this.styleBtn.TabIndex = 3;
+            this.styleBtn.Tag = "";
+            this.styleBtn.UseVisualStyleBackColor = false;
+            this.styleBtn.Click += new System.EventHandler(this.switchBtn_Click);
             // 
             // closeBtn
             // 
@@ -274,6 +293,7 @@
         private System.Windows.Forms.Panel gridPnl;
         private System.Windows.Forms.Label gridLbl;
         private System.Windows.Forms.PictureBox gridImage;
+        private System.Windows.Forms.Button styleBtn;
     }
 }
 

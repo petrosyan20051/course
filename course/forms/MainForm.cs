@@ -12,7 +12,7 @@ namespace course.forms {
 
         private Point startPoint; // точка начала перемещения
 
-        private Button _closeBtn, _minimizeBtn, _expandBtn;
+        private Button _closeBtn, _minimizeBtn, _expandBtn, _styleBtn;
         private Panel _controlPnl, _menuPnl;
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
@@ -35,39 +35,43 @@ namespace course.forms {
             _mainLabel = this.mainLbl;
             _gridImage = this.gridImage;
             _gridLabel = this.gridLbl;
+            _styleBtn = this.styleBtn;
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
             this.InitVariables();
 
             // Установка цвета фона компонентов
-            _controlPnl.BackColor = Design.ControlPanelDefaultColor;
-            _menuPnl.BackColor = Design.MenuPanelDefaultColor;
+            _controlPnl.BackColor = Design.ControlPanelDarkDefaultColor;
+            _menuPnl.BackColor = Design.MenuPanelDarkDefaultColor;
 
-            _closeBtn.BackColor = Design.ControlPanelDefaultColor;
-            _expandBtn.BackColor = Design.ControlPanelDefaultColor;
-            _minimizeBtn.BackColor = Design.ControlPanelDefaultColor;
+            _closeBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+            _expandBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+            _minimizeBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+            _styleBtn.BackColor = Design.ControlPanelDarkDefaultColor;
 
-            _menuSpl.BackColor = Design.SplitterDefaulColor;
-            _controlSpl.BackColor = Design.SplitterDefaulColor;
+            _menuSpl.BackColor = Design.SplitterDarkDefaultColor;
+            _controlSpl.BackColor = Design.SplitterDarkDefaultColor;
 
-            _mainLabel.BackColor = Design.MenuPanelDefaultColor;
-            _mainLabel.ForeColor = Design.onEnterPanelColor;
+            _mainLabel.BackColor = Design.MenuPanelDarkDefaultColor;
+            _mainLabel.ForeColor = Design.onEnterDarkPanelColor;
             // Установка расположения label
             _mainLabel.Location = new Point(
                     _mainLabel.Location.X,
                     (_mainImage.Location.Y + _mainLabel.Height) / 2 + 9
                 );
 
-            _gridLabel.BackColor = Design.MenuPanelDefaultColor;
-            _gridLabel.ForeColor = Design.DefaultTextColor;
+            _gridLabel.BackColor = Design.MenuPanelDarkDefaultColor;
+            _gridLabel.ForeColor = Design.DefaultDarkTextColor;
             _gridLabel.Location = new Point(
                     _gridLabel.Location.X,
                     (_gridImage.Location.Y + _gridLabel.Height) / 2 + 9
                 );
 
             // Установка цвета формы фона
-            (sender as Form).BackColor = Design.FormDefaultColor;
+            (sender as Form)?.BackColor = Design.FormDarkDefaultColor;
+            _styleBtn.Tag = 0; // текущая цветовая тема - темная
+            this.Tag = 0x0; // битовая маска режима работы панели-меню. 0x0 - "Главная", 0x1 - "Таблицы"
 
             /*// Гибкая установка иконок PictureBox
             string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
@@ -95,12 +99,12 @@ namespace course.forms {
 
         private void closeBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
-            _btn.BackColor = Design.ControlPanelDefaultColor;
+            _btn.BackColor = Design.ControlPanelDarkDefaultColor;
         }
 
         private void rollBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
-            _btn.BackColor = Design.ControlPanelDefaultColor;
+            _btn.BackColor = Design.ControlPanelDarkDefaultColor;
         }
 
         private void rollBtn_MouseEnter(object sender, EventArgs e) {
@@ -115,7 +119,7 @@ namespace course.forms {
 
         private void expandBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
-            _btn.BackColor = Design.ControlPanelDefaultColor;
+            _btn.BackColor = Design.ControlPanelDarkDefaultColor;
         }
 
         private void controlPnl_MouseDown(object sender, MouseEventArgs e) {
@@ -128,6 +132,83 @@ namespace course.forms {
 
         private void controlPnl_MouseUp(object sender, MouseEventArgs e) {
             isDragging = false; // Отпускание ЛКМ останавливает перемещение формы
+        }
+
+        private void switchBtn_Click(object sender, EventArgs e) {
+            // Переключение дизайна интерфейса (темный или светлый стиль)
+            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
+            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
+
+            // Смена иконки кнопки. Tag == 0 -> в светлую тему, иначе - темную.
+            int Tag = (int)_styleBtn.Tag;
+            _styleBtn.Image = Image
+                .FromFile(Path.Combine(
+                    imagePath,
+                    $"{(Tag == 0 ? "light" : "dark")}ModeButton.png"
+                ));
+            // Смена цветовой палитры
+            switch (Tag) {
+                case 0: // меняем на светлую
+                    _controlPnl.BackColor = Design.ControlPanelLightDefaultColor;
+                    _menuPnl.BackColor = Design.MenuPanelLightDefaultColor;
+
+                    _closeBtn.BackColor = Design.ControlPanelLightDefaultColor;
+                    _expandBtn.BackColor = Design.ControlPanelLightDefaultColor;
+                    _minimizeBtn.BackColor = Design.ControlPanelLightDefaultColor;
+                    _styleBtn.BackColor = Design.ControlPanelLightDefaultColor;
+
+                    _menuSpl.BackColor = Design.SplitterLightDefaultColor;
+                    _controlSpl.BackColor = Design.SplitterLightDefaultColor;
+
+                    // Обновляем цвет для активных компонентов и неактивных компонентов панели-меню
+                    /*foreach (Panel panels in _menuPnl.Controls) {
+                        bool isActive = false; // текущий пункт меню не выбран по умолчанию
+                        foreach (var control in panels.Controls) {
+                            if (control is Label label) { // компонент - Label
+                                                          // Смена цвета label. Зависит от того, является ли текущий пункт меню активным
+                                label.BackColor = Design.MenuPanelLightDefaultColor;
+                                label.ForeColor =
+                                    label.BackColor == Design.DefaultDarkTextColor ?
+                                    Design.DefaultLightTextColor : Design.onEnterLightPanelColor;
+                                if (label.ForeColor == Design.onEnterLightPanelColor) {
+                                    isActive = true; // данная панель содержит выбранный пункт меню
+                                }
+                            } else if (control is PictureBox pictureBox) {
+                                 _styleBtn.Image = Image
+                                    .FromFile(Path.Combine(
+                                        imagePath,
+                                        $"{(Tag == 0 ? "light" : "dark")}ModeButton.png"
+                                    ));
+                            }
+                        }
+                    }*/
+
+                    this.BackColor = Design.FormLightDefaultColor;
+                    break;
+
+                case 1: // меняем на темную
+                        // Установка цвета фона компонентов
+                    _controlPnl.BackColor = Design.ControlPanelDarkDefaultColor;
+                    _menuPnl.BackColor = Design.MenuPanelDarkDefaultColor;
+
+                    _closeBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+                    _expandBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+                    _minimizeBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+                    _styleBtn.BackColor = Design.ControlPanelDarkDefaultColor;
+
+                    _menuSpl.BackColor = Design.SplitterDarkDefaultColor;
+                    _controlSpl.BackColor = Design.SplitterDarkDefaultColor;
+
+                    //_mainLabel.BackColor = (int)this.Tag & 1 ==  ? Design.MenuPanelDarkDefaultColor;
+                    _mainLabel.ForeColor = Design.onEnterDarkPanelColor;
+
+                    _gridLabel.BackColor = Design.MenuPanelDarkDefaultColor;
+                    _gridLabel.ForeColor = Design.DefaultDarkTextColor;
+
+                    this.BackColor = Design.FormDarkDefaultColor;
+                    break;
+            }
+            _styleBtn.Tag = (int)_styleBtn.Tag == 0 ? 1 : 0;
         }
 
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {
