@@ -11,51 +11,43 @@ using System.Windows.Forms;
 
 namespace course.classes {
 
-    internal class StyleManager {
-        public bool theme { set; get; } // Текущая тема ("light" или "dark")
-
-        public string iconsPath { set; get; } =
+    public class StyleManager {
+        private bool theme { set; get; } // Current theme. Light or dark
+        private string iconsPath { set; get; } =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons"); // Путь к папке с иконками
 
-        private Dictionary<Panel, string> panelNames; // Словарь: панель -> имя пункта меню
+        private List<Panel> panels;
 
         public MenuManager(bool theme, string iconsPath) {
             this.theme = theme;
             this.iconsPath = iconsPath;
-            this.panelNames = new Dictionary<Panel, string>();
+            this.panels = new List<Panel>();
         }
 
         // Добавление панели в менеджер
         public void AddPanel(Panel? panel, string? panelName) {
-            if (!panelNames.ContainsKey(panel)) {
-                panelNames[panel] = panelName;
-                panel.Click += Panel_Click; // Подписываемся на событие клика
+            if (!panels.Contains(panel)) {
+                panels.Add(panel);
             }
-        }
-
-        // Обработчик клика по панели
-        private void Panel_Click(object sender, EventArgs e) {
-            var clickedPanel = sender as Panel;
-            UpdateMenuState(clickedPanel);
         }
 
         // Обновление состояния меню
         public void UpdateMenuState(Panel clickedPanel) {
-            foreach (var panel in panelNames.Keys) {
-                var panelName = panelNames[panel];
+            foreach (var panel in panels) {
+                var panelName = panel.Name;
                 var label = panel.Controls.OfType<Label>().FirstOrDefault();
                 var pictureBox = panel.Controls.OfType<PictureBox>().FirstOrDefault();
 
-                if (label == null || pictureBox == null) continue;
+                if (label is null || pictureBox is null) continue;
 
                 if (panel == clickedPanel) {
-                    // Активный пункт меню
-                    label.ForeColor = !theme ? Color.Black : Color.White;
-                    pictureBox.Image = LoadIcon($"{panelName}_active_{theme}.png");
+                    // Active for dark and light theme
+                    label.ForeColor = !theme ? Design.onEnterDarkPanelColor : Design.onEnterLightPanelColor;
+                    pictureBox.Image = LoadIcon($"{panelName}_colorful.png");
                 } else {
-                    // Неактивный пункт меню
-                    label.ForeColor = theme ? Color.Gray : Color.DarkGray;
-                    pictureBox.Image = LoadIcon($"{panelName}_inactive_{theme}.png");
+                    // Inactive for dark and light theme
+                    label.ForeColor = theme ? Design.onEnterLightPanelColor : Design.onEnterDarkPanelColor;
+                    pictureBox.Image = LoadIcon($"{panelName}_pale.png");
                 }
             }
         }
@@ -69,10 +61,10 @@ namespace course.classes {
             throw new FileNotFoundException($"Иконка не найдена: {iconPath}");
         }
 
-        // Смена темы
-        public void ChangeTheme(string newTheme) {
+        /*// Смена темы
+        public void ChangeTheme(bool newTheme) {
             theme = newTheme;
             UpdateMenuState(null); // Обновляем все пункты меню для новой темы
-        }
+        }*/
     }
 }

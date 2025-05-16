@@ -49,6 +49,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classes\Design.cs" />
+    <Compile Include="classes\StyleManager.cs" />
+    <Compile Include="controllers\RoundedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="forms\MainFormMenuPanel.cs">
       <SubType>Form</SubType>
     </Compile>
