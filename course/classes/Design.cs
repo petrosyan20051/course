@@ -5,14 +5,15 @@ namespace course.classes {
     public class Design {
 
         #region General colors
+
         public static Color ButtonCloseEnterColor = Color.Red;
         public static Color ButtonExpandEnterColor = Color.MediumBlue;
 
-        
-        #endregion
+        #endregion General colors
 
         #region Dark Theme
-        public static int DarkTheme = 0; 
+
+        public static int DarkTheme = 0;
         public static Color FormDarkDefaultColor = Color.FromArgb(45, 45, 45);
 
         public static Color ControlPanelDarkDefaultColor = Color.FromArgb(26, 26, 26);
@@ -24,7 +25,8 @@ namespace course.classes {
 
         public static Color DefaultDarkTextColor = Color.FromArgb(100, 100, 100); // text is not chosen
         public static Color onEnterDarkPanelColor = Color.FromArgb(200, 200, 200); // panel is focused
-        #endregion
+
+        #endregion Dark Theme
 
         #region Light Theme
 
@@ -33,12 +35,13 @@ namespace course.classes {
 
         public static Color ControlPanelLightDefaultColor = Color.FromArgb(170, 170, 170);
         public static Color MenuPanelLightDefaultColor = Color.FromArgb(220, 220, 220);
-        public static Color SplitterLightDefaultColor = Color.FromArgb(210, 210, 210);
+        public static Color SplitterLightDefaultColor = Color.FromArgb(245, 245, 245);
 
         public static Color ButtonStyleLightEnterColor = Color.FromArgb(220, 220, 220);
 
-        public static Color DefaultLightTextColor = Color.FromArgb(200, 200, 200); // text is not chosen
+        public static Color DefaultLightTextColor = Color.FromArgb(180, 180, 180); // text is not chosen
         public static Color onEnterLightPanelColor = Color.FromArgb(52, 58, 64); // panel is focused
-        #endregion
+
+        #endregion Light Theme
     }
 }
