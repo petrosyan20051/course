@@ -11,14 +11,15 @@ namespace course.forms {
         private bool isResizing = false; // форма находится в состоянии изменения размера
 
         private Point startPoint; // точка начала перемещения
+        private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
         private Button _closeBtn, _minimizeBtn, _expandBtn, _styleBtn;
-        private Panel _controlPnl, _menuPnl;
+        private Panel _controlPnl, _menuPnl, _mainPnl, _gridPnl;
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
         private Label _mainLabel, _gridLabel;
-        private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
+        private StyleManager style;
         public MainForm() {
             InitializeComponent();
         }
@@ -36,6 +37,16 @@ namespace course.forms {
             _gridImage = this.gridImage;
             _gridLabel = this.gridLbl;
             _styleBtn = this.styleBtn;
+            _mainPnl = this.mainPnl;
+            _gridPnl = this.gridPnl;
+            
+            style = new StyleManager(
+                Design.DarkTheme,
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons")
+            ); // Make style manager
+            foreach (Panel panel in _menuPnl.Controls) { // Add panels into panel
+                style.AddPanel(panel, panel.Name);
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
@@ -70,8 +81,8 @@ namespace course.forms {
 
             // Установка цвета формы фона
             (sender as Form)?.BackColor = Design.FormDarkDefaultColor;
-            _styleBtn.Tag = 0; // текущая цветовая тема - темная
-            this.Tag = 0x0; // битовая маска режима работы панели-меню. 0x0 - "Главная", 0x1 - "Таблицы"
+            _styleBtn.Tag = Design.DarkTheme; // current theme - dark
+            //this.Tag = 0x0; // битовая маска режима работы панели-меню. 0x0 - "Главная", 0x1 - "Таблицы"
 
             /*// Гибкая установка иконок PictureBox
             string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
@@ -136,11 +147,18 @@ namespace course.forms {
 
         private void switchBtn_Click(object sender, EventArgs e) {
             // Переключение дизайна интерфейса (темный или светлый стиль)
-            string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
-            string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
+            //string appBaseDirectory = AppDomain.CurrentDomain.BaseDirectory; // путь к исполняемому файлу
+            //string imagePath = Path.Combine(appBaseDirectory, "..", "..", "icons"); // получаем доступ к каталогу icons
 
+            // Change theme
+            if ((int)_styleBtn.Tag == Design.DarkTheme) { // light theme
+                //style.ChangeTheme(Design.LightTheme, );
+            } else { // dark theme
+                //style.ChangeTheme(Design.DarkTheme);
+            }
+            
             // Смена иконки кнопки. Tag == 0 -> в светлую тему, иначе - темную.
-            int Tag = (int)_styleBtn.Tag;
+            /*int Tag = (int)_styleBtn.Tag;
             _styleBtn.Image = Image
                 .FromFile(Path.Combine(
                     imagePath,
@@ -181,7 +199,7 @@ namespace course.forms {
                                     ));
                             }
                         }
-                    }*/
+                    }
 
                     this.BackColor = Design.FormLightDefaultColor;
                     break;
@@ -207,8 +225,9 @@ namespace course.forms {
 
                     this.BackColor = Design.FormDarkDefaultColor;
                     break;
-            }
+            }*/
             _styleBtn.Tag = (int)_styleBtn.Tag == 0 ? 1 : 0;
+            
         }
 
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {
