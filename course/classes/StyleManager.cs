@@ -17,18 +17,39 @@ namespace course.classes {
         public string iconsPath { private set; get; } =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons"); // Путь к папке с иконками
 
-        private List<Panel> panels;
+        public List<Panel> panels { private set; get; }
+        public List<Splitter> splitters { private set; get; }
 
         public StyleManager(int theme, string? iconsPath) {
             this.theme = theme;
             this.iconsPath = iconsPath;
             this.panels = [];
+            this.splitters = [];
         }
 
         // Add panel into manager
         public void AddPanel(Panel? panel, string? panelName) {
             if (!panels.Contains(panel)) {
                 panels.Add(panel);
+            }
+        }
+
+        // Add splitter into manager
+        public void AddSplitter(Splitter? splitter) {
+            if (!splitter.Contains(splitter)) {
+                splitters.Add(splitter);
+            }
+        }
+
+        public void DeletePanel(Panel? panel) {
+            if (panels.Contains(panel)) {
+                panels.Remove(panel);
+            }
+        }
+
+        public void DeletePanel(Splitter? splitter) {
+            if (splitters.Contains(splitter)) {
+                splitters.Remove(splitter);
             }
         }
 
@@ -58,6 +79,9 @@ namespace course.classes {
                         Design.DefaultDarkTextColor : Design.DefaultLightTextColor;
                     pictureBox.Image = LoadIcon($"{panelName}_off_{(theme == Design.DarkTheme ? "dark" : "bright")}_theme.png");
                 }
+            }
+            foreach (var splitter in splitters) {
+                splitter.BackColor = theme == Design.DarkTheme ? Design.SplitterDarkDefaultColor : Design.SplitterLightDefaultColor;
             }
         }
 
