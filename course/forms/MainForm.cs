@@ -20,6 +20,7 @@ namespace course.forms {
         private Label _mainLabel, _gridLabel;
 
         private StyleManager style;
+
         public MainForm() {
             InitializeComponent();
         }
@@ -39,7 +40,7 @@ namespace course.forms {
             _styleBtn = this.styleBtn;
             _mainPnl = this.mainPnl;
             _gridPnl = this.gridPnl;
-            
+
             style = new StyleManager(
                 Design.DarkTheme,
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons")
@@ -85,10 +86,6 @@ namespace course.forms {
             _menuPnl.Tag = _mainPnl; // current chosen point
         }
 
-        private void closeBtn_MouseClick(object sender, MouseEventArgs e) {
-            Application.Exit();
-        }
-
         private void closeBtn_MouseEnter(object sender, EventArgs e) {
             var _btn = sender as Button;
             _btn.BackColor = Design.ButtonCloseEnterColor;
@@ -99,12 +96,12 @@ namespace course.forms {
             _btn.BackColor = _controlPnl.BackColor;
         }
 
-        private void rollBtn_MouseLeave(object sender, EventArgs e) {
+        private void minimizeBtn_MouseLeave(object sender, EventArgs e) {
             var _btn = sender as Button;
             _btn.BackColor = _controlPnl.BackColor;
         }
 
-        private void rollBtn_MouseEnter(object sender, EventArgs e) {
+        private void minimizeBtn_MouseEnter(object sender, EventArgs e) {
             var _btn = sender as Button;
             _btn.BackColor = Design.ButtonRollDarkEnterColor;
         }
@@ -129,6 +126,14 @@ namespace course.forms {
             _btn?.BackColor = _controlPnl.BackColor;
         }
 
+        private void minimizeBtn_Click(object sender, EventArgs e) {
+
+        }
+
+        private void closeBtn_Click(object sender, EventArgs e) {
+            Application.Exit();
+        }
+
         private void controlPnl_MouseDown(object sender, MouseEventArgs e) {
             // Щелчок ЛКМ по панели порождает перемещение формы
             if (e.Button == MouseButtons.Left) {
@@ -142,20 +147,18 @@ namespace course.forms {
         }
 
         private void styleBtn_Click(object sender, EventArgs e) {
-
             // Change theme
             int tag = (int)_styleBtn.Tag;
             style.ChangeMenuPanelTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, (Panel)_menuPnl.Tag);
             (sender as Button)?.Image = StyleManager
                 .LoadIcon(
-                    Path.Combine(style.iconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"), 
+                    Path.Combine(style.iconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"),
                     style.iconsPath
-                );            
-            
+                );
+
             ChangeDesign(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme);
-            
+
             _styleBtn.Tag = (int)_styleBtn.Tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme;
-            
         }
 
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {

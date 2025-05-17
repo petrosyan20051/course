@@ -25,10 +25,10 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.controlPnl = new System.Windows.Forms.Panel();
+            this.closeBtn = new course.controllers.RoundedButton();
+            this.expandBtn = new course.controllers.RoundedButton();
+            this.minimizeBtn = new course.controllers.RoundedButton();
             this.styleBtn = new System.Windows.Forms.Button();
-            this.closeBtn = new System.Windows.Forms.Button();
-            this.expandBtn = new System.Windows.Forms.Button();
-            this.minimizeBt = new System.Windows.Forms.Button();
             this.menuPnl = new System.Windows.Forms.Panel();
             this.gridPnl = new System.Windows.Forms.Panel();
             this.gridLbl = new System.Windows.Forms.Label();
@@ -39,7 +39,6 @@
             this.menuSpl = new System.Windows.Forms.Splitter();
             this.controlSpl = new System.Windows.Forms.Splitter();
             this.mainPnlGrid = new System.Windows.Forms.Panel();
-            this.minimizeBtn = new course.controllers.RoundedButton();
             this.controlPnl.SuspendLayout();
             this.menuPnl.SuspendLayout();
             this.gridPnl.SuspendLayout();
@@ -51,11 +50,9 @@
             // controlPnl
             // 
             this.controlPnl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.controlPnl.Controls.Add(this.minimizeBtn);
-            this.controlPnl.Controls.Add(this.styleBtn);
             this.controlPnl.Controls.Add(this.closeBtn);
             this.controlPnl.Controls.Add(this.expandBtn);
-            this.controlPnl.Controls.Add(this.minimizeBt);
+            this.controlPnl.Controls.Add(this.minimizeBtn);
             this.controlPnl.Dock = System.Windows.Forms.DockStyle.Top;
             this.controlPnl.Location = new System.Drawing.Point(0, 0);
             this.controlPnl.Name = "controlPnl";
@@ -64,6 +61,51 @@
             this.controlPnl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseDown);
             this.controlPnl.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseMove);
             this.controlPnl.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlPnl_MouseUp);
+            // 
+            // closeBtn
+            // 
+            this.closeBtn.BorderRadius = 5;
+            this.closeBtn.FlatAppearance.BorderSize = 0;
+            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.closeBtn.Image = ((System.Drawing.Image)(resources.GetObject("closeBtn.Image")));
+            this.closeBtn.Location = new System.Drawing.Point(935, 3);
+            this.closeBtn.Name = "closeBtn";
+            this.closeBtn.Size = new System.Drawing.Size(62, 26);
+            this.closeBtn.TabIndex = 6;
+            this.closeBtn.UseVisualStyleBackColor = true;
+            this.closeBtn.Click += new System.EventHandler(this.closeBtn_Click);
+            this.closeBtn.MouseEnter += new System.EventHandler(this.closeBtn_MouseEnter);
+            this.closeBtn.MouseLeave += new System.EventHandler(this.closeBtn_MouseLeave);
+            // 
+            // expandBtn
+            // 
+            this.expandBtn.BorderRadius = 5;
+            this.expandBtn.FlatAppearance.BorderSize = 0;
+            this.expandBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.expandBtn.Image = ((System.Drawing.Image)(resources.GetObject("expandBtn.Image")));
+            this.expandBtn.Location = new System.Drawing.Point(873, 3);
+            this.expandBtn.Name = "expandBtn";
+            this.expandBtn.Size = new System.Drawing.Size(62, 26);
+            this.expandBtn.TabIndex = 5;
+            this.expandBtn.UseVisualStyleBackColor = true;
+            this.expandBtn.Click += new System.EventHandler(this.expandBtn_Click);
+            this.expandBtn.MouseEnter += new System.EventHandler(this.expandBtn_MouseEnter);
+            this.expandBtn.MouseLeave += new System.EventHandler(this.expandBtn_MouseLeave);
+            // 
+            // minimizeBtn
+            // 
+            this.minimizeBtn.BorderRadius = 5;
+            this.minimizeBtn.FlatAppearance.BorderSize = 0;
+            this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.minimizeBtn.Image = ((System.Drawing.Image)(resources.GetObject("minimizeBtn.Image")));
+            this.minimizeBtn.Location = new System.Drawing.Point(811, 3);
+            this.minimizeBtn.Name = "minimizeBtn";
+            this.minimizeBtn.Size = new System.Drawing.Size(62, 26);
+            this.minimizeBtn.TabIndex = 4;
+            this.minimizeBtn.UseVisualStyleBackColor = true;
+            this.minimizeBtn.Click += new System.EventHandler(this.minimizeBtn_Click);
+            this.minimizeBtn.MouseEnter += new System.EventHandler(this.minimizeBtn_MouseEnter);
+            this.minimizeBtn.MouseLeave += new System.EventHandler(this.minimizeBtn_MouseLeave);
             // 
             // styleBtn
             // 
@@ -74,7 +116,7 @@
             this.styleBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.styleBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.styleBtn.Image = ((System.Drawing.Image)(resources.GetObject("styleBtn.Image")));
-            this.styleBtn.Location = new System.Drawing.Point(720, 3);
+            this.styleBtn.Location = new System.Drawing.Point(749, 3);
             this.styleBtn.Name = "styleBtn";
             this.styleBtn.Size = new System.Drawing.Size(62, 26);
             this.styleBtn.TabIndex = 3;
@@ -83,61 +125,6 @@
             this.styleBtn.Click += new System.EventHandler(this.styleBtn_Click);
             this.styleBtn.MouseEnter += new System.EventHandler(this.styleBtn_MouseEnter);
             this.styleBtn.MouseLeave += new System.EventHandler(this.styleBtn_MouseLeave);
-            // 
-            // closeBtn
-            // 
-            this.closeBtn.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.closeBtn.BackColor = System.Drawing.Color.Transparent;
-            this.closeBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.closeBtn.FlatAppearance.BorderSize = 0;
-            this.closeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.closeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.closeBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.closeBtn.Image = ((System.Drawing.Image)(resources.GetObject("closeBtn.Image")));
-            this.closeBtn.Location = new System.Drawing.Point(935, 3);
-            this.closeBtn.Name = "closeBtn";
-            this.closeBtn.Size = new System.Drawing.Size(62, 26);
-            this.closeBtn.TabIndex = 0;
-            this.closeBtn.UseVisualStyleBackColor = false;
-            this.closeBtn.MouseClick += new System.Windows.Forms.MouseEventHandler(this.closeBtn_MouseClick);
-            this.closeBtn.MouseEnter += new System.EventHandler(this.closeBtn_MouseEnter);
-            this.closeBtn.MouseLeave += new System.EventHandler(this.closeBtn_MouseLeave);
-            // 
-            // expandBtn
-            // 
-            this.expandBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.expandBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.expandBtn.FlatAppearance.BorderSize = 0;
-            this.expandBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.expandBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.expandBtn.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.expandBtn.Image = ((System.Drawing.Image)(resources.GetObject("expandBtn.Image")));
-            this.expandBtn.Location = new System.Drawing.Point(856, 3);
-            this.expandBtn.Name = "expandBtn";
-            this.expandBtn.Size = new System.Drawing.Size(62, 26);
-            this.expandBtn.TabIndex = 1;
-            this.expandBtn.UseVisualStyleBackColor = false;
-            this.expandBtn.Click += new System.EventHandler(this.expandBtn_Click);
-            this.expandBtn.MouseEnter += new System.EventHandler(this.expandBtn_MouseEnter);
-            this.expandBtn.MouseLeave += new System.EventHandler(this.expandBtn_MouseLeave);
-            // 
-            // minimizeBt
-            // 
-            this.minimizeBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.minimizeBt.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(12)))), ((int)(((byte)(12)))), ((int)(((byte)(16)))));
-            this.minimizeBt.FlatAppearance.BorderSize = 0;
-            this.minimizeBt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.minimizeBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.minimizeBt.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.minimizeBt.Image = ((System.Drawing.Image)(resources.GetObject("minimizeBt.Image")));
-            this.minimizeBt.Location = new System.Drawing.Point(788, 3);
-            this.minimizeBt.Name = "minimizeBt";
-            this.minimizeBt.Size = new System.Drawing.Size(62, 26);
-            this.minimizeBt.TabIndex = 2;
-            this.minimizeBt.UseVisualStyleBackColor = false;
-            this.minimizeBt.Click += new System.EventHandler(this.rollBtn_Click);
-            this.minimizeBt.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
-            this.minimizeBt.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
             // 
             // menuPnl
             // 
@@ -246,22 +233,6 @@
             this.mainPnlGrid.Size = new System.Drawing.Size(824, 632);
             this.mainPnlGrid.TabIndex = 4;
             // 
-            // minimizeBtn
-            // 
-            this.minimizeBtn.BorderRadius = 10;
-            this.minimizeBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.minimizeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.minimizeBtn.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.minimizeBtn.Image = ((System.Drawing.Image)(resources.GetObject("minimizeBtn.Image")));
-            this.minimizeBtn.Location = new System.Drawing.Point(788, 3);
-            this.minimizeBtn.Name = "minimizeBtn";
-            this.minimizeBtn.Size = new System.Drawing.Size(62, 26);
-            this.minimizeBtn.TabIndex = 4;
-            this.minimizeBtn.UseVisualStyleBackColor = true;
-            this.minimizeBtn.Click += new System.EventHandler(this.rollBtn_Click);
-            this.minimizeBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
-            this.minimizeBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -270,6 +241,7 @@
             this.ClientSize = new System.Drawing.Size(1000, 666);
             this.ControlBox = false;
             this.Controls.Add(this.mainPnlGrid);
+            this.Controls.Add(this.styleBtn);
             this.Controls.Add(this.controlSpl);
             this.Controls.Add(this.menuSpl);
             this.Controls.Add(this.menuPnl);
@@ -300,9 +272,6 @@
         #endregion
 
         private System.Windows.Forms.Panel controlPnl;
-        private System.Windows.Forms.Button closeBtn;
-        private System.Windows.Forms.Button expandBtn;
-        private System.Windows.Forms.Button minimizeBt;
         private System.Windows.Forms.Panel menuPnl;
         private System.Windows.Forms.Splitter menuSpl;
         private System.Windows.Forms.Splitter controlSpl;
@@ -315,6 +284,8 @@
         private System.Windows.Forms.PictureBox gridImage;
         private System.Windows.Forms.Button styleBtn;
         private controllers.RoundedButton minimizeBtn;
+        private controllers.RoundedButton expandBtn;
+        private controllers.RoundedButton closeBtn;
     }
 }
 
