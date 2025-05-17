@@ -4,7 +4,14 @@ namespace course.classes {
 
     public class Design {
 
-        // Dark Theme
+        #region General colors
+        public static Color ButtonCloseEnterColor = Color.Red;
+        public static Color ButtonExpandEnterColor = Color.MediumBlue;
+
+        
+        #endregion
+
+        #region Dark Theme
         public static int DarkTheme = 0; 
         public static Color FormDarkDefaultColor = Color.FromArgb(45, 45, 45);
 
@@ -12,22 +19,26 @@ namespace course.classes {
         public static Color MenuPanelDarkDefaultColor = Color.FromArgb(35, 35, 35);
         public static Color SplitterDarkDefaultColor = Color.FromArgb(45, 45, 45);
 
+        public static Color ButtonRollDarkEnterColor = Color.FromArgb(50, 50, 50);
+        public static Color ButtonStyleDarkEnterColor = Color.FromArgb(40, 40, 40);
+
         public static Color DefaultDarkTextColor = Color.FromArgb(100, 100, 100); // text is not chosen
         public static Color onEnterDarkPanelColor = Color.FromArgb(200, 200, 200); // panel is focused
+        #endregion
 
-        // Light Theme
+        #region Light Theme
+
         public static int LightTheme = 1;
         public static Color FormLightDefaultColor = Color.FromArgb(248, 249, 250);
 
-        public static Color ControlPanelLightDefaultColor = Color.FromArgb(26, 26, 26);
-        public static Color MenuPanelLightDefaultColor = Color.FromArgb(233, 236, 239);
-        public static Color SplitterLightDefaultColor = Color.FromArgb(45, 45, 45);
+        public static Color ControlPanelLightDefaultColor = Color.FromArgb(170, 170, 170);
+        public static Color MenuPanelLightDefaultColor = Color.FromArgb(220, 220, 220);
+        public static Color SplitterLightDefaultColor = Color.FromArgb(210, 210, 210);
 
-        public static Color ButtonCloseEnterColor = Color.Red;
-        public static Color ButtonExpandEnterColor = Color.MediumBlue;
-        public static Color ButtonRollEnterColor = Color.Gray;
+        public static Color ButtonStyleLightEnterColor = Color.FromArgb(220, 220, 220);
 
         public static Color DefaultLightTextColor = Color.FromArgb(200, 200, 200); // text is not chosen
         public static Color onEnterLightPanelColor = Color.FromArgb(52, 58, 64); // panel is focused
+        #endregion
     }
 }
