@@ -80,7 +80,9 @@
             this.styleBtn.TabIndex = 3;
             this.styleBtn.Tag = "";
             this.styleBtn.UseVisualStyleBackColor = false;
-            this.styleBtn.Click += new System.EventHandler(this.switchBtn_Click);
+            this.styleBtn.Click += new System.EventHandler(this.styleBtn_Click);
+            this.styleBtn.MouseEnter += new System.EventHandler(this.styleBtn_MouseEnter);
+            this.styleBtn.MouseLeave += new System.EventHandler(this.styleBtn_MouseLeave);
             // 
             // closeBtn
             // 
@@ -256,6 +258,9 @@
             this.minimizeBtn.Size = new System.Drawing.Size(62, 26);
             this.minimizeBtn.TabIndex = 4;
             this.minimizeBtn.UseVisualStyleBackColor = true;
+            this.minimizeBtn.Click += new System.EventHandler(this.rollBtn_Click);
+            this.minimizeBtn.MouseEnter += new System.EventHandler(this.rollBtn_MouseEnter);
+            this.minimizeBtn.MouseLeave += new System.EventHandler(this.rollBtn_MouseLeave);
             // 
             // MainForm
             // 
