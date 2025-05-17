@@ -24,7 +24,8 @@ namespace course.classes {
         public static Color ButtonStyleDarkEnterColor = Color.FromArgb(40, 40, 40);
 
         public static Color DefaultDarkTextColor = Color.FromArgb(100, 100, 100); // text is not chosen
-        public static Color onEnterDarkPanelColor = Color.FromArgb(200, 200, 200); // panel is focused
+        public static Color ChosenDarkPanelColor = Color.FromArgb(200, 200, 200); // text is chosen
+        public static Color onPanelDarkFocusedColor = Color.FromArgb(60, 60, 60); // panel is focused
 
         #endregion Dark Theme
 
@@ -40,7 +41,8 @@ namespace course.classes {
         public static Color ButtonStyleLightEnterColor = Color.FromArgb(220, 220, 220);
 
         public static Color DefaultLightTextColor = Color.FromArgb(180, 180, 180); // text is not chosen
-        public static Color onEnterLightPanelColor = Color.FromArgb(52, 58, 64); // panel is focused
+        public static Color onEnterLightPanelColor = Color.FromArgb(52, 58, 64); // text is chosen
+        public static Color onPanelLightFocusedColor = Color.FromArgb(190, 190, 190); // panel is focused
 
         #endregion Light Theme
     }

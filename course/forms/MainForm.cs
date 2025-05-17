@@ -53,7 +53,7 @@ namespace course.forms {
         private void MainForm_Load(object sender, EventArgs e) {
             this.InitVariables();
 
-            // Установка цвета фона компонентов
+            // Set components color
             _controlPnl.BackColor = Design.ControlPanelDarkDefaultColor;
             _menuPnl.BackColor = Design.MenuPanelDarkDefaultColor;
 
@@ -66,24 +66,34 @@ namespace course.forms {
             _controlSpl.BackColor = Design.SplitterDarkDefaultColor;
 
             _mainLabel.BackColor = Design.MenuPanelDarkDefaultColor;
-            _mainLabel.ForeColor = Design.onEnterDarkPanelColor;
-            // Установка расположения label
-            _mainLabel.Location = new Point(
-                    _mainLabel.Location.X,
-                    (_mainImage.Location.Y + _mainLabel.Height) / 2 + 9
-                );
-
+            _mainLabel.ForeColor = Design.ChosenDarkPanelColor;
             _gridLabel.BackColor = Design.MenuPanelDarkDefaultColor;
             _gridLabel.ForeColor = Design.DefaultDarkTextColor;
-            _gridLabel.Location = new Point(
-                    _gridLabel.Location.X,
-                    (_gridImage.Location.Y + _gridLabel.Height) / 2 + 9
-                );
 
-            // Установка цвета формы фона
+            // Set picturebox location
+            int startPointOfPictureBox = 15;
+            int dx = 15;
+            _mainImage.Location = new Point(startPointOfPictureBox, _mainPnl.Height / 4);
+            _gridImage.Location = new Point(startPointOfPictureBox, _gridPnl.Height / 4);
+
+            // Set label location
+            _mainLabel.Location = new Point(_mainImage.Location.X + _mainImage.Width + dx, _mainPnl.Height / 4 + 9);
+            _gridLabel.Location = new Point(_gridImage.Location.X + _gridImage.Width + dx, _gridPnl.Height / 4 + 6);
+
+            // Set form color
             (sender as Form)?.BackColor = Design.FormDarkDefaultColor;
             _styleBtn.Tag = Design.DarkTheme; // current theme - dark
             _menuPnl.Tag = _mainPnl; // current chosen point
+
+            // Add tooltips for components
+            styleTip.SetToolTip(
+                _styleBtn,
+                $"Текущая тема: {((int)_styleBtn.Tag == Design.DarkTheme ?
+                "тёмная" : "светлая")}"
+            );
+            minimizeTip.SetToolTip(_minimizeBtn, "Свернуть в трей");
+            expandTip.SetToolTip(_expandBtn, "Растянуть на весь экран / вернуть в исходное положение");
+            closeTip.SetToolTip(_closeBtn, "Завершение работы приложения");
         }
 
         private void closeBtn_MouseEnter(object sender, EventArgs e) {
@@ -127,7 +137,41 @@ namespace course.forms {
         }
 
         private void minimizeBtn_Click(object sender, EventArgs e) {
+            switch (this.WindowState) {
+                case FormWindowState.Maximized:
+                case FormWindowState.Normal:
+                    this.WindowState = FormWindowState.Minimized; // минимизируем
+                    formWindowState = this.WindowState; // запоминаем предыдущее состояние
+                    break;
 
+                default:
+                    this.WindowState = formWindowState; // возвращаем состояние как было
+                    break;
+            }
+        }
+
+        private void mainPnl_MouseEnter(object sender, EventArgs e) {
+            _mainPnl.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
+                Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
+            _mainLabel.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
+                Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
+        }
+
+        private void mainPnl_MouseLeave(object sender, EventArgs e) {
+            _mainPnl.BackColor = _menuPnl.BackColor;
+            _mainLabel.BackColor = _menuPnl.BackColor;
+        }
+
+        private void gridPnl_MouseEnter(object sender, EventArgs e) {
+            _gridPnl.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
+                Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
+            _gridLabel.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
+                Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
+        }
+
+        private void gridPnl_MouseLeave(object sender, EventArgs e) {
+            _gridPnl.BackColor = _menuPnl.BackColor;
+            _gridLabel.BackColor = _menuPnl.BackColor;
         }
 
         private void closeBtn_Click(object sender, EventArgs e) {
@@ -167,7 +211,6 @@ namespace course.forms {
                 newPoint.Offset(-startPoint.X, -startPoint.Y); // смещение новой точки относительно старой
                 this.Location = newPoint;
             }
-
             // Переход с формы на панель в крайнем правом и левом положении должен сбрасывать иконку курсора
             if (e.X >= this.Width - 5 || e.X <= 5) {
                 this.Cursor = Cursors.Default;
@@ -203,23 +246,10 @@ namespace course.forms {
                 FormWindowState.Normal :
                 FormWindowState.Maximized;
             // Обновляем позиции кнопок управления
-            _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
-            _expandBtn.Location = new Point(this.Width - 144, _expandBtn.Location.Y);
-            _minimizeBtn.Location = new Point(this.Width - 222, _minimizeBtn.Location.Y);
-        }
-
-        private void rollBtn_Click(object sender, EventArgs e) {
-            switch (this.WindowState) {
-                case FormWindowState.Maximized:
-                case FormWindowState.Normal:
-                    this.WindowState = FormWindowState.Minimized; // минимизируем
-                    formWindowState = this.WindowState; // запоминаем предыдущее состояние
-                    break;
-
-                default:
-                    this.WindowState = formWindowState; // возвращаем состояние как было
-                    break;
-            }
+            _closeBtn.Location = new Point(this.Width - _closeBtn.Width, _closeBtn.Location.Y);
+            _expandBtn.Location = new Point(_closeBtn.Location.X - _expandBtn.Width, _expandBtn.Location.Y);
+            _minimizeBtn.Location = new Point(_expandBtn.Location.X - _minimizeBtn.Width, _minimizeBtn.Location.Y);
+            _styleBtn.Location = new Point(_minimizeBtn.Location.X - _styleBtn.Width, _styleBtn.Location.Y);
         }
 
         private void MainForm_MouseUp(object sender, MouseEventArgs e) {

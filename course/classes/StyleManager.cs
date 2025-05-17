@@ -72,13 +72,16 @@ namespace course.classes {
                         Design.MenuPanelDarkDefaultColor : Design.MenuPanelLightDefaultColor;
                 if (panel.Equals(clickedPanel)) { // change icon for clicked panel
                     label.ForeColor = theme == Design.DarkTheme ?
-                        Design.onEnterDarkPanelColor : Design.onEnterLightPanelColor;
+                        Design.ChosenDarkPanelColor : Design.onEnterLightPanelColor;
                     pictureBox.Image = LoadIcon($"{panelName}_on_{(theme == Design.DarkTheme ? "dark" : "bright")}_theme.png");
                 } else { // otherwise
                     label.ForeColor = theme == Design.DarkTheme ?
                         Design.DefaultDarkTextColor : Design.DefaultLightTextColor;
                     pictureBox.Image = LoadIcon($"{panelName}_off_{(theme == Design.DarkTheme ? "dark" : "bright")}_theme.png");
                 }
+
+                // Change color for menu panels
+                panel.BackColor = theme == Design.DarkTheme ? Design.MenuPanelDarkDefaultColor : Design.MenuPanelLightDefaultColor;
             }
             foreach (var splitter in splitters) {
                 splitter.BackColor = theme == Design.DarkTheme ? Design.SplitterDarkDefaultColor : Design.SplitterLightDefaultColor;
