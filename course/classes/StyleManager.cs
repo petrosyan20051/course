@@ -13,6 +13,7 @@ namespace course.classes {
 
     public class StyleManager {
         private int theme { set; get; } // Current theme. Light or dark
+
         public string iconsPath { private set; get; } =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons"); // Путь к папке с иконками
 
@@ -51,11 +52,11 @@ namespace course.classes {
                 if (panel.Equals(clickedPanel)) { // change icon for clicked panel
                     label.ForeColor = theme == Design.DarkTheme ?
                         Design.onEnterDarkPanelColor : Design.onEnterLightPanelColor;
-                    pictureBox.Image = LoadIcon($"{panelName}_{(theme == Design.DarkTheme ? "bright" : "dark")}.png");
+                    pictureBox.Image = LoadIcon($"{panelName}_on_{(theme == Design.DarkTheme ? "dark" : "bright")}_theme.png");
                 } else { // otherwise
                     label.ForeColor = theme == Design.DarkTheme ?
                         Design.DefaultDarkTextColor : Design.DefaultLightTextColor;
-                    pictureBox.Image = LoadIcon($"{panelName}_{(theme == Design.DarkTheme ? "dark" : "bright")}.png");
+                    pictureBox.Image = LoadIcon($"{panelName}_off_{(theme == Design.DarkTheme ? "dark" : "bright")}_theme.png");
                 }
             }
         }
