@@ -12,47 +12,49 @@ using System.Windows.Forms;
 namespace course.classes {
 
     public class StyleManager {
-        private bool theme { set; get; } // Current theme. Light or dark
+        private int theme { set; get; } // Current theme. Light or dark
         private string iconsPath { set; get; } =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons"); // Путь к папке с иконками
 
         private List<Panel> panels;
 
-        public MenuManager(bool theme, string iconsPath) {
+        public StyleManager(int theme, string? iconsPath) {
             this.theme = theme;
             this.iconsPath = iconsPath;
-            this.panels = new List<Panel>();
+            this.panels = [];
         }
 
-        // Добавление панели в менеджер
+        // Add panel into manager
         public void AddPanel(Panel? panel, string? panelName) {
             if (!panels.Contains(panel)) {
                 panels.Add(panel);
             }
         }
 
-        // Обновление состояния меню
+        // Update menu state
         public void UpdateMenuState(Panel clickedPanel) {
             foreach (var panel in panels) {
                 var panelName = panel.Name;
                 var label = panel.Controls.OfType<Label>().FirstOrDefault();
                 var pictureBox = panel.Controls.OfType<PictureBox>().FirstOrDefault();
 
-                if (label is null || pictureBox is null) continue;
+                if (label is null || pictureBox is null) continue; // panel or label is not found
 
-                if (panel == clickedPanel) {
-                    // Active for dark and light theme
-                    label.ForeColor = !theme ? Design.onEnterDarkPanelColor : Design.onEnterLightPanelColor;
-                    pictureBox.Image = LoadIcon($"{panelName}_colorful.png");
-                } else {
-                    // Inactive for dark and light theme
-                    label.ForeColor = theme ? Design.onEnterLightPanelColor : Design.onEnterDarkPanelColor;
-                    pictureBox.Image = LoadIcon($"{panelName}_pale.png");
+                label.BackColor = theme == Design.DarkTheme ?
+                        Design.MenuPanelDarkDefaultColor : Design.MenuPanelLightDefaultColor;
+                if (panel.Equals(clickedPanel)) { // change icon for clicked panel
+                    label.ForeColor = theme == Design.DarkTheme ?
+                        Design.onEnterDarkPanelColor : Design.onEnterLightPanelColor;
+                    pictureBox.Image = LoadIcon($"{panelName}_{(theme == Design.DarkTheme ? "bright" : "dark")}.png");
+                } else { // otherwise
+                    label.ForeColor = theme == Design.DarkTheme ?
+                        Design.DefaultDarkTextColor : Design.DefaultLightTextColor;
+                    pictureBox.Image = LoadIcon($"{panelName}_{(theme == Design.DarkTheme ? "dark" : "bright")}.png");
                 }
             }
         }
 
-        // Загрузка иконки из файла
+        // Get icon from file
         private Image LoadIcon(string iconName) {
             string iconPath = Path.Combine(iconsPath, iconName);
             if (File.Exists(iconPath)) {
@@ -61,10 +63,10 @@ namespace course.classes {
             throw new FileNotFoundException($"Иконка не найдена: {iconPath}");
         }
 
-        /*// Смена темы
-        public void ChangeTheme(bool newTheme) {
-            theme = newTheme;
-            UpdateMenuState(null); // Обновляем все пункты меню для новой темы
-        }*/
+        // Change theme
+        public void ChangeTheme(int newTheme, Panel clickedPanel) {
+            theme = newTheme; // update theme var
+            UpdateMenuState(clickedPanel); // update all points for theme
+        }
     }
 }
