@@ -121,7 +121,7 @@
   <data name="closeBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAn
-        XAAAJ1wBsD+bBwAAAK5JREFUKFNt0DELQVEYh/G7CCmrcr+CQQYmH8CEZPGRbEpKmWQik5gUZbLYMBoV
+        WwAAJ1sB4ns9eAAAAK5JREFUKFNt0DELQVEYh/G7CCmrcr+CQQYmH8CEZPGRbEpKmWQik5gUZbLYMBoV
         peQDHM//dI4OGX517nufe3q7kTFmhSZ0/qeKuQ49XNHAb1TBBQs9JNHHCy34qAxFW8R+mMIQD9RQxBEb
         xIh8KAl0ccAeM+Rh34ehlHDCDR03s8KoAN00xQD6oI6vUNEZWjyHNEa4w/46RX7xHeziThYTPNHWYOl8
         Fg9kMDbGrN+8CksCXi+vCQAAAABJRU5ErkJggg==
@@ -143,13 +143,16 @@
   </data>
   <data name="styleBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAQ5JREFUOE+dkjFuwkAQRX+HOALiAHAESiRugERHlT4lR6CLlGugCILBjsFEKBKQ
-        ko4iTVpEZIkG+smftcVaeEEWxdP+Wc/b9XoNEXkY52RRbDFn/kxZZNB6jpa8oSMxc8ax8pQ5IB9O6jJm
-        2xbP8ss6J/vMKutOSwcznGTIVg8Vt6y76KvqEa4JEbNHJEL/thylaPbIhPhosJaUn/uy7q5Zj5HkbyOG
-        JMC5mKws8GoklQMz+nnZQ5MPqkaMUKbQ4oJRKiTilKzRzss+nkxTiAPH2OQsM/KOjQyscwlyYv5Cz1xH
-        sogV9St7WPKOS7J3yZpXZIgaxRcKO4p/zCPu2uVPAjlqv3Uu4RGck8UQ/AM+DzJiNRJY/gAAAABJRU5E
-        rkJggg==
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHESURBVDhPrZTPK2xxFMCPCRuFRK9snoWFUpKFBSn/ATsW
+        Fq/s7awsFMVCYsOeJKSGYe41Y0avlx9Z2CmlKLKQFYvXE3J8zr2mMTPXjHlZfPre7znf87nne7/dr6jq
+        t+I/bDO6EPsSIehXR+ahVs+IHb7nMoRb4ICJC+FIB+uvGNf0XKr1iFigMAomLcwP1iZAdY9Of0uF7hIP
+        FBo7kLnNbCpZs0idUvfMfEDjUvK50LZl0s+pYc2K16Hhyr4mpDW/MNWpbTEVT9MA+6Bel4480OHk14T2
+        bPm0zOiGO/A79DkoTpg6EJdvFZUpr7NM4UVxQhttnpBOcjeQLbz8H+FPTjTpdZfb4XGxwha27HrFubJ/
+        HMr0R2EjwmYSQcImnoeRnTFmi3xicqJJaU8L7VeKyjKswziSEWITsMD8FB4hWGbEZBBh6KOwDHpI/oVX
+        eIYXb3E+XAjLErVVHBaTlNC2F4c/0qcRuc0pDGKbl8a5HMJSr6vUrgULRTelizc6xO7Bus2WPdHZJeMo
+        F0KVblBTQGiHUQ6/iIfBvuE1XPCiQ+KzfDM7cfFumILCCPg3Sh3b6oUx8nMwQ2dDrGsjV5pf+G2ovAHA
+        0HvT2qC75AAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="gridImage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
