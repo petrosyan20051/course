@@ -8,9 +8,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace course.controllers {
+
     public partial class RoundedButton : Button {
+
         // Радиус закругления углов
-        private int borderRadius = 10;
+        public int borderRadius { private set; get; }
 
         public int BorderRadius {
             get { return borderRadius; }
@@ -21,23 +23,31 @@ namespace course.controllers {
             }
         }
 
+        public RoundedButton(int borderRadius = 5) {
+            this.BorderRadius = borderRadius;
+            this.FlatStyle = FlatStyle.Flat;
+            this.FlatAppearance.BorderSize = 0;
+        }
+
         protected override void OnPaint(PaintEventArgs e) {
-            // Создаем путь для закругленных углов
+            e.Graphics.Clear(this.BackColor);
+
+            // Make path for rounded angles
             GraphicsPath path = new GraphicsPath();
             int width = this.Width;
             int height = this.Height;
 
-            // Добавляем закругленный прямоугольник в путь
-            path.AddArc(0, 0, borderRadius * 2, borderRadius * 2, 180, 90); // Левый верхний угол
-            path.AddArc(width - borderRadius * 2, 0, borderRadius * 2, borderRadius * 2, 270, 90); // Правый верхний угол
-            path.AddArc(width - borderRadius * 2, height - borderRadius * 2, borderRadius * 2, borderRadius * 2, 0, 90); // Правый нижний угол
-            path.AddArc(0, height - borderRadius * 2, borderRadius * 2, borderRadius * 2, 90, 90); // Левый нижний угол
+            // Add rounded rectangle into path
+            path.AddArc(0, 0, borderRadius * 2, borderRadius * 2, 180, 90); // Left-up corner
+            path.AddArc(width - borderRadius * 2, 0, borderRadius * 2, borderRadius * 2, 270, 90); // Right-up corner
+            path.AddArc(width - borderRadius * 2, height - borderRadius * 2, borderRadius * 2, borderRadius * 2, 0, 90); // Right-down corner
+            path.AddArc(0, height - borderRadius * 2, borderRadius * 2, borderRadius * 2, 90, 90); // Left-down corner
             path.CloseFigure();
 
-            // Устанавливаем область отрисовки кнопки
+            // Make area for path
             this.Region = new Region(path);
 
-            // Отрисовываем текст кнопки
+            // Draw button text
             using (SolidBrush brush = new SolidBrush(this.ForeColor)) {
                 StringFormat format = new StringFormat {
                     Alignment = StringAlignment.Center,
