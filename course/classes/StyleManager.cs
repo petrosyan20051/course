@@ -13,7 +13,7 @@ namespace course.classes {
 
     public class StyleManager {
         private int theme { set; get; } // Current theme. Light or dark
-        private string iconsPath { set; get; } =
+        public string iconsPath { private set; get; } =
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons"); // Путь к папке с иконками
 
         private List<Panel> panels;
@@ -28,6 +28,12 @@ namespace course.classes {
         public void AddPanel(Panel? panel, string? panelName) {
             if (!panels.Contains(panel)) {
                 panels.Add(panel);
+            }
+        }
+
+        public void UpdateIconFolderPath(string path) {
+            if (Directory.Exists(path)) {
+                this.iconsPath = path;
             }
         }
 
@@ -60,11 +66,19 @@ namespace course.classes {
             if (File.Exists(iconPath)) {
                 return Image.FromFile(iconPath);
             }
-            throw new FileNotFoundException($"Иконка не найдена: {iconPath}");
+            throw new FileNotFoundException($"Icon is not found: {iconPath}");
+        }
+
+        public static Image LoadIcon(string iconName, string iconsPath) {
+            string iconPath = Path.Combine(iconsPath, iconName);
+            if (File.Exists(iconPath)) {
+                return Image.FromFile(iconPath);
+            }
+            throw new FileNotFoundException($"Icon is not found: {iconPath}");
         }
 
         // Change theme
-        public void ChangeTheme(int newTheme, Panel clickedPanel) {
+        public void ChangeMenuPanelTheme(int newTheme, Panel clickedPanel) {
             theme = newTheme; // update theme var
             UpdateMenuState(clickedPanel); // update all points for theme
         }
