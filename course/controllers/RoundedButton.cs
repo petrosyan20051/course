@@ -12,7 +12,7 @@ namespace course.controllers {
     public partial class RoundedButton : Button {
 
         // Радиус закругления углов
-        public int borderRadius { private set; get; }
+        private int borderRadius { set; get; } = 5;
 
         public int BorderRadius {
             get { return borderRadius; }
@@ -23,8 +23,7 @@ namespace course.controllers {
             }
         }
 
-        public RoundedButton(int borderRadius = 5) {
-            this.BorderRadius = borderRadius;
+        public RoundedButton() {
             this.FlatStyle = FlatStyle.Flat;
             this.FlatAppearance.BorderSize = 0;
         }
