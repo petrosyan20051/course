@@ -5,6 +5,7 @@ namespace course.classes {
     public class Design {
 
         // Dark Theme
+        public static int DarkTheme = 0; 
         public static Color FormDarkDefaultColor = Color.FromArgb(45, 45, 45);
 
         public static Color ControlPanelDarkDefaultColor = Color.FromArgb(26, 26, 26);
@@ -15,6 +16,7 @@ namespace course.classes {
         public static Color onEnterDarkPanelColor = Color.FromArgb(200, 200, 200); // panel is focused
 
         // Light Theme
+        public static int LightTheme = 1;
         public static Color FormLightDefaultColor = Color.FromArgb(248, 249, 250);
 
         public static Color ControlPanelLightDefaultColor = Color.FromArgb(26, 26, 26);
