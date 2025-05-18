@@ -1,8 +1,4 @@
 ﻿using gui.classes;
-using System;
-using System.Windows.Forms;
-
-//using
 
 namespace gui.forms {
 
@@ -24,10 +20,14 @@ namespace gui.forms {
 
             try {
                 // Make instance db context
-                using (var context = new ApplicationContext()) {
-                    // var orders = context.
+                using (var context = new db.Models.OrderContext()) {
+                    var orders = context.Orders.ToList(); // get data about orders
+                    _grid.DataSource = orders; // bind data to grid
                 }
-            } catch (Exception ex) { }
+            } catch (Exception ex) {
+                MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace gui.classes {
+﻿namespace gui.classes {
 
     public class Design {
 
@@ -41,6 +39,8 @@ namespace gui.classes {
         public static Color SplitterLightDefaultColor = Color.FromArgb(245, 245, 245);
 
         public static Color ButtonStyleLightEnterColor = Color.FromArgb(220, 220, 220);
+
+        public static Color DataGridViewLightThemeColor = Color.FromArgb(200, 200, 200);
 
         public static Color DefaultLightTextColor = Color.FromArgb(180, 180, 180); // text is not chosen
         public static Color onEnterLightPanelColor = Color.FromArgb(52, 58, 64); // text is chosen

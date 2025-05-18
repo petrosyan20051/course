@@ -1,8 +1,4 @@
 ﻿using gui.classes;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
 
 namespace gui.forms {
 
@@ -46,13 +42,29 @@ namespace gui.forms {
                 Design.DarkTheme,
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "icons")
             ); // Make style manager
-            foreach (Panel panel in _menuPnl.Controls) { // Add panels into panel
-                style.AddPanel(panel, panel.Name);
+            foreach (var control in _menuPnl.Controls) { // Add panels into manager
+                if (control is Panel panel) {
+                    style.AddPanel(panel, panel.Name);
+                }
+            }
+            foreach (var control in this.Controls) { // add splitter into manager
+                if (control is Splitter splitter) {
+                    style.AddSplitter(splitter);
+                }
             }
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
             this.InitVariables();
+
+            // Add from about general information of tables
+            TableInformation form = new TableInformation();
+            style.AddDataGrid(form.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
+
+            form.Height = _mainGridPanel.Height;
+            form.Dock = DockStyle.Fill;
+            _mainGridPanel.Controls.Add(form);
+            form.Show();
 
             // Set components color
             _controlPnl.BackColor = Design.ControlPanelDarkDefaultColor;
@@ -82,7 +94,7 @@ namespace gui.forms {
             _gridLabel.Location = new Point(_gridImage.Location.X + _gridImage.Width + dx, _gridMenuPnl.Height / 4 + 6);
 
             // Set form color
-            (sender as Form).BackColor = Design.FormDarkDefaultColor;
+            this.BackColor = Design.FormDarkDefaultColor;
             _styleBtn.Tag = Design.DarkTheme; // current theme - dark
             _menuPnl.Tag = _mainMenuPnl; // current chosen point
 
@@ -95,13 +107,6 @@ namespace gui.forms {
             minimizeTip.SetToolTip(_minimizeBtn, "Свернуть в трей");
             expandTip.SetToolTip(_expandBtn, "Растянуть на весь экран / вернуть в исходное положение");
             closeTip.SetToolTip(_closeBtn, "Завершение работы приложения");
-
-            // Add from about general information of tables
-            TableInformation form = new TableInformation();
-            form.Width = _mainGridPanel.Width;
-            form.Height = _mainGridPanel.Height;
-            _mainGridPanel.Controls.Add(form);
-            form.Show();
         }
 
         private void closeBtn_MouseEnter(object sender, EventArgs e) {

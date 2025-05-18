@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using gui.classes;
-
-// Class for changing style of app. Dark Theme, Light Theme
+﻿// Class for changing style of app. Dark Theme, Light Theme
 
 namespace gui.classes {
 
@@ -17,12 +9,14 @@ namespace gui.classes {
 
         public List<Panel> panels { private set; get; }
         public List<Splitter> splitters { private set; get; }
+        public List<DataGridView> datagrids { private set; get; }
 
-        public StyleManager(int theme, string? iconsPath) {
+        public StyleManager(int theme, string iconsPath) {
             this.theme = theme;
             this.iconsPath = iconsPath;
             this.panels = [];
             this.splitters = [];
+            this.datagrids = [];
         }
 
         // Add panel into manager
@@ -39,6 +33,13 @@ namespace gui.classes {
             }
         }
 
+        // Add grid into manager
+        public void AddDataGrid(DataGridView? grid) {
+            if (!datagrids.Contains(grid)) {
+                datagrids.Add(grid);
+            }
+        }
+
         public void DeletePanel(Panel? panel) {
             if (panels.Contains(panel)) {
                 panels.Remove(panel);
@@ -48,6 +49,12 @@ namespace gui.classes {
         public void DeletePanel(Splitter? splitter) {
             if (splitters.Contains(splitter)) {
                 splitters.Remove(splitter);
+            }
+        }
+
+        public void DeleteFataGrid(DataGridView? grid) {
+            if (datagrids.Contains(grid)) {
+                datagrids.Remove(grid);
             }
         }
 
@@ -83,6 +90,9 @@ namespace gui.classes {
             }
             foreach (var splitter in splitters) {
                 splitter.BackColor = theme == Design.DarkTheme ? Design.SplitterDarkDefaultColor : Design.SplitterLightDefaultColor;
+            }
+            foreach (var grid in datagrids) {
+                grid.BackgroundColor = theme == Design.DarkTheme ? Design.DataGridViewDarkThemeColor : Design.DataGridViewLightThemeColor;
             }
         }
 

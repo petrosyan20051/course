@@ -1,6 +1,4 @@
 ﻿using gui.classes;
-using System;
-using System.Windows.Forms;
 
 namespace gui.forms {
 
