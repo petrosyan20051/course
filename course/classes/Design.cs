@@ -23,6 +23,8 @@ namespace course.classes {
         public static Color ButtonRollDarkEnterColor = Color.FromArgb(50, 50, 50);
         public static Color ButtonStyleDarkEnterColor = Color.FromArgb(40, 40, 40);
 
+        public static Color DataGridViewDarkThemeColor = Color.FromArgb(70, 70, 70);
+
         public static Color DefaultDarkTextColor = Color.FromArgb(100, 100, 100); // text is not chosen
         public static Color ChosenDarkPanelColor = Color.FromArgb(200, 200, 200); // text is chosen
         public static Color onPanelDarkFocusedColor = Color.FromArgb(60, 60, 60); // panel is focused

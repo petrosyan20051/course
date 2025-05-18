@@ -1,6 +1,6 @@
-﻿using System;
+﻿using course.forms;
+using System;
 using System.Windows.Forms;
-using course.forms;
 
 namespace course {
     internal static class Program {

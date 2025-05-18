@@ -14,7 +14,7 @@ namespace course.forms {
         private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
         private Button _closeBtn, _minimizeBtn, _expandBtn, _styleBtn;
-        private Panel _controlPnl, _menuPnl, _mainPnl, _gridPnl;
+        private Panel _controlPnl, _menuPnl, _mainMenuPnl, _gridMenuPnl, _mainGridPanel;
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
         private Label _mainLabel, _gridLabel;
@@ -38,8 +38,9 @@ namespace course.forms {
             _gridImage = this.gridImage;
             _gridLabel = this.gridLbl;
             _styleBtn = this.styleBtn;
-            _mainPnl = this.mainPnl;
-            _gridPnl = this.gridPnl;
+            _mainMenuPnl = this.mainPnl;
+            _gridMenuPnl = this.gridPnl;
+            _mainGridPanel = this.mainPnlGrid;
 
             style = new StyleManager(
                 Design.DarkTheme,
@@ -73,17 +74,17 @@ namespace course.forms {
             // Set picturebox location
             int startPointOfPictureBox = 15;
             int dx = 15;
-            _mainImage.Location = new Point(startPointOfPictureBox, _mainPnl.Height / 4);
-            _gridImage.Location = new Point(startPointOfPictureBox, _gridPnl.Height / 4);
+            _mainImage.Location = new Point(startPointOfPictureBox, _mainMenuPnl.Height / 4);
+            _gridImage.Location = new Point(startPointOfPictureBox, _gridMenuPnl.Height / 4);
 
             // Set label location
-            _mainLabel.Location = new Point(_mainImage.Location.X + _mainImage.Width + dx, _mainPnl.Height / 4 + 9);
-            _gridLabel.Location = new Point(_gridImage.Location.X + _gridImage.Width + dx, _gridPnl.Height / 4 + 6);
+            _mainLabel.Location = new Point(_mainImage.Location.X + _mainImage.Width + dx, _mainMenuPnl.Height / 4 + 9);
+            _gridLabel.Location = new Point(_gridImage.Location.X + _gridImage.Width + dx, _gridMenuPnl.Height / 4 + 6);
 
             // Set form color
             (sender as Form)?.BackColor = Design.FormDarkDefaultColor;
             _styleBtn.Tag = Design.DarkTheme; // current theme - dark
-            _menuPnl.Tag = _mainPnl; // current chosen point
+            _menuPnl.Tag = _mainMenuPnl; // current chosen point
 
             // Add tooltips for components
             styleTip.SetToolTip(
@@ -94,6 +95,13 @@ namespace course.forms {
             minimizeTip.SetToolTip(_minimizeBtn, "Свернуть в трей");
             expandTip.SetToolTip(_expandBtn, "Растянуть на весь экран / вернуть в исходное положение");
             closeTip.SetToolTip(_closeBtn, "Завершение работы приложения");
+
+            // Add from about general information of tables
+            TableInformation form = new TableInformation();
+            form.Width = _mainGridPanel.Width;
+            form.Height = _mainGridPanel.Height;
+            _mainGridPanel.Controls.Add(form);
+            form.Show();
         }
 
         private void closeBtn_MouseEnter(object sender, EventArgs e) {
@@ -151,26 +159,26 @@ namespace course.forms {
         }
 
         private void mainPnl_MouseEnter(object sender, EventArgs e) {
-            _mainPnl.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
+            _mainMenuPnl.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
                 Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
             _mainLabel.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
                 Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
         }
 
         private void mainPnl_MouseLeave(object sender, EventArgs e) {
-            _mainPnl.BackColor = _menuPnl.BackColor;
+            _mainMenuPnl.BackColor = _menuPnl.BackColor;
             _mainLabel.BackColor = _menuPnl.BackColor;
         }
 
         private void gridPnl_MouseEnter(object sender, EventArgs e) {
-            _gridPnl.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
+            _gridMenuPnl.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
                 Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
             _gridLabel.BackColor = (int)_styleBtn.Tag == Design.DarkTheme ?
                 Design.onPanelDarkFocusedColor : Design.onPanelLightFocusedColor;
         }
 
         private void gridPnl_MouseLeave(object sender, EventArgs e) {
-            _gridPnl.BackColor = _menuPnl.BackColor;
+            _gridMenuPnl.BackColor = _menuPnl.BackColor;
             _gridLabel.BackColor = _menuPnl.BackColor;
         }
 
