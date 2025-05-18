@@ -44,7 +44,7 @@ namespace gui.forms {
 
             style = new StyleManager(
                 Design.DarkTheme,
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons")
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "icons")
             ); // Make style manager
             foreach (Panel panel in _menuPnl.Controls) { // Add panels into panel
                 style.AddPanel(panel, panel.Name);

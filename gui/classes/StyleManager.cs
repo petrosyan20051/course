@@ -13,8 +13,7 @@ namespace gui.classes {
     public class StyleManager {
         private int theme { set; get; } // Current theme. Light or dark
 
-        public string iconsPath { private set; get; } =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "icons"); // Путь к папке с иконками
+        public string iconsPath { private set; get; } // path with icons
 
         public List<Panel> panels { private set; get; }
         public List<Splitter> splitters { private set; get; }
