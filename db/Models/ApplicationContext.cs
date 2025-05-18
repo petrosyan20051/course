@@ -7,9 +7,13 @@ namespace db.Models {
 
         public ApplicationContext() => Database.EnsureCreated();
 
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        : base(options) {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
-                optionsBuilder.UseSqlServer(@"Server=16.0.1135.2;Database=KR;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=KR;Trusted_Connection=True;");
             }
         }
     }

@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/Сontrollers": {
+    "/Orders": {
       "get": {
         "tags": [
           "Orders"
@@ -36,6 +36,46 @@
                   "items": {
                     "$ref": "#/components/schemas/Order"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Orders/{id}": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
                 }
               }
             }
