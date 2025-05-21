@@ -176,6 +176,21 @@ namespace db.Migrations
                     b.HasIndex("RouteId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            Distance = 550,
+                            IdCustomer = 2,
+                            IdRate = 2,
+                            IdRoute = 1,
+                            Note = "",
+                            WhenAdded = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            WhenChanged = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            WhoAdded = "",
+                            WhoChanged = ""
+                        });
                 });
 
             modelBuilder.Entity("db.Models.Rate", b =>

@@ -1,15 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace db.Migrations {
+namespace db.Migrations
+{
     /// <inheritdoc />
-    public partial class InitialCreate : Migration {
+    public partial class InitialCreate : Migration
+    {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder) {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
             migrationBuilder.CreateTable(
                 name: "Customers",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Forename = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -22,13 +27,15 @@ namespace db.Migrations {
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Drivers",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Forename = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -42,13 +49,15 @@ namespace db.Migrations {
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Drivers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Routes",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BoardingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -59,13 +68,15 @@ namespace db.Migrations {
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Routes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Vehicles",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdDriver = table.Column<int>(type: "int", nullable: false),
@@ -82,7 +93,8 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DriverId = table.Column<int>(type: "int", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Vehicles", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Vehicles_Drivers_DriverId",
@@ -93,7 +105,8 @@ namespace db.Migrations {
 
             migrationBuilder.CreateTable(
                 name: "Rates",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Forename = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -109,7 +122,8 @@ namespace db.Migrations {
                     DriverId = table.Column<int>(type: "int", nullable: true),
                     TransportVehicleId = table.Column<int>(type: "int", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Rates", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Rates_Drivers_DriverId",
@@ -125,7 +139,8 @@ namespace db.Migrations {
 
             migrationBuilder.CreateTable(
                 name: "Orders",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdCustomer = table.Column<int>(type: "int", nullable: false),
@@ -141,7 +156,8 @@ namespace db.Migrations {
                     RateId = table.Column<int>(type: "int", nullable: true),
                     RouteId = table.Column<int>(type: "int", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orders_Customers_CustomerId",
@@ -159,6 +175,11 @@ namespace db.Migrations {
                         principalTable: "Routes",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "CustomerId", "Distance", "IdCustomer", "IdRate", "IdRoute", "Note", "RateId", "RouteId", "WhenAdded", "WhenChanged", "WhoAdded", "WhoChanged" },
+                values: new object[] { 5, null, 550, 2, 2, 1, "", null, null, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "", "" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
@@ -192,7 +213,8 @@ namespace db.Migrations {
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder) {
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
             migrationBuilder.DropTable(
                 name: "Orders");
 

@@ -3,18 +3,18 @@
 namespace db.Models {
 
     public class OrderContext(DbContextOptions<OrderContext> options) : DbContext(options) {
-        public DbSet<Order> Orders => Set<Order>();
-        public DbSet<Rate> Rates => Set<Rate>();
-        public DbSet<Route> Routes => Set<Route>();
-        public DbSet<TransportVehicle> Vehicles => Set<TransportVehicle>();
-        public DbSet<Driver> Drivers => Set<Driver>();
-        public DbSet<Customer> Customers => Set<Customer>();
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Rate> Rates { get; set; }
+        public DbSet<Route> Routes { get; set; }
+        public DbSet<TransportVehicle> Vehicles { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             if (!optionsBuilder.IsConfigured) {
                 optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=KR;Trusted_Connection=True");
             }
-        }*/
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);

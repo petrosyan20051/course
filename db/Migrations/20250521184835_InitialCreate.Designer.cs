@@ -12,7 +12,7 @@ using db.Models;
 namespace db.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20250518190351_InitialCreate")]
+    [Migration("20250521184835_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -179,6 +179,21 @@ namespace db.Migrations
                     b.HasIndex("RouteId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 5,
+                            Distance = 550,
+                            IdCustomer = 2,
+                            IdRate = 2,
+                            IdRoute = 1,
+                            Note = "",
+                            WhenAdded = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            WhenChanged = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            WhoAdded = "",
+                            WhoChanged = ""
+                        });
                 });
 
             modelBuilder.Entity("db.Models.Rate", b =>
