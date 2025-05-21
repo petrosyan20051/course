@@ -1,4 +1,6 @@
 ﻿using gui.classes;
+using db.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace gui.forms {
 
@@ -20,7 +22,7 @@ namespace gui.forms {
 
             try {
                 // Make instance db context
-                using (var context = new db.Models.OrderContext()) {
+                using (var context = new OrderContext()) {
                     var orders = context.Orders.ToList(); // get data about orders
                     _grid.DataSource = orders; // bind data to grid
                 }
