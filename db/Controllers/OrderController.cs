@@ -28,8 +28,18 @@ namespace db.Controllers {
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, Order updated) {
-            if (id != updated.Id) return BadRequest();
+            if (id != updated.Id)
+                return BadRequest();
             _context.Entry(updated).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Put(int id, Order order) {
+            if (id != order.Id)
+                return BadRequest();
+            _context.Entry(order).State = EntityState.Added;
             await _context.SaveChangesAsync();
             return NoContent();
         }
