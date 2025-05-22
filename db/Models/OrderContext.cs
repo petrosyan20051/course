@@ -3,6 +3,7 @@
 namespace db.Models {
 
     public class OrderContext(DbContextOptions<OrderContext> options) : DbContext(options) {
+
         public DbSet<Order> Orders { get; set; }
         public DbSet<Rate> Rates { get; set; }
         public DbSet<Route> Routes { get; set; }
@@ -11,9 +12,7 @@ namespace db.Models {
         public DbSet<Customer> Customers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            if (!optionsBuilder.IsConfigured) {
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=KR;Trusted_Connection=True");
-            }
+            optionsBuilder.UseSqlServer("Server=Laptop;Database=KR;Trusted_Connection=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
