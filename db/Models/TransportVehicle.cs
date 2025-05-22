@@ -6,7 +6,7 @@ namespace db.Models {
         public int Id { get; set; }
 
         [ForeignKey("Driver")]
-        public int IdDriver { get; set; }
+        public int DriverId { get; set; }
 
         public string Number { get; set; } = string.Empty;
         public string Series { get; set; } = string.Empty;

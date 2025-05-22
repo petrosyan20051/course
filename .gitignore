@@ -1,4 +1,3 @@
 # Ignore build files
 .vs/
-course/bin
-course/obj
+db/bin

@@ -154,15 +154,15 @@
             "type": "integer",
             "format": "int32"
           },
-          "idCustomer": {
+          "customerId": {
             "type": "integer",
             "format": "int32"
           },
-          "idRoute": {
+          "routeId": {
             "type": "integer",
             "format": "int32"
           },
-          "idRate": {
+          "rateId": {
             "type": "integer",
             "format": "int32"
           },
@@ -176,7 +176,8 @@
           },
           "whenAdded": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "whoChanged": {
             "type": "string",
@@ -184,7 +185,8 @@
           },
           "whenChanged": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "note": {
             "type": "string",
