@@ -17,6 +17,7 @@ namespace db.Tools {
                 var phone = $"+7{random.Next(900, 1000)}{random.Next(1000000, 9999999)}";
 
                 customers.Add(new Customer {
+                    Id = i + 1,
                     Forename = firstName,
                     Surname = lastName,
                     PhoneNumber = phone,
