@@ -216,8 +216,7 @@
           },
           "whenAdded": {
             "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           },
           "whoChanged": {
             "type": "string",
@@ -230,6 +229,11 @@
           },
           "note": {
             "type": "string",
+            "nullable": true
+          },
+          "isDeleted": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         },
