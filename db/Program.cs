@@ -1,3 +1,5 @@
+using db.Contexts;
+using db.Controllers;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,8 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<OrderContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<OrderDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IRepository<Order, int>, OrderRepository>();
 
 var app = builder.Build();
 

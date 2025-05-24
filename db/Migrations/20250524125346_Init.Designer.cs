@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using db.Models;
+using db.Contexts;
 
 #nullable disable
 
 namespace db.Migrations
 {
-    [DbContext(typeof(OrderContext))]
+    [DbContext(typeof(OrderDbContext))]
     [Migration("20250524125346_Init")]
     partial class Init
     {

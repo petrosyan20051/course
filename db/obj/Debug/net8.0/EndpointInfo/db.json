@@ -5,10 +5,10 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Orders": {
+    "/api/Order": {
       "get": {
         "tags": [
-          "Orders"
+          "Order"
         ],
         "responses": {
           "200": {
@@ -41,12 +41,58 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Order"
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "/api/Orders/{id}": {
+    "/api/Order/{id}": {
       "get": {
         "tags": [
-          "Orders"
+          "Order"
         ],
         "parameters": [
           {
@@ -84,47 +130,7 @@
       },
       "put": {
         "tags": [
-          "Orders"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Orders"
+          "Order"
         ],
         "parameters": [
           {
@@ -164,7 +170,7 @@
       },
       "delete": {
         "tags": [
-          "Orders"
+          "Order"
         ],
         "parameters": [
           {

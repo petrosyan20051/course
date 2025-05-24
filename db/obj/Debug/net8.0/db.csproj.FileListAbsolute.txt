@@ -331,3 +331,4 @@ C:\Users\Максим\source\repos\course_work\db\db\obj\Debug\net8.0\refint\db.
 C:\Users\Максим\source\repos\course_work\db\db\obj\Debug\net8.0\db.pdb
 C:\Users\Максим\source\repos\course_work\db\db\obj\Debug\net8.0\db.genruntimeconfig.cache
 C:\Users\Максим\source\repos\course_work\db\db\obj\Debug\net8.0\ref\db.dll
+C:\Users\Максим\source\repos\course_work\db\db\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

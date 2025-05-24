@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "db.Controllers.OrdersController",
-    "Method": "GetOrders",
-    "RelativePath": "api/Orders",
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "GetAll",
+    "RelativePath": "api/Order",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -20,9 +20,35 @@
     ]
   },
   {
-    "ContainingType": "db.Controllers.OrdersController",
-    "Method": "GetOrderById",
-    "RelativePath": "api/Orders/{id}",
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "Create",
+    "RelativePath": "api/Order",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "db.Models.Order",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "db.Models.Order",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "Get",
+    "RelativePath": "api/Order/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -46,9 +72,9 @@
     ]
   },
   {
-    "ContainingType": "db.Controllers.OrdersController",
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
     "Method": "Update",
-    "RelativePath": "api/Orders/{id}",
+    "RelativePath": "api/Order/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -59,7 +85,7 @@
         "IsRequired": true
       },
       {
-        "Name": "updated",
+        "Name": "entity",
         "Type": "db.Models.Order",
         "IsRequired": true
       }
@@ -67,30 +93,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "db.Controllers.OrdersController",
-    "Method": "Put",
-    "RelativePath": "api/Orders/{id}",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "order",
-        "Type": "db.Models.Order",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "db.Controllers.OrdersController",
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
     "Method": "Delete",
-    "RelativePath": "api/Orders/{id}",
+    "RelativePath": "api/Order/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
