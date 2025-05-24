@@ -23,6 +23,12 @@ namespace db.Controllers {
         }   
 
         public async Task AddAsync(Order entity) {
+            var order = await _context.Orders
+                .Where(o => o.Id == entity.Id)
+                .FirstOrDefaultAsync(o => o.Id == entity.Id);
+            if (order != null && order.isDeleted is null) {
+                throw new InvalidDataException("New entity must have original id");
+            }
             await _context.Orders.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
