@@ -18,18 +18,19 @@ namespace db.Models {
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Customer>().HasData(
-                Generators.GenerateCustomers(200));
-            modelBuilder.Entity<Route>().HasData(
-                new Route { Id = 1, BoardingAddress = "Moscow", DropAddress = "Istra" });
-            modelBuilder.Entity<Driver>().HasData(
-                new Driver { Id = 1, Forename = "Max", Surname = "Morozov", PhoneNumber = "+7853058034", DriverLicenceSeries = "23032", DriverLicenceNumber = "3280423" });
-            modelBuilder.Entity<TransportVehicle>().HasData(
-                new TransportVehicle { Id = 1, DriverId = 1, Number = "34111", Series = "324242", RegistrationCode = 4234, Model = "Toyota Land Cruiser", Color = "Gray", ReleaseYear = "2012" });
-            modelBuilder.Entity<Rate>().HasData(
-                new Rate { Id = 1, Forename = "Basic", DriverId = 1, VehicleId = 1, MovePrice = 100, IdlePrice = 50 });
-            modelBuilder.Entity<Order>().HasData(
-                new Order { Id = 1, CustomerId = 1, RouteId = 1, RateId = 1, Distance = 100 });               
+            var customers = Generators.GenerateCustomers(500);
+            var routes = Generators.GenerateRoutes(500);
+            var drivers = Generators.GenerateDrivers(500);
+            var vehicles = Generators.GenerateTransportVehicles(drivers, 500);
+            var rates = Generators.GenerateRates(drivers, vehicles, 500);
+            var orders = Generators.GenerateOrders(customers, routes, rates, 240);
+
+            modelBuilder.Entity<Customer>().HasData(customers);
+            modelBuilder.Entity<Route>().HasData(routes);
+            modelBuilder.Entity<Driver>().HasData(drivers);
+            modelBuilder.Entity<TransportVehicle>().HasData(vehicles);
+            modelBuilder.Entity<Rate>().HasData(rates);
+            modelBuilder.Entity<Order>().HasData(orders);               
         }
     }
 }
