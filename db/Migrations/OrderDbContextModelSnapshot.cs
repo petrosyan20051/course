@@ -11,7 +11,7 @@ using db.Contexts;
 namespace db.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    partial class OrderContextModelSnapshot : ModelSnapshot
+    partial class OrderDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

@@ -13,15 +13,16 @@ namespace db.Contexts {
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Customer> Customers { get; set; }
 
-        public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) { }
+        public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseSqlServer("Server=Laptop;Database=KR;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=192.168.0.104;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
-            
+
             var customers = Generators.GenerateCustomers(500);
             var routes = Generators.GenerateRoutes(500);
             var drivers = Generators.GenerateDrivers(500);
@@ -34,7 +35,7 @@ namespace db.Contexts {
             modelBuilder.Entity<Driver>().HasData(drivers);
             modelBuilder.Entity<TransportVehicle>().HasData(vehicles);
             modelBuilder.Entity<Rate>().HasData(rates);
-            modelBuilder.Entity<Order>().HasData(orders);               
+            modelBuilder.Entity<Order>().HasData(orders);
         }
     }
 }
