@@ -12,8 +12,8 @@ using db.Contexts;
 namespace db.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20250525093659_InitMigration")]
-    partial class InitMigration
+    [Migration("20250525185951_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

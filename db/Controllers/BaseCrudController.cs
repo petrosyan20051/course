@@ -1,5 +1,4 @@
-﻿using db.Contexts;
-using db.Controllers;
+﻿using db.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using db.Models;
 using db.Tools;
-using db.Models;
-using db.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace db.Contexts {
 

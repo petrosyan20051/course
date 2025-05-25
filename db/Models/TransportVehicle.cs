@@ -20,7 +20,7 @@ namespace db.Models {
         public string? WhoChanged { get; set; } = null;
         public DateTime? WhenChanged { get; set; } = null;
         public string? Note { get; set; } = null;
-        public DateTime? isDeleted {  get; set; } = null;
+        public DateTime? isDeleted { get; set; } = null;
 
         public ICollection<Rate> Rates { get; set; } = new List<Rate>();
     }

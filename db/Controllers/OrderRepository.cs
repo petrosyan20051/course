@@ -20,7 +20,7 @@ namespace db.Controllers {
             return await _context.Orders
                 .Where(o => o.isDeleted == null)
                 .ToListAsync();
-        }   
+        }
 
         public async Task AddAsync(Order entity) {
             var order = await _context.Orders

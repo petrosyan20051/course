@@ -26,8 +26,7 @@ namespace db.Tools {
             var streetNames = new[] { "Ленина", "Гагарина", "Пушкина", "Советская", "Мира" };
             var landmarks = new[] { "ТЦ 'Галерея'", "ЖД вокзал", "Аэропорт", "Университет", "Парк Победы" };
 
-            return Enumerable.Range(1, count).Select(i =>
-            {
+            return Enumerable.Range(1, count).Select(i => {
                 // Генерация случайного адреса посадки
                 var boarding = _random.Next(10) < 3
                     ? $"{districts[_random.Next(districts.Length)]} р-н, {landmarks[_random.Next(landmarks.Length)]}"
@@ -57,7 +56,7 @@ namespace db.Tools {
 
         public static List<Driver> GenerateDrivers(int count) {
             var firstNames = new[] { "Иван", "Алексей", "Дмитрий", "Сергей", "Андрей", "Михаил", "Артем", "Николай", "Александр", "Юрий", "Игорь", "Максим", "Никита" };
-            var lastNames = new[] { "Иванов", "Петров", "Сидоров", "Смирнов", "Кузнецов", "Васильев", "Попов", "Соколов","Гарбарь", "Ляшенок", "Минко", "Фетисов", "Топорков" };
+            var lastNames = new[] { "Иванов", "Петров", "Сидоров", "Смирнов", "Кузнецов", "Васильев", "Попов", "Соколов", "Гарбарь", "Ляшенок", "Минко", "Фетисов", "Топорков" };
             var licenseSeries = Enumerable.Range('A', 26)
                 .Select(c => ((char)c).ToString() + (char)_random.Next('A', 'Z' + 1))
                 .Distinct()
@@ -100,8 +99,7 @@ namespace db.Tools {
             // Создаем список для хранения использованных DriverId
             var usedDriverIds = new HashSet<int>();
 
-            return Enumerable.Range(1, count).Select(i =>
-            {
+            return Enumerable.Range(1, count).Select(i => {
                 // Выбираем случайного водителя, который еще не имеет транспортного средства
                 Driver driver;
                 int attempts = 0;
@@ -146,8 +144,7 @@ namespace db.Tools {
 
             var rateTypes = new[] { "Стандарт", "Премиум", "Эконом", "Бизнес", "Комфорт" };
 
-            return Enumerable.Range(1, count).Select(i =>
-            {
+            return Enumerable.Range(1, count).Select(i => {
                 // Выбираем случайного водителя и его транспортное средство
                 var driver = drivers[_random.Next(drivers.Count)];
                 var driverVehicles = vehicles.Where(v => v.DriverId == driver.Id).ToList();
@@ -156,7 +153,7 @@ namespace db.Tools {
                     : vehicles[_random.Next(vehicles.Count)];
 
                 return new Rate {
-                    Id = i,                   
+                    Id = i,
                     Forename = rateTypes[_random.Next(rateTypes.Length)],
                     DriverId = driver.Id,
                     VehicleId = vehicle.Id,
@@ -186,8 +183,7 @@ namespace db.Tools {
             if (rates == null || rates.Count == 0)
                 return null;
 
-            return Enumerable.Range(1, count).Select(i =>
-            {
+            return Enumerable.Range(1, count).Select(i => {
                 var customer = customers[_random.Next(customers.Count)];
                 var route = routes[_random.Next(routes.Count)];
                 var rate = rates[_random.Next(rates.Count)];
