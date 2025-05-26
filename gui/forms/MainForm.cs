@@ -3,19 +3,22 @@
 namespace gui.forms {
 
     public partial class MainForm : Form {
-        private bool isDragging = false; // форма находится в состоянии перемещения
-        private bool isResizing = false; // форма находится в состоянии изменения размера
+        private bool isDragging { get; set; } = false; // форма находится в состоянии перемещения
+        private bool isResizing { get; set; } = false; // форма находится в состоянии изменения размера
+        private UserRights userRights { get; set; } = UserRights.Admin;
 
         private Point startPoint; // точка начала перемещения
         private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
 
-        private Button _closeBtn, _minimizeBtn, _expandBtn, _styleBtn;
+        private Button _closeBtn, _minimizeBtn, _expandBtn, _styleBtn, _userBtn;
         private Panel _controlPnl, _menuPnl, _mainMenuPnl, _gridMenuPnl, _mainGridPanel;
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
         private Label _mainLabel, _gridLabel;
 
         private StyleManager style;
+
+        public enum UserRights { Basic, Admin } // rights access for user
 
         public MainForm() {
             InitializeComponent();
@@ -37,6 +40,7 @@ namespace gui.forms {
             _mainMenuPnl = this.mainPnl;
             _gridMenuPnl = this.gridPnl;
             _mainGridPanel = this.mainPnlGrid;
+            _userBtn = this.userBtn;
 
             style = new StyleManager(
                 Design.DarkTheme,
@@ -107,6 +111,9 @@ namespace gui.forms {
             minimizeTip.SetToolTip(_minimizeBtn, "Свернуть в трей");
             expandTip.SetToolTip(_expandBtn, "Растянуть на весь экран / вернуть в исходное положение");
             closeTip.SetToolTip(_closeBtn, "Завершение работы приложения");
+            userTip.SetToolTip(
+                _userBtn, $"Текущие права пользователя: " +
+                $"{(userRights == UserRights.Admin ? "администратор" : "базовый пользователь")}");
         }
 
         private void closeBtn_MouseEnter(object sender, EventArgs e) {
@@ -216,6 +223,10 @@ namespace gui.forms {
             ChangeDesign(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme);
 
             _styleBtn.Tag = (int)_styleBtn.Tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme;
+            styleTip.SetToolTip(
+                _styleBtn,
+                $"Текущая тема: {((int)_styleBtn.Tag == Design.DarkTheme ?
+                "тёмная" : "светлая")}");
         }
 
         private void controlPnl_MouseMove(object sender, MouseEventArgs e) {
@@ -263,6 +274,7 @@ namespace gui.forms {
             _expandBtn.Location = new Point(_closeBtn.Location.X - _expandBtn.Width, _expandBtn.Location.Y);
             _minimizeBtn.Location = new Point(_expandBtn.Location.X - _minimizeBtn.Width, _minimizeBtn.Location.Y);
             _styleBtn.Location = new Point(_minimizeBtn.Location.X - _styleBtn.Width, _styleBtn.Location.Y);
+            _userBtn.Location = new Point(_styleBtn.Location.X - _userBtn.Width, _userBtn.Location.Y);
         }
 
         private void MainForm_MouseUp(object sender, MouseEventArgs e) {
@@ -276,6 +288,21 @@ namespace gui.forms {
                 Cursor.Current == Cursors.SizeWE ||
                 Cursor.Current == Cursors.SizeNWSE)) {
                 isResizing = true;
+            }
+        }
+
+        private void userBtn_Click(object sender, EventArgs e) {
+            switch (userRights) {
+                case UserRights.Basic:
+                    userRights = UserRights.Admin;
+                    userTip.SetToolTip(_userBtn, "Текущие права пользователя: администратор");
+
+                    break;
+
+                case UserRights.Admin:
+                    userRights = UserRights.Basic;
+                    userTip.SetToolTip(_userBtn, "Текущие права пользователя: базовый пользователь");
+                    break;
             }
         }
     }

@@ -1,43 +1,46 @@
 ﻿using db.Contexts;
 using db.Factories;
+using db.Models;
 using gui.classes;
+using gui.forms;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
 using System.Collections;
-using System.Reflection;
-using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace gui.forms {
 
     public partial class TableInformation : Form {
+
+        public delegate void IsDeleteChangedHandler(MainForm.UserRights newRights, string currentDbSetName);
+
+        public event IsDeleteChangedHandler IsDeleteChanged;
+
         private DataGridView _grid;
         private ComboBox _tblCmBox;
+
+        public MainForm.UserRights userRights { get; set; }
 
         //private Dictionary<string, Type> _contextTypes; // dict for flexible context to change from one to another
         private OrderDbContext _context; // db context
 
-        public TableInformation() {
+        public TableInformation(MainForm.UserRights userRights = MainForm.UserRights.Admin) {
             InitializeComponent();
             InitVariables();
             this.TopLevel = false;
+            this.userRights = userRights;
 
-            //_tblCmBox.DataSource = _contextTypes.Keys.ToList(); // bind sources for combobox
-
-            // Make instance db context
-            var factory = new OrderContextFactory();
-            _context = factory.CreateDbContext([]);
+            _tblCmBox.DataSource = Tools.GetTableNames<OrderDbContext>(_context);
 
             // Get source for datagridview
             try {
-                var orders = _context?.Orders.ToList(); // get data about orders
+                var orders = Tools.GetFilteredDataByRole<Order, DateTime>(_context.Orders, userRights); // get data about orders
                 _grid.DataSource = orders; // bind data to grid
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             _grid.AutoResizeColumns(); // resize columns
-            _tblCmBox.DataSource = Tools.GetTableNames<OrderDbContext>(_context);
         }
 
         private void TableInformation_Load(object sender, EventArgs e) {
@@ -45,12 +48,7 @@ namespace gui.forms {
         }
 
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
-            string selectedTypeName = (sender as ComboBox).Text;
-            Type entityType = Type.GetType($"db.Models.{selectedTypeName}");
-
-            var dbSetProperty = typeof(OrderDbContext).GetProperty((sender as ComboBox).Text);
-            var dbSet = dbSetProperty.GetValue(_context) as IEnumerable; // Приводим к IEnumerable
-            _grid.DataSource = dbSet?.Cast<object>().ToList();
+            _grid.DataSource = GetDbSourceForDataGridView((sender as ComboBox)?.Text)?.ToList();
         }
 
         #region Пользовательские методы
@@ -59,11 +57,38 @@ namespace gui.forms {
             _grid = this.dbGrid;
             _tblCmBox = this.tableLst;
 
-            /*// Initialize dict
-            _contextTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .Where(t => typeof(BaseDbContext).IsAssignableFrom(t) && !t.IsAbstract)
-                .ToDictionary(t => t.Name, t => t);*/
+            this.IsDeleteChanged += OnIsDeletedChanged;
+
+            // Make instance db context
+            var factory = new OrderContextFactory();
+            _context = factory.CreateDbContext([]);
+        }
+
+        private void OnIsDeletedChanged(MainForm.UserRights newRights, string currentDbSetName) {
+            IsDeleteChanged?.Invoke(newRights, _tblCmBox.SelectedText);
+        }
+
+        private void HandleIsDeletedChanged(MainForm.UserRights user, string currentDbSetName) {
+            var source = GetDbSourceForDataGridView(currentDbSetName) as IQueryable;
+            //_grid.DataSource =
+            //Tools.GetFilteredDataByRole < source.GetType(), DateTime > (source, user);
+        }
+
+        private IEnumerable<object>? GetDbSourceForDataGridView(string name) {
+            //Type? entityType = Type.GetType($"db.Models.{name}");
+            //if (entityType is null) {
+            //    return null;
+            //}
+
+            var dbSetProperty = typeof(OrderDbContext).GetProperty(name);
+            var dbSet = dbSetProperty?.GetValue(_context) as IEnumerable; // Приводим к IEnumerable
+            return dbSet?.Cast<object>();
+        }
+
+        private IEnumerable<object>? GetFilteredDataByRole(IEnumerable<object> db, MainForm.UserRights newRights) {
+            if (newRights != MainForm.UserRights.Admin) {
+                return db.Where(o => )
+            }
         }
 
         #endregion Пользовательские методы
