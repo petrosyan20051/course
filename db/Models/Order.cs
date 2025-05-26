@@ -2,7 +2,7 @@
 
 namespace db.Models {
 
-    public class Order {
+    public class Order : BaseModel {
         public int Id { get; set; }
 
         [ForeignKey("Customer")]
@@ -15,12 +15,5 @@ namespace db.Models {
         public int RateId { get; set; }
 
         public int Distance { get; set; }
-
-        public string WhoAdded { get; set; } = string.Empty;
-        public DateTime WhenAdded { get; set; }
-        public string? WhoChanged { get; set; } = null;
-        public DateTime? WhenChanged { get; set; } = null;
-        public string? Note { get; set; } = null;
-        public DateTime? isDeleted { get; set; } = null;
     }
 }

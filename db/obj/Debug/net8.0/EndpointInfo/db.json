@@ -196,26 +196,6 @@
       "Order": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "customerId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "routeId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rateId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "distance": {
-            "type": "integer",
-            "format": "int32"
-          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -241,6 +221,26 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "customerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "routeId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rateId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "distance": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
