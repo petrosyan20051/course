@@ -15,6 +15,6 @@ namespace db.Models {
         public int MovePrice { set; get; }
         public int IdlePrice { set; get; }
 
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        //public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

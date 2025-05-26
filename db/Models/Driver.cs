@@ -8,7 +8,7 @@
         public string DriverLicenceSeries { get; set; } = string.Empty;
         public string DriverLicenceNumber { get; set; } = string.Empty;
 
-        public ICollection<TransportVehicle> TransportVehicles { get; set; } = new List<TransportVehicle>();
-        public ICollection<Rate> Rates { get; set; } = new List<Rate>();
+        //public ICollection<TransportVehicle> TransportVehicles { get; set; } = new List<TransportVehicle>();
+        //public ICollection<Rate> Rates { get; set; } = new List<Rate>();
     }
 }

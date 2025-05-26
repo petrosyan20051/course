@@ -15,6 +15,6 @@ namespace db.Models {
         public string Color { get; set; } = string.Empty;
         public string ReleaseYear { get; set; } = string.Empty;
 
-        public ICollection<Rate> Rates { get; set; } = new List<Rate>();
+        //public ICollection<Rate> Rates { get; set; } = new List<Rate>();
     }
 }

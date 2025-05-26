@@ -7,6 +7,6 @@
         public string PhoneNumber { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
 
-        public ICollection<Order> orders { get; set; } = new List<Order>();
+        //public ICollection<Order> orders { get; set; } = new List<Order>();
     }
 }
