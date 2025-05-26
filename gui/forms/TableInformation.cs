@@ -2,10 +2,7 @@
 using db.Factories;
 using db.Models;
 using gui.classes;
-using gui.forms;
-using Microsoft.EntityFrameworkCore;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace gui.forms {
 
@@ -33,7 +30,7 @@ namespace gui.forms {
 
             // Get source for datagridview
             try {
-                var orders = Tools.GetFilteredDataByRole<Order, DateTime>(_context.Orders, userRights); // get data about orders
+                var orders = Tools.GetFilteredDataByRole(_context.Orders, userRights); // get data about orders
                 _grid.DataSource = orders; // bind data to grid
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -69,27 +66,25 @@ namespace gui.forms {
         }
 
         private void HandleIsDeletedChanged(MainForm.UserRights user, string currentDbSetName) {
-            var source = GetDbSourceForDataGridView(currentDbSetName) as IQueryable;
-            //_grid.DataSource =
-            //Tools.GetFilteredDataByRole < source.GetType(), DateTime > (source, user);
+            //var source = GetDbSourceForDataGridView(currentDbSetName) as IQueryable;
+            _grid.DataSource = Tools.GetFilteredDataByRole<BaseModel>(_grid.DataSource as IEnumerable<BaseModel>, user);
         }
 
         private IEnumerable<object>? GetDbSourceForDataGridView(string name) {
-            //Type? entityType = Type.GetType($"db.Models.{name}");
-            //if (entityType is null) {
-            //    return null;
-            //}
+            Type? entityType = Type.GetType($"db.Models.{name}");
 
             var dbSetProperty = typeof(OrderDbContext).GetProperty(name);
             var dbSet = dbSetProperty?.GetValue(_context) as IEnumerable; // Приводим к IEnumerable
             return dbSet?.Cast<object>();
         }
 
-        private IEnumerable<object>? GetFilteredDataByRole(IEnumerable<object> db, MainForm.UserRights newRights) {
+        /*private IEnumerable<object>? GetFilteredDataByRole(IEnumerable<BaseModel> db, MainForm.UserRights newRights) {
             if (newRights != MainForm.UserRights.Admin) {
-                return db.Where(o => )
+                return db.Where(o => o.isDeleted == null).ToList();
+            } else {
+                return db.Where(o => o.isDeleted != null).ToList();
             }
-        }
+        }*/
 
         #endregion Пользовательские методы
     }

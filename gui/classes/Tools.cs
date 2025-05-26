@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using db.Models;
 using gui.forms;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace gui.classes {
 
@@ -25,7 +26,15 @@ namespace gui.classes {
             return null;
         }
 
-        public static List<TEntity>? GetFilteredDataByRole<TEntity, TProperty>(DbSet<TEntity> dbSet, MainForm.UserRights newRights)
+        public static IEnumerable<object>? GetFilteredDataByRole<TEntity>(IEnumerable<TEntity> db, MainForm.UserRights newRights) where TEntity : BaseModel {
+            if (newRights != MainForm.UserRights.Admin) {
+                return db.Where(o => o.isDeleted == null).ToList();
+            } else {
+                return db.ToList();
+            }
+        }
+
+        /*public static List<TEntity>? GetFilteredDataByRole<TEntity, TProperty>(DbSet<TEntity> dbSet, MainForm.UserRights newRights)
             where TEntity : class {
             var query = dbSet.AsQueryable();
 
@@ -39,6 +48,6 @@ namespace gui.classes {
             }
 
             return null;
-        }
+        }*/
     }
 }
