@@ -2,23 +2,20 @@
 using db.Factories;
 using db.Models;
 using gui.classes;
-using Microsoft.VisualBasic.ApplicationServices;
-using System.Collections;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace gui.forms {
 
     public partial class TableInformation : BaseForm {
-
-        public delegate void UserRightsChangedHandler(MainForm.UserRights newRights, string currentDbSetName);
-
-        public event UserRightsChangedHandler UserRightsChanged;
+        private Dictionary<string, Type> tableMapping;
 
         public override UserRights Rights {
             get => base.Rights;
             set {
                 if (base.Rights != value) {
                     base.Rights = value;
-                    OnUserRightsChanged(value, _tblCmBox.SelectedText);
+                    OnUserRightsChanged(value, _tblCmBox.Text);
                 }
             }
         }
@@ -28,18 +25,18 @@ namespace gui.forms {
 
         private OrderDbContext _context; // db context
 
-        public TableInformation(MainForm.UserRights userRights = MainForm.UserRights.Admin) {
+        public TableInformation(UserRights userRights = UserRights.Admin) {
             InitializeComponent();
             InitVariables();
             this.TopLevel = false;
             this.Rights = userRights;
 
-            _tblCmBox.DataSource = Tools.GetTableNames<OrderDbContext>(_context);
+            // Combobox source: string + value
+            _tblCmBox.DataSource = Tools.GetTableNames(_context);
 
             // Get source for datagridview
             try {
-                var orders = Tools.GetFilteredDataByRole(_context.Orders, userRights); // get data about orders
-                _grid.DataSource = orders; // bind data to grid
+                _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -53,7 +50,12 @@ namespace gui.forms {
         }
 
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
-            _grid.DataSource = GetDbSourceForDataGridView((sender as ComboBox)?.Text)?.ToList();
+            ComboBox cmbBox = sender as ComboBox;
+            _grid.DataSource =
+                Tools.DbSetFilterByRole(
+                    Tools.GetDbSet(_context, tableMapping[cmbBox.Text]),
+                    Rights,
+                    tableMapping[cmbBox.Text]);
         }
 
         #region Пользовательские методы
@@ -62,23 +64,25 @@ namespace gui.forms {
             _grid = this.dbGrid;
             _tblCmBox = this.tableLst;
 
-            this.UserRightsChanged += OnUserRightsChanged;
-
             // Make instance db context
             var factory = new OrderContextFactory();
             _context = factory.CreateDbContext([]);
+
+            // Making mapping for tables: string TableName -> Type TableType
+            tableMapping = new Dictionary<string, Type>();
+            foreach (var entityType in _context.Model.GetEntityTypes()) {
+                tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
+            }
         }
 
-        private void OnUserRightsChanged(MainForm.UserRights newRights, string currentDbSetName) {
-            _grid.DataSource = Tools.GetFilteredDataByRole<BaseModel>(_grid.DataSource as IEnumerable<BaseModel>, newRights);
-        }
-
-        private IEnumerable<object>? GetDbSourceForDataGridView(string name) {
-            Type? entityType = Type.GetType($"db.Models.{name}");
-
-            var dbSetProperty = typeof(OrderDbContext).GetProperty(name);
-            var dbSet = dbSetProperty?.GetValue(_context) as IEnumerable; // Приводим к IEnumerable
-            return dbSet?.Cast<object>();
+        private void OnUserRightsChanged(UserRights newRights, string dbSetName) {
+            if (!tableMapping.ContainsKey(_tblCmBox.Text))
+                return;
+            _grid.DataSource =
+                Tools.DbSetFilterByRole(
+                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                    Rights,
+                    tableMapping[_tblCmBox.Text]);
         }
 
         #endregion Пользовательские методы

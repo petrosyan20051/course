@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-// Base class which contains properties to change userRights
+﻿// Base class which contains properties to change userRights
 namespace gui.forms {
 
     public partial class BaseForm : Form {
