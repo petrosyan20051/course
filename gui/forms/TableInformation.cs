@@ -2,15 +2,16 @@
 using db.Factories;
 using db.Models;
 using gui.classes;
+using Microsoft.VisualBasic.ApplicationServices;
 using System.Collections;
 
 namespace gui.forms {
 
     public partial class TableInformation : BaseForm {
 
-        public delegate void IsDeleteChangedHandler(MainForm.UserRights newRights, string currentDbSetName);
+        public delegate void UserRightsChangedHandler(MainForm.UserRights newRights, string currentDbSetName);
 
-        public event IsDeleteChangedHandler IsDeleteChanged;
+        public event UserRightsChangedHandler UserRightsChanged;
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
@@ -52,20 +53,18 @@ namespace gui.forms {
             _grid = this.dbGrid;
             _tblCmBox = this.tableLst;
 
-            this.IsDeleteChanged += OnIsDeletedChanged;
+            this.UserRightsChanged += OnUserRightsChanged;
+            Rights = UserRights.Basic;
 
             // Make instance db context
             var factory = new OrderContextFactory();
             _context = factory.CreateDbContext([]);
         }
 
-        private void OnIsDeletedChanged(MainForm.UserRights newRights, string currentDbSetName) {
-            IsDeleteChanged?.Invoke(newRights, _tblCmBox.SelectedText);
-        }
-
-        private void HandleIsDeletedChanged(MainForm.UserRights user, string currentDbSetName) {
+        private void OnUserRightsChanged(MainForm.UserRights newRights, string currentDbSetName) {
             //var source = GetDbSourceForDataGridView(currentDbSetName) as IQueryable;
-            _grid.DataSource = Tools.GetFilteredDataByRole<BaseModel>(_grid.DataSource as IEnumerable<BaseModel>, user);
+            _grid.DataSource = Tools.GetFilteredDataByRole<BaseModel>(_grid.DataSource as IEnumerable<BaseModel>, newRights);
+            //IsDeleteChanged?.Invoke(newRights, _tblCmBox.SelectedText);
         }
 
         private IEnumerable<object>? GetDbSourceForDataGridView(string name) {

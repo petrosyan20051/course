@@ -301,6 +301,7 @@ namespace gui.forms {
 
                 case UserRights.Admin:
                     Rights = UserRights.Basic;
+                    _currentForm.Rights = UserRights.Admin;
                     userTip.SetToolTip(_userBtn, "Текущие права пользователя: базовый пользователь");
                     break;
             }
