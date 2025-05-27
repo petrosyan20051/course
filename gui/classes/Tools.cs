@@ -28,26 +28,10 @@ namespace gui.classes {
 
         public static IEnumerable<object>? GetFilteredDataByRole<TEntity>(IEnumerable<TEntity> db, MainForm.UserRights newRights) where TEntity : BaseModel {
             if (newRights != MainForm.UserRights.Admin) {
-                return db.Where(o => o.isDeleted == null).ToList();
+                return db?.Where(o => o.isDeleted == null).ToList();
             } else {
-                return db.ToList();
+                return db?.ToList();
             }
         }
-
-        /*public static List<TEntity>? GetFilteredDataByRole<TEntity, TProperty>(DbSet<TEntity> dbSet, MainForm.UserRights newRights)
-            where TEntity : class {
-            var query = dbSet.AsQueryable();
-
-            if (newRights != MainForm.UserRights.Admin) {
-                var hasIsDeleted = typeof(TEntity).GetProperty("isDeleted") != null; // has TEntity property "isDeleted"?
-                if (hasIsDeleted) {
-                    return query.Where(e => EF.Property<TProperty?>(e, "isDeleted") == null)?.ToList(); //
-                }
-            } else {
-                return query?.ToList();
-            }
-
-            return null;
-        }*/
     }
 }

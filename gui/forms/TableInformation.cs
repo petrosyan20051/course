@@ -13,10 +13,19 @@ namespace gui.forms {
 
         public event UserRightsChangedHandler UserRightsChanged;
 
+        public override UserRights Rights {
+            get => base.Rights;
+            set {
+                if (base.Rights != value) {
+                    base.Rights = value;
+                    OnUserRightsChanged(value, _tblCmBox.SelectedText);
+                }
+            }
+        }
+
         private DataGridView _grid;
         private ComboBox _tblCmBox;
 
-        //private Dictionary<string, Type> _contextTypes; // dict for flexible context to change from one to another
         private OrderDbContext _context; // db context
 
         public TableInformation(MainForm.UserRights userRights = MainForm.UserRights.Admin) {
@@ -54,7 +63,6 @@ namespace gui.forms {
             _tblCmBox = this.tableLst;
 
             this.UserRightsChanged += OnUserRightsChanged;
-            Rights = UserRights.Basic;
 
             // Make instance db context
             var factory = new OrderContextFactory();
@@ -62,9 +70,7 @@ namespace gui.forms {
         }
 
         private void OnUserRightsChanged(MainForm.UserRights newRights, string currentDbSetName) {
-            //var source = GetDbSourceForDataGridView(currentDbSetName) as IQueryable;
             _grid.DataSource = Tools.GetFilteredDataByRole<BaseModel>(_grid.DataSource as IEnumerable<BaseModel>, newRights);
-            //IsDeleteChanged?.Invoke(newRights, _tblCmBox.SelectedText);
         }
 
         private IEnumerable<object>? GetDbSourceForDataGridView(string name) {
@@ -74,14 +80,6 @@ namespace gui.forms {
             var dbSet = dbSetProperty?.GetValue(_context) as IEnumerable; // Приводим к IEnumerable
             return dbSet?.Cast<object>();
         }
-
-        /*private IEnumerable<object>? GetFilteredDataByRole(IEnumerable<BaseModel> db, MainForm.UserRights newRights) {
-            if (newRights != MainForm.UserRights.Admin) {
-                return db.Where(o => o.isDeleted == null).ToList();
-            } else {
-                return db.Where(o => o.isDeleted != null).ToList();
-            }
-        }*/
 
         #endregion Пользовательские методы
     }
