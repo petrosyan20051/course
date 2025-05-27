@@ -8,7 +8,7 @@ namespace db.Contexts {
         public DbSet<Order> Orders { get; set; }
         public DbSet<Rate> Rates { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
-        public DbSet<TransportVehicle> Vehicles { get; set; }
+        public DbSet<TransportVehicle> TransportVehicles { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Customer> Customers { get; set; }
 
