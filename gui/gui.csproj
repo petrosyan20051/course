@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="icons\" />
+    <Folder Include="Icons\" />
   </ItemGroup>
 
   <ItemGroup>

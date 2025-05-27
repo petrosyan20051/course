@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace gui.forms {
 
-    public partial class TableInformation : Form {
+    public partial class TableInformation : BaseForm {
 
         public delegate void IsDeleteChangedHandler(MainForm.UserRights newRights, string currentDbSetName);
 
@@ -15,8 +15,6 @@ namespace gui.forms {
         private DataGridView _grid;
         private ComboBox _tblCmBox;
 
-        public MainForm.UserRights userRights { get; set; }
-
         //private Dictionary<string, Type> _contextTypes; // dict for flexible context to change from one to another
         private OrderDbContext _context; // db context
 
@@ -24,7 +22,7 @@ namespace gui.forms {
             InitializeComponent();
             InitVariables();
             this.TopLevel = false;
-            this.userRights = userRights;
+            this.Rights = userRights;
 
             _tblCmBox.DataSource = Tools.GetTableNames<OrderDbContext>(_context);
 

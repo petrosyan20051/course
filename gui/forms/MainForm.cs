@@ -2,10 +2,9 @@
 
 namespace gui.forms {
 
-    public partial class MainForm : Form {
+    public partial class MainForm : BaseForm {
         private bool isDragging { get; set; } = false; // форма находится в состоянии перемещения
         private bool isResizing { get; set; } = false; // форма находится в состоянии изменения размера
-        private UserRights userRights { get; set; } = UserRights.Admin;
 
         private Point startPoint; // точка начала перемещения
         private FormWindowState formWindowState = FormWindowState.Normal; // текущее состояние формы
@@ -15,10 +14,9 @@ namespace gui.forms {
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
         private Label _mainLabel, _gridLabel;
+        private BaseForm _currentForm;
 
         private StyleManager style;
-
-        public enum UserRights { Basic, Admin } // rights access for user
 
         public MainForm() {
             InitializeComponent();
@@ -56,19 +54,21 @@ namespace gui.forms {
                     style.AddSplitter(splitter);
                 }
             }
+
+            Rights = UserRights.Admin;
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
             this.InitVariables();
 
             // Add from about general information of tables
-            TableInformation form = new TableInformation();
-            style.AddDataGrid(form.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
+            _currentForm = new TableInformation();
+            style.AddDataGrid(_currentForm.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
 
-            form.Height = _mainGridPanel.Height;
-            form.Dock = DockStyle.Fill;
-            _mainGridPanel.Controls.Add(form);
-            form.Show();
+            _currentForm.Height = _mainGridPanel.Height;
+            _currentForm.Dock = DockStyle.Fill;
+            _mainGridPanel.Controls.Add(_currentForm);
+            _currentForm.Show();
 
             // Set components color
             _controlPnl.BackColor = Design.ControlPanelDarkDefaultColor;
@@ -113,7 +113,7 @@ namespace gui.forms {
             closeTip.SetToolTip(_closeBtn, "Завершение работы приложения");
             userTip.SetToolTip(
                 _userBtn, $"Текущие права пользователя: " +
-                $"{(userRights == UserRights.Admin ? "администратор" : "базовый пользователь")}");
+                $"{(Rights == UserRights.Admin ? "администратор" : "базовый пользователь")}");
         }
 
         private void closeBtn_MouseEnter(object sender, EventArgs e) {
@@ -292,15 +292,15 @@ namespace gui.forms {
         }
 
         private void userBtn_Click(object sender, EventArgs e) {
-            switch (userRights) {
+            switch (Rights) {
                 case UserRights.Basic:
-                    userRights = UserRights.Admin;
+                    this.Rights = UserRights.Admin;
+                    _currentForm.Rights = UserRights.Admin;
                     userTip.SetToolTip(_userBtn, "Текущие права пользователя: администратор");
-
                     break;
 
                 case UserRights.Admin:
-                    userRights = UserRights.Basic;
+                    Rights = UserRights.Basic;
                     userTip.SetToolTip(_userBtn, "Текущие права пользователя: базовый пользователь");
                     break;
             }
