@@ -31,7 +31,7 @@ namespace gui.forms {
             this.TopLevel = false;
             this.Rights = userRights;
 
-            // Combobox source: string + value
+            // Combobox source: OrderDbContext table names
             _tblCmBox.DataSource = Tools.GetTableNames(_context);
 
             // Get source for datagridview
@@ -41,6 +41,8 @@ namespace gui.forms {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
 
             _grid.AutoResizeColumns(); // resize columns
         }
@@ -56,6 +58,7 @@ namespace gui.forms {
                     Tools.GetDbSet(_context, tableMapping[cmbBox.Text]),
                     Rights,
                     tableMapping[cmbBox.Text]);
+            Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
         #region Пользовательские методы
@@ -83,6 +86,13 @@ namespace gui.forms {
                     Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
                     Rights,
                     tableMapping[_tblCmBox.Text]);
+            Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
+
+            if (newRights != UserRights.Admin) {
+                Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
+            } else {
+                Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
+            }
         }
 
         #endregion Пользовательские методы

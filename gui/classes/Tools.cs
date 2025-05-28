@@ -1,12 +1,15 @@
 ﻿using db.Contexts;
 using db.Models;
+using db.Tools;
 using gui.forms;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Windows.Forms;
 using static gui.forms.BaseForm;
 
 namespace gui.classes {
@@ -54,6 +57,30 @@ namespace gui.classes {
             }
         }
 
+        public static void HideColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
+            if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
+                return;
+            }
+
+            foreach (var columnName in columnNames) {
+                if (grid.Columns.Contains(columnName)) {
+                    grid.Columns[columnName].Visible = false;
+                }
+            }
+        }
+
+        public static void ShowUpColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
+            if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
+                return;
+            }
+
+            foreach (var columnName in columnNames) {
+                if (grid.Columns.Contains(columnName)) {
+                    grid.Columns[columnName].Visible = true;
+                }
+            }
+        }
+
         private static IList? Filter<TEntity>(List<TEntity> db, UserRights newRights) where TEntity : BaseModel {
             if (newRights != UserRights.Admin) {
                 return db?.Where(o => o.isDeleted == null).ToList();
@@ -81,6 +108,41 @@ namespace gui.classes {
                 return context.TransportVehicles.ToList();
             } else {
                 return null;
+            }
+        }
+
+        public static void ReorderColumnsAccordingToDbContextByType(DataGridView grid, Type entityType) {
+            if (grid is null || entityType == null) {
+                return;
+            }
+
+            if (entityType == typeof(Order)) {
+                ReorderColumnsAccordingToDbContext<Order>(grid);
+            } else if (entityType == typeof(Customer)) {
+                ReorderColumnsAccordingToDbContext<Customer>(grid);
+            } else if (entityType == typeof(Driver)) {
+                ReorderColumnsAccordingToDbContext<Driver>(grid);
+            } else if (entityType == typeof(Route)) {
+                ReorderColumnsAccordingToDbContext<Route>(grid);
+            } else if (entityType == typeof(Rate)) {
+                ReorderColumnsAccordingToDbContext<Rate>(grid);
+            } else if (entityType == typeof(TransportVehicle)) {
+                ReorderColumnsAccordingToDbContext<TransportVehicle>(grid);
+            }
+        }
+
+        // Reorder columns names in order of declarinhg (see OrderDbContext)
+        public static void ReorderColumnsAccordingToDbContext<TEntity>(DataGridView grid) where TEntity : class {
+            var properties = typeof(TEntity).GetProperties()
+                .OrderByDescending(p => p.GetCustomAttribute<DisplayPriorityAttribute>()?.IsHighPriority ?? true)
+                .ThenBy(p => p.MetadataToken)
+                .ToList();
+
+            // Упорядочиваем столбцы в DataGridView
+            foreach (var prop in properties) {
+                if (grid.Columns.Contains(prop.Name)) {
+                    grid.Columns[prop.Name].DisplayIndex = properties.IndexOf(prop);
+                }
             }
         }
     }
