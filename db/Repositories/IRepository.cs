@@ -1,4 +1,4 @@
-﻿namespace db.Controllers {
+﻿namespace db.Repositories {
     public interface IRepository<TEntity, TKey> where TEntity : class {
         Task<TEntity> GetByIdAsync(TKey id);
         Task<IEnumerable<TEntity>> GetAllAsync();

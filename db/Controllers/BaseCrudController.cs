@@ -1,4 +1,4 @@
-﻿using db.Controllers;
+﻿using db.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

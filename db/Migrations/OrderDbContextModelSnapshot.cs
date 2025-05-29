@@ -12667,12 +12667,6 @@ namespace db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("RateId");
-
-                    b.HasIndex("RouteId");
-
                     b.ToTable("Orders");
 
                     b.HasData(
@@ -15822,9 +15816,6 @@ namespace db.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TransportVehicleId")
-                        .HasColumnType("int");
-
                     b.Property<int>("VehicleId")
                         .HasColumnType("int");
 
@@ -15845,10 +15836,6 @@ namespace db.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DriverId");
-
-                    b.HasIndex("TransportVehicleId");
 
                     b.ToTable("Rates");
 
@@ -27452,9 +27439,7 @@ namespace db.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("Vehicles");
+                    b.ToTable("TransportVehicles");
 
                     b.HasData(
                         new
@@ -35457,76 +35442,6 @@ namespace db.Migrations
                             WhoAdded = "system",
                             WhoChanged = "system"
                         });
-                });
-
-            modelBuilder.Entity("db.Models.Order", b =>
-                {
-                    b.HasOne("db.Models.Customer", null)
-                        .WithMany("orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("db.Models.Rate", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("RateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("db.Models.Route", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("RouteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("db.Models.Rate", b =>
-                {
-                    b.HasOne("db.Models.Driver", null)
-                        .WithMany("Rates")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("db.Models.TransportVehicle", null)
-                        .WithMany("Rates")
-                        .HasForeignKey("TransportVehicleId");
-                });
-
-            modelBuilder.Entity("db.Models.TransportVehicle", b =>
-                {
-                    b.HasOne("db.Models.Driver", null)
-                        .WithMany("TransportVehicles")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("db.Models.Customer", b =>
-                {
-                    b.Navigation("orders");
-                });
-
-            modelBuilder.Entity("db.Models.Driver", b =>
-                {
-                    b.Navigation("Rates");
-
-                    b.Navigation("TransportVehicles");
-                });
-
-            modelBuilder.Entity("db.Models.Rate", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("db.Models.Route", b =>
-                {
-                    b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("db.Models.TransportVehicle", b =>
-                {
-                    b.Navigation("Rates");
                 });
 #pragma warning restore 612, 618
         }

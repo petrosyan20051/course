@@ -1,4 +1,5 @@
 using db.Models;
+using db.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 using IdType = int;

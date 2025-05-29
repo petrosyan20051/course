@@ -2,43 +2,41 @@
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace db.Controllers {
-    public class OrderRepository : IRepository<Order, int> {
+using TypeId = int;
+
+namespace db.Repositories {
+    public class CustomerRepository : IRepository<Customer, TypeId> {
         private readonly OrderDbContext _context;
 
-        public OrderRepository(OrderDbContext context) {
+        public CustomerRepository(OrderDbContext context) {
             _context = context;
         }
 
-        public async Task<Order> GetByIdAsync(int id) {
-            return await _context.Orders
-                .Where(o => o.isDeleted == null)
-                .FirstOrDefaultAsync(o => o.Id == id);
+        public async Task<Customer> GetByIdAsync(TypeId id) {
+            return await _context.Customers.FirstOrDefaultAsync(o => o.Id == id);
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync() {
-            return await _context.Orders
-                .Where(o => o.isDeleted == null)
-                .ToListAsync();
+        public async Task<IEnumerable<Customer>> GetAllAsync() {
+            return await _context.Customers.ToListAsync();
         }
 
-        public async Task AddAsync(Order entity) {
-            var order = await _context.Orders
+        public async Task AddAsync(Customer entity) {
+            var customer = await _context.Customers
                 .Where(o => o.Id == entity.Id)
                 .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (order != null && order.isDeleted is null) {
+            if (customer != null && customer.isDeleted is null) {
                 throw new InvalidDataException("New entity must have original id");
             }
-            await _context.Orders.AddAsync(entity);
+            await _context.Customers.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Order entity) {
-            _context.Orders.Update(entity);
+        public async Task UpdateAsync(Customer entity) {
+            _context.Customers.Update(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id) {
+        public async Task DeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
                 entity.isDeleted = DateTime.Now; // soft delete
