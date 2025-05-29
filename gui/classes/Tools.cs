@@ -111,6 +111,7 @@ namespace gui.classes {
             }
         }
 
+        // Reoder columns data of datagridview using type of entity
         public static void ReorderColumnsAccordingToDbContextByType(DataGridView grid, Type entityType) {
             if (grid is null || entityType == null) {
                 return;

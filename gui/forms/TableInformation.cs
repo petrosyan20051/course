@@ -43,8 +43,9 @@ namespace gui.forms {
             }
 
             Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
-
             _grid.AutoResizeColumns(); // resize columns
+
+            _grid.ReadOnly = userRights == UserRights.Admin ? false : true; // install right to edit db
         }
 
         private void TableInformation_Load(object sender, EventArgs e) {
@@ -76,6 +77,7 @@ namespace gui.forms {
             foreach (var entityType in _context.Model.GetEntityTypes()) {
                 tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
             }
+
         }
 
         private void OnUserRightsChanged(UserRights newRights, string dbSetName) {
@@ -89,8 +91,10 @@ namespace gui.forms {
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
 
             if (newRights != UserRights.Admin) {
+                _grid.ReadOnly = true; // user is not admin so can't edit grid
                 Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
             } else {
+                _grid.ReadOnly = false; // user is admin
                 Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
             }
         }
