@@ -3,7 +3,8 @@ using db.Factories;
 using db.Models;
 using gui.classes;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using static gui.forms.BaseForm;
+using System.Windows.Forms;
 
 namespace gui.forms {
 
@@ -22,6 +23,7 @@ namespace gui.forms {
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
+        private Button _addSetBtn;
 
         private OrderDbContext _context; // db context
 
@@ -46,6 +48,7 @@ namespace gui.forms {
             _grid.AutoResizeColumns(); // resize columns
 
             _grid.ReadOnly = userRights == UserRights.Admin ? false : true; // install right to edit db
+            _addSetBtn.Enabled = userRights == UserRights.Admin ? true : false; // install right to edit db
         }
 
         private void TableInformation_Load(object sender, EventArgs e) {
@@ -62,11 +65,18 @@ namespace gui.forms {
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
+        private void addSetBtn_Click(object sender, EventArgs e) {
+            //_grid.AddNewRow();
+            _grid.Rows.Add(); // add new empty row
+
+        }
+
         #region Пользовательские методы
 
         private void InitVariables() {
             _grid = this.dbGrid;
             _tblCmBox = this.tableLst;
+            _addSetBtn = this.addSetBtn;
 
             // Make instance db context
             var factory = new OrderContextFactory();
@@ -93,9 +103,11 @@ namespace gui.forms {
             if (newRights != UserRights.Admin) {
                 _grid.ReadOnly = true; // user is not admin so can't edit grid
                 Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
+                _addSetBtn.Enabled = false; // install right to edit db
             } else {
                 _grid.ReadOnly = false; // user is admin
                 Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
+                _addSetBtn.Enabled = true; // install right to edit db
             }
         }
 

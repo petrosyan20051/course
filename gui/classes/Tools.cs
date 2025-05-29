@@ -1,15 +1,10 @@
 ﻿using db.Contexts;
 using db.Models;
 using db.Tools;
-using gui.forms;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Windows.Forms;
 using static gui.forms.BaseForm;
 
 namespace gui.classes {
