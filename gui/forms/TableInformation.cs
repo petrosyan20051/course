@@ -1,10 +1,10 @@
 ﻿using db.Contexts;
 using db.Factories;
 using db.Models;
+using db.Repositories;
 using gui.classes;
 using Microsoft.EntityFrameworkCore;
-using static gui.forms.BaseForm;
-using System.Windows.Forms;
+using System.Collections;
 
 namespace gui.forms {
 
@@ -56,18 +56,20 @@ namespace gui.forms {
         }
 
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
-            ComboBox cmbBox = sender as ComboBox;
-            _grid.DataSource =
-                Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, tableMapping[cmbBox.Text]),
-                    Rights,
-                    tableMapping[cmbBox.Text]);
+            ComboBox? cmbBox = sender as ComboBox;
+            var dbSet = Tools.GetDbSet(_context, tableMapping[cmbBox.Text]);
+            _grid.DataSource = Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
-        private void addSetBtn_Click(object sender, EventArgs e) {
-            //_grid.AddNewRow();
-            _grid.Rows.Add(); // add new empty row
+        private async void addSetBtn_Click(object sender, EventArgs e) {
+            OrderRepository rep = new OrderRepository(_context);
+            await rep.AddAsync(new Order());
+
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+
+            //_context.Orders.AddAsync(new Order());
+            //_grid.Rows.Add(); // add new empty row
 
         }
 
@@ -95,7 +97,7 @@ namespace gui.forms {
                 return;
             _grid.DataSource =
                 Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]) as IList,
                     Rights,
                     tableMapping[_tblCmBox.Text]);
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
