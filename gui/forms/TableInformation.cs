@@ -4,7 +4,12 @@ using db.Models;
 using db.Repositories;
 using gui.classes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
+using System.ComponentModel;
+using System.Reflection;
+
+using TypeId = int;
 
 namespace gui.forms {
 
@@ -62,15 +67,27 @@ namespace gui.forms {
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
-        private async void addSetBtn_Click(object sender, EventArgs e) {
-            OrderRepository rep = new OrderRepository(_context);
-            await rep.AddAsync(new Order());
+            private async void addSetBtn_Click(object sender, EventArgs e) {
+                dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
 
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+                // Get DbSet<entityType> 
+                var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
+                dynamic? dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
 
-            //_context.Orders.AddAsync(new Order());
-            //_grid.Rows.Add(); // add new empty row
+                // Get entity constructor and its instance
+                var entityConstructor = tableMapping[_tblCmBox.Text].GetConstructor(new Type[] {});
+                dynamic? entityInstance = entityConstructor?.Invoke(new object[] { });
 
+                // Set Id to instance
+               // entityInstance.Id = await repository?.NewIdToAdd();
+
+                // Make instance for new object set 
+                await dbSet?.AddAsync(entityInstance);
+
+                _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+
+                // Добавляем новую строку в DataGridView
+                //_grid.Rows.Add();
         }
 
         #region Пользовательские методы

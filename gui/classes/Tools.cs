@@ -1,5 +1,6 @@
-﻿using db.Contexts;
+﻿using db.Factories;
 using db.Models;
+using db.Repositories;
 using db.Tools;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,7 +31,7 @@ namespace gui.classes {
             var castGenericMathod = typeof(Enumerable)?.GetMethod("Cast", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
             var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
 
-            var castedDb = castGenericMathod?.Invoke(null, new object[] {db}); // casted: IList db -> List<entityType>
+            var castedDb = castGenericMathod?.Invoke(null, new object[] { db }); // casted: IList db -> List<entityType>
             var castedDbToList = toListGenericMethod?.Invoke(null, new object[] { castedDb }); // db.ToList()
             return (IList)filterGenericMethod?.Invoke(null, new object[] { castedDbToList, newRights }); // FilterByRoles using    
         }
@@ -74,7 +75,7 @@ namespace gui.classes {
 
             // Get DbSet<entityType> 
             var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
-            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<User>
+            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
 
             // Make request and get List<entityType>
             var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
@@ -83,7 +84,7 @@ namespace gui.classes {
             // Make BindingList<User>
             var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
             var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
-            
+
             return bindingList;
         }
 
@@ -113,6 +114,24 @@ namespace gui.classes {
                     grid.Columns[prop.Name].DisplayIndex = properties.IndexOf(prop);
                 }
             }
+        }
+
+        public static dynamic? GetRepositoryByName<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+            // Finding Id property to determine TKey
+            var keyType = entityType?.GetProperty("Id")?.PropertyType;
+
+            // Now get repos
+            var repositoryType = Type.GetType($"db.Repositories.{entityType?.Name}Repository, db");
+
+            // Check where it implements IRepository<TEntity, TKey>
+            var genericRepoType = typeof(IRepository<,>).MakeGenericType(entityType, keyType);
+
+            //Make instance of repos with giving context
+            var constructor = repositoryType?.GetConstructor(new[] { context.GetType() });
+
+            var repositoryInstance = constructor?.Invoke(new object[] { context }); // make repository
+
+            return repositoryInstance;
         }
     }
 }
