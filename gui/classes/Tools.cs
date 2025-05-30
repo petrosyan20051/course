@@ -4,6 +4,7 @@ using db.Tools;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
+using System.ComponentModel;
 using System.Reflection;
 using static gui.forms.BaseForm;
 
@@ -19,37 +20,19 @@ namespace gui.classes {
                 .ToList();
         }
 
-        public static BaseDbContext? CreateSelectedContext(string type, Dictionary<string, Type> contextTuple) {
-            if (type.IsNullOrEmpty()) { // whether source type string is nullable or empty
-                return null;
-            }
-
-            if (contextTuple.TryGetValue(type, out var contextType)) { // creates instance of context
-                return Activator.CreateInstance(contextType) as BaseDbContext;
-            }
-            return null;
-        }
-
         public static IList? DbSetFilterByRole(IList db, UserRights newRights, Type entityType) {
             if (db is null || entityType is null) {
                 return null;
             }
 
-            if (entityType == typeof(Order)) {
-                return Filter(db as List<Order>, newRights);
-            } else if (entityType == typeof(Customer)) {
-                return Filter(db as List<Customer>, newRights);
-            } else if (entityType == typeof(Driver)) {
-                return Filter(db as List<Driver>, newRights);
-            } else if (entityType == typeof(Route)) {
-                return Filter(db as List<Route>, newRights);
-            } else if (entityType == typeof(Rate)) {
-                return Filter(db as List<Rate>, newRights);
-            } else if (entityType == typeof(TransportVehicle)) {
-                return Filter(db as List<TransportVehicle>, newRights);
-            } else {
-                return null;
-            }
+            // Make generic methods using reflection
+            var filterGenericMethod = typeof(Tools).GetMethod("Filter", BindingFlags.Static | BindingFlags.NonPublic)?.MakeGenericMethod(entityType);
+            var castGenericMathod = typeof(Enumerable)?.GetMethod("Cast", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+
+            var castedDb = castGenericMathod?.Invoke(null, new object[] {db}); // casted: IList db -> List<entityType>
+            var castedDbToList = toListGenericMethod?.Invoke(null, new object[] { castedDb }); // db.ToList()
+            return (IList)filterGenericMethod?.Invoke(null, new object[] { castedDbToList, newRights }); // FilterByRoles using    
         }
 
         public static void HideColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
@@ -84,47 +67,37 @@ namespace gui.classes {
             }
         }
 
-        public static IList? GetDbSet(OrderDbContext context, Type entityType) {
-            if (context is null || entityType == null) {
+        public static IBindingList? GetDbSet<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+            if (context is null || entityType is null) {
                 return null;
             }
 
-            if (entityType == typeof(Order)) {
-                return context.Orders.ToList();
-            } else if (entityType == typeof(Customer)) {
-                return context.Customers.ToList();
-            } else if (entityType == typeof(Driver)) {
-                return context.Drivers.ToList();
-            } else if (entityType == typeof(Route)) {
-                return context.Routes.ToList();
-            } else if (entityType == typeof(Rate)) {
-                return context.Rates.ToList();
-            } else if (entityType == typeof(TransportVehicle)) {
-                return context.TransportVehicles.ToList();
-            } else {
-                return null;
-            }
+            // Get DbSet<entityType> 
+            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
+            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<User>
+
+            // Make request and get List<entityType>
+            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
+
+            // Make BindingList<User>
+            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
+            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
+            
+            return bindingList;
         }
 
         // Reoder columns data of datagridview using type of entity
         public static void ReorderColumnsAccordingToDbContextByType(DataGridView grid, Type entityType) {
-            if (grid is null || entityType == null) {
+            if (grid is null || entityType is null) {
                 return;
             }
 
-            if (entityType == typeof(Order)) {
-                ReorderColumnsAccordingToDbContext<Order>(grid);
-            } else if (entityType == typeof(Customer)) {
-                ReorderColumnsAccordingToDbContext<Customer>(grid);
-            } else if (entityType == typeof(Driver)) {
-                ReorderColumnsAccordingToDbContext<Driver>(grid);
-            } else if (entityType == typeof(Route)) {
-                ReorderColumnsAccordingToDbContext<Route>(grid);
-            } else if (entityType == typeof(Rate)) {
-                ReorderColumnsAccordingToDbContext<Rate>(grid);
-            } else if (entityType == typeof(TransportVehicle)) {
-                ReorderColumnsAccordingToDbContext<TransportVehicle>(grid);
-            }
+            // Make genetic type for ReorderColumnsAccordingToDbContext<entityType>
+            var reorderGenericMethod = typeof(Tools)
+                .GetMethod("ReorderColumnsAccordingToDbContext", BindingFlags.Static | BindingFlags.Public)?
+                .MakeGenericMethod(entityType);
+            reorderGenericMethod?.Invoke(null, new object[] { grid });
         }
 
         // Reorder columns names in order of declarinhg (see OrderDbContext)
@@ -134,7 +107,7 @@ namespace gui.classes {
                 .ThenBy(p => p.MetadataToken)
                 .ToList();
 
-            // Упорядочиваем столбцы в DataGridView
+            // Sort Columns in DataGridView
             foreach (var prop in properties) {
                 if (grid.Columns.Contains(prop.Name)) {
                     grid.Columns[prop.Name].DisplayIndex = properties.IndexOf(prop);
