@@ -1,16 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using TypeId = int;
 
 namespace db.Models {
 
     public class Order : BaseModel {
         [ForeignKey("Customer")]
-        public int CustomerId { get; set; }
+        public TypeId CustomerId { get; set; }
 
         [ForeignKey("Route")]
-        public int RouteId { get; set; }
+        public TypeId RouteId { get; set; }
 
         [ForeignKey("Rate")]
-        public int RateId { get; set; }
+        public TypeId RateId { get; set; }
 
         public int Distance { get; set; }
     }

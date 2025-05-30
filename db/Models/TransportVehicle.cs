@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using TypeId = int;
+
 namespace db.Models {
 
     public class TransportVehicle : BaseModel {
         [ForeignKey("Driver")]
-        public int DriverId { get; set; }
+        public TypeId DriverId { get; set; }
 
         public string Number { get; set; } = string.Empty;
         public string Series { get; set; } = string.Empty;

@@ -9,7 +9,7 @@ namespace db.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class OrderController : BaseCrudController<Order, IdType> {
-        public OrderController(IRepository<Order, int> repository) : base(repository) { }
+        public OrderController(IRepository<Order, IdType> repository) : base(repository) { }
 
         protected override int GetEntityId(Order entity) {
             return entity.Id;

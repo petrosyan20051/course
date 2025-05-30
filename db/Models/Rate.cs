@@ -1,15 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+using TypeId = int;
+
 namespace db.Models {
 
     public class Rate : BaseModel {
         public string Forename { get; set; } = string.Empty;
 
         [ForeignKey("Driver")]
-        public int DriverId { get; set; }
+        public TypeId DriverId { get; set; }
 
         [ForeignKey("Vehicle")]
-        public int VehicleId { get; set; }
+        public TypeId VehicleId { get; set; }
 
         public int MovePrice { set; get; }
         public int IdlePrice { set; get; }
