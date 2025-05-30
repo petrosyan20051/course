@@ -109,6 +109,26 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Customer, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "NewIdToAdd",
+    "RelativePath": "api/Customer/NewIdToAdd",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "BaseCrudController\u00602[[db.Models.Driver, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
     "Method": "GetAll",
     "RelativePath": "api/Driver",
@@ -216,6 +236,26 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Driver, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "NewIdToAdd",
+    "RelativePath": "api/Driver/NewIdToAdd",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
@@ -327,6 +367,26 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Order, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "NewIdToAdd",
+    "RelativePath": "api/Order/NewIdToAdd",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "BaseCrudController\u00602[[db.Models.Rate, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
     "Method": "GetAll",
     "RelativePath": "api/Rate",
@@ -434,6 +494,26 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Rate, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "NewIdToAdd",
+    "RelativePath": "api/Rate/NewIdToAdd",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "BaseCrudController\u00602[[db.Models.Route, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
@@ -545,6 +625,26 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.Route, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "NewIdToAdd",
+    "RelativePath": "api/Route/NewIdToAdd",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "BaseCrudController\u00602[[db.Models.TransportVehicle, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
     "Method": "GetAll",
     "RelativePath": "api/TransportVehicle",
@@ -652,5 +752,25 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BaseCrudController\u00602[[db.Models.TransportVehicle, db, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+    "Method": "NewIdToAdd",
+    "RelativePath": "api/TransportVehicle/NewIdToAdd",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

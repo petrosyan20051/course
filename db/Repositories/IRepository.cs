@@ -7,6 +7,6 @@
         Task DeleteAsync(TKey id);
 
         // Some addictive methods
-        //Task<bool> ExistsAsync(TKey id);
+        Task<TKey> NewIdToAdd();
     }
 }

@@ -3,8 +3,6 @@
 namespace db.Models {
 
     public class TransportVehicle : BaseModel {
-        public int Id { get; set; }
-
         [ForeignKey("Driver")]
         public int DriverId { get; set; }
 

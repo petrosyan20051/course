@@ -3,8 +3,6 @@
 namespace db.Models {
 
     public class Order : BaseModel {
-        public int Id { get; set; }
-
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
 

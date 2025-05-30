@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
-using db.Tools;
+﻿using db.Tools;
+
+using TypeId = int;
 
 namespace db.Models {
 
     public abstract class BaseModel {
+
+        [DisplayPriority(true)]
+        public TypeId Id { get; set; }
 
         [DisplayPriority(false)]
         public string WhoAdded { get; set; } = string.Empty;

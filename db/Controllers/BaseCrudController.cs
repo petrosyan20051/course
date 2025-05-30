@@ -1,10 +1,13 @@
-﻿using db.Repositories;
+﻿using db.Models;
+using db.Repositories;
 using Microsoft.AspNetCore.Mvc;
+
+using TypeId = int;
 
 [ApiController]
 [Route("api/[controller]")]
 public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
-    where TEntity : class {
+    where TEntity : BaseModel {
     protected readonly IRepository<TEntity, TKey> _repository;
 
     public BaseCrudController(IRepository<TEntity, TKey> repository) {
@@ -17,7 +20,7 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         return Ok(await _repository.GetAllAsync());
     }
 
-    // GET: api/{entity}/5
+    // GET: api/{entity}
     [HttpGet("{id}")]
     public virtual async Task<ActionResult<TEntity>> Get(TKey id) {
         var entity = await _repository.GetByIdAsync(id);
@@ -31,7 +34,7 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
     }
 
-    // PUT: api/{entity}/5
+    // PUT: api/{entity}
     [HttpPut("{id}")]
     public virtual async Task<IActionResult> Update(TKey id, [FromBody] TEntity entity) {
         if (!id.Equals(GetEntityId(entity))) {
@@ -42,11 +45,34 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/{entity}/5
+    // DELETE: api/{entity}
     [HttpDelete("{id}")]
     public virtual async Task<IActionResult> Delete(TKey id) {
         await _repository.DeleteAsync(id);
         return NoContent();
+    }
+
+    // GET: api/{NewIdToAdd}
+    [HttpGet("NewIdToAdd")]
+    public virtual async Task<TypeId> NewIdToAdd() {
+        var entities = await _repository.GetAllAsync();
+        if (entities == null)
+            return -1; // entities are not found
+
+        // Get All deleted Ids in ascending order
+        var deletedIds = entities
+            .Where(e => e.isDeleted != null)
+            .Select(e => e.Id)
+            .OrderBy(id => id)
+            .ToList();
+        if (deletedIds.Any())
+            return deletedIds.First(); // return first free id
+        var usedIds = new HashSet<TypeId>(entities.Select(c => c.Id).Where(id => id > 0).OrderBy(id => id));
+        for (TypeId i = 1; i < TypeId.MaxValue; i++) {
+            if (!usedIds.Contains(i))
+                return i;
+        }
+        return TypeId.MaxValue; // maybe all seats are reserved
     }
 
     protected abstract TKey GetEntityId(TEntity entity);

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TypeId = int;
 
 namespace db.Repositories {
-    
+
     public class DriverRepository : IRepository<Driver, TypeId> {
         private readonly OrderDbContext _context;
 
@@ -46,8 +46,25 @@ namespace db.Repositories {
             }
         }
 
-        //public Task<bool> ExistsAsync(int id) {
-        //    throw new NotImplementedException();
-        //}
+        public async Task<TypeId> NewIdToAdd() {
+            var entities = await GetAllAsync();
+            if (entities == null)
+                return -1; // entities are not found
+
+            // Get All deleted Ids in ascending order
+            var deletedIds = entities
+                .Where(e => e.isDeleted != null)
+                .Select(e => e.Id)
+                .OrderBy(id => id)
+                .ToList();
+            if (deletedIds.Any())
+                return deletedIds.First(); // return first free id
+            var usedIds = new HashSet<TypeId>(entities.Select(c => c.Id).Where(id => id > 0).OrderBy(id => id));
+            for (TypeId i = 1; i < TypeId.MaxValue; i++) {
+                if (!usedIds.Contains(i))
+                    return i;
+            }
+            return TypeId.MaxValue; // maybe all seats are reserved
+        }
     }
 }

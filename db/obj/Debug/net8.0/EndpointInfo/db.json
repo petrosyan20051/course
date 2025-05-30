@@ -190,6 +190,38 @@
         }
       }
     },
+    "/api/Customer/NewIdToAdd": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Driver": {
       "get": {
         "tags": [
@@ -371,6 +403,38 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Driver/NewIdToAdd": {
+      "get": {
+        "tags": [
+          "Driver"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
           }
         }
       }
@@ -560,6 +624,38 @@
         }
       }
     },
+    "/api/Order/NewIdToAdd": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Rate": {
       "get": {
         "tags": [
@@ -741,6 +837,38 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Rate/NewIdToAdd": {
+      "get": {
+        "tags": [
+          "Rate"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
           }
         }
       }
@@ -930,6 +1058,38 @@
         }
       }
     },
+    "/api/Route/NewIdToAdd": {
+      "get": {
+        "tags": [
+          "Route"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/TransportVehicle": {
       "get": {
         "tags": [
@@ -1114,6 +1274,38 @@
           }
         }
       }
+    },
+    "/api/TransportVehicle/NewIdToAdd": {
+      "get": {
+        "tags": [
+          "TransportVehicle"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1121,6 +1313,10 @@
       "Customer": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -1146,10 +1342,6 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "forename": {
             "type": "string",
@@ -1173,6 +1365,10 @@
       "Driver": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -1198,10 +1394,6 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "forename": {
             "type": "string",
@@ -1229,6 +1421,10 @@
       "Order": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -1254,10 +1450,6 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "customerId": {
             "type": "integer",
@@ -1281,6 +1473,10 @@
       "Rate": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -1306,10 +1502,6 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "forename": {
             "type": "string",
@@ -1337,6 +1529,10 @@
       "Route": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -1362,10 +1558,6 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "boardingAddress": {
             "type": "string",
@@ -1381,6 +1573,10 @@
       "TransportVehicle": {
         "type": "object",
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
           "whoAdded": {
             "type": "string",
             "nullable": true
@@ -1406,10 +1602,6 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          },
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "driverId": {
             "type": "integer",

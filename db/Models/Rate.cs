@@ -3,7 +3,6 @@
 namespace db.Models {
 
     public class Rate : BaseModel {
-        public int Id { get; set; }
         public string Forename { get; set; } = string.Empty;
 
         [ForeignKey("Driver")]
