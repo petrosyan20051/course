@@ -133,5 +133,25 @@ namespace gui.classes {
 
             return repositoryInstance;
         }
+
+        #region Deprecated
+
+        // Method to convert "input" to type "targetType"
+        public static object? TryConvert(object input, Type targetType) {
+            var converter = TypeDescriptor.GetConverter(targetType);
+            try {
+                return converter.ConvertFrom(input);
+            } catch {
+                throw new ArgumentException($"Converting object cannot be casted" +
+                    $"to type \"{targetType.Name}\"");
+            }
+
+        }
+
+
+
+        #endregion
+
+
     }
 }
