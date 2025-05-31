@@ -39,12 +39,15 @@
             dbGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dbGrid.Dock = DockStyle.Fill;
             dbGrid.Location = new Point(0, 0);
-            dbGrid.Margin = new Padding(9, 7, 9, 7);
+            dbGrid.Margin = new Padding(4, 3, 4, 3);
             dbGrid.Name = "dbGrid";
             dbGrid.ReadOnly = true;
             dbGrid.RowHeadersWidth = 92;
-            dbGrid.Size = new Size(1929, 1103);
+            dbGrid.Size = new Size(900, 385);
             dbGrid.TabIndex = 0;
+            dbGrid.CellPainting += dbGrid_CellPainting;
+            dbGrid.CellParsing += dbGrid_CellParsing;
+            dbGrid.DataError += dbGrid_DataError;
             // 
             // choosePnl
             // 
@@ -52,10 +55,10 @@
             choosePnl.Controls.Add(tablesLbl);
             choosePnl.Controls.Add(tableLst);
             choosePnl.Dock = DockStyle.Bottom;
-            choosePnl.Location = new Point(0, 1103);
-            choosePnl.Margin = new Padding(9, 7, 9, 7);
+            choosePnl.Location = new Point(0, 385);
+            choosePnl.Margin = new Padding(4, 3, 4, 3);
             choosePnl.Name = "choosePnl";
-            choosePnl.Size = new Size(1929, 150);
+            choosePnl.Size = new Size(900, 61);
             choosePnl.TabIndex = 1;
             // 
             // addSetBtn
@@ -65,9 +68,10 @@
             addSetBtn.FlatAppearance.BorderSize = 0;
             addSetBtn.FlatStyle = FlatStyle.Flat;
             addSetBtn.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            addSetBtn.Location = new Point(895, 40);
+            addSetBtn.Location = new Point(418, 16);
+            addSetBtn.Margin = new Padding(1);
             addSetBtn.Name = "addSetBtn";
-            addSetBtn.Size = new Size(351, 79);
+            addSetBtn.Size = new Size(164, 32);
             addSetBtn.TabIndex = 2;
             addSetBtn.Text = "Добавить набор";
             addSetBtn.UseVisualStyleBackColor = false;
@@ -77,10 +81,9 @@
             // 
             tablesLbl.AutoSize = true;
             tablesLbl.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            tablesLbl.Location = new Point(41, 47);
-            tablesLbl.Margin = new Padding(6, 0, 6, 0);
+            tablesLbl.Location = new Point(19, 19);
             tablesLbl.Name = "tablesLbl";
-            tablesLbl.Size = new Size(199, 59);
+            tablesLbl.Size = new Size(88, 25);
             tablesLbl.TabIndex = 1;
             tablesLbl.Text = "Таблица";
             // 
@@ -89,22 +92,21 @@
             tableLst.DropDownStyle = ComboBoxStyle.DropDownList;
             tableLst.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             tableLst.FormattingEnabled = true;
-            tableLst.Location = new Point(252, 47);
-            tableLst.Margin = new Padding(6, 7, 6, 7);
+            tableLst.Location = new Point(118, 19);
             tableLst.Name = "tableLst";
-            tableLst.Size = new Size(338, 67);
+            tableLst.Size = new Size(160, 33);
             tableLst.TabIndex = 0;
             tableLst.SelectedIndexChanged += tableLst_SelectedIndexChanged;
             // 
             // TableInformation
             // 
-            AutoScaleDimensions = new SizeF(15F, 37F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1929, 1253);
+            ClientSize = new Size(900, 446);
             Controls.Add(dbGrid);
             Controls.Add(choosePnl);
             FormBorderStyle = FormBorderStyle.None;
-            Margin = new Padding(9, 7, 9, 7);
+            Margin = new Padding(4, 3, 4, 3);
             Name = "TableInformation";
             Load += TableInformation_Load;
             ((System.ComponentModel.ISupportInitialize)dbGrid).EndInit();
