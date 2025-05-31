@@ -26,6 +26,8 @@ namespace gui.forms {
             }
         }
 
+        private string? currentCell;
+
         private DataGridView _grid;
         private ComboBox _tblCmBox;
         private Button _addSetBtn;
@@ -67,27 +69,26 @@ namespace gui.forms {
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
-            private async void addSetBtn_Click(object sender, EventArgs e) {
-                dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
+        private async void addSetBtn_Click(object sender, EventArgs e) {
+            dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
 
-                // Get DbSet<entityType> 
-                var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
-                dynamic? dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
+            // Get DbSet<entityType> 
+            var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
+            dynamic? dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
 
-                // Get entity constructor and its instance
-                var entityConstructor = tableMapping[_tblCmBox.Text].GetConstructor(new Type[] {});
-                dynamic? entityInstance = entityConstructor?.Invoke(new object[] { });
+            // Get entity constructor and its instance
+            var entityConstructor = tableMapping[_tblCmBox.Text].GetConstructor(new Type[] { });
+            dynamic? entityInstance = entityConstructor?.Invoke(new object[] { });
 
-                // Set Id to instance
-               // entityInstance.Id = await repository?.NewIdToAdd();
+            // Set Id to instance
+            // entityInstance.Id = await repository?.NewIdToAdd();
 
-                // Make instance for new object set 
-                await dbSet?.AddAsync(entityInstance);
+            // Make instance for new object set 
+            await dbSet?.AddAsync(entityInstance);
 
-                _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+            _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
 
-                // Добавляем новую строку в DataGridView
-                //_grid.Rows.Add();
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
         #region Пользовательские методы
@@ -131,5 +132,47 @@ namespace gui.forms {
         }
 
         #endregion Пользовательские методы
+
+        private void dbGrid_DataError(object sender, DataGridViewDataErrorEventArgs e) {
+            if (e.Exception is FormatException) {
+                e.ThrowException = false; // dont throw exception
+
+                _grid.CurrentCell = _grid.Rows[e.RowIndex].Cells[e.ColumnIndex];
+                MessageBox.Show(
+                    $"Некорректное значение \"{currentCell}\"",
+                    "Курсовая работа",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void dbGrid_CellParsing(object sender, DataGridViewCellParsingEventArgs e) {
+            currentCell = e.Value?.ToString();
+        }
+
+        private void dbGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
+            // If user - admin so paint background for soft deleted and not deleted sets
+            if (Rights != UserRights.Admin) {
+                return;
+            } else if (e.RowIndex < 0 || e.ColumnIndex < 0) {
+                return;
+            }
+            
+            dynamic? entity = (sender as DataGridView)?
+                .Rows[e.RowIndex]?
+                .DataBoundItem as dynamic;
+            var brushColor = entity?.isDeleted is null ? Design.IsSetExists : Design.SoftDeleteColor;
+            
+            using (var brush = new SolidBrush(brushColor)) {
+                e?.Graphics?.FillRectangle(brush, e.CellBounds); // fill rect with brush
+
+                using (var pen = new Pen(Color.Black)) {
+                    e?.Graphics?.DrawRectangle(pen, e.CellBounds);
+                }
+            }
+
+            e.PaintContent(e.ClipBounds);
+            e?.Handled = true;
+        }
     }
 }
