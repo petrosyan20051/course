@@ -7,6 +7,9 @@
         public static Color ButtonCloseEnterColor = Color.Red;
         public static Color ButtonExpandEnterColor = Color.MediumBlue;
 
+        public static Color SoftDeleteColor = Color.FromArgb(238, 32, 77);
+        public static Color IsSetExists = Color.FromArgb(189, 236, 182);
+
         #endregion General colors
 
         #region Dark Theme
