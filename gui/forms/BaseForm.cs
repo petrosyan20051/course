@@ -6,6 +6,8 @@ namespace gui.forms {
 
         public enum UserRights { Basic, Admin } // rights access for user
 
+        public static string AppName = "Курсовая работа";
+
         public BaseForm() {
         }
     }

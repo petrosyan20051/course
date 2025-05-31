@@ -40,13 +40,17 @@
             dbGrid.Dock = DockStyle.Fill;
             dbGrid.Location = new Point(0, 0);
             dbGrid.Margin = new Padding(4, 3, 4, 3);
+            dbGrid.MultiSelect = false;
             dbGrid.Name = "dbGrid";
             dbGrid.ReadOnly = true;
+            dbGrid.RowHeadersVisible = false;
             dbGrid.RowHeadersWidth = 92;
+            dbGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
             dbGrid.Size = new Size(900, 385);
             dbGrid.TabIndex = 0;
             dbGrid.CellPainting += dbGrid_CellPainting;
             dbGrid.CellParsing += dbGrid_CellParsing;
+            dbGrid.CellValueChanged += dbGrid_CellValueChanged;
             dbGrid.DataError += dbGrid_DataError;
             // 
             // choosePnl
