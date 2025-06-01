@@ -24,8 +24,6 @@ namespace gui.forms {
         }
 
         private string? currentCell;
-        private bool isUpdatingCellValue = false;
-
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
@@ -143,39 +141,60 @@ namespace gui.forms {
         }
 
         private async void dbGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            if (isUpdatingCellValue) {
+            var grid = sender as DataGridView;
+            
+            await ApplyChangesToDatabase(_context);
+
+            // Update DataGridView
+            grid?.DataSource = Tools.DbSetFilterByRole(
+                Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                Rights, tableMapping[_tblCmBox.Text]);
+        }
+
+        private async void dbGrid_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode != Keys.Delete) {
                 return;
             }
 
+
+            // Get Id to deleted
+            var grid = sender as DataGridView;
+            var idsToDelete = grid?.SelectedRows
+                .Cast<DataGridViewRow>()
+                .Where(row => row.Cells["Id"]?.Value is int id)
+                .Select(row => (int)row.Cells["Id"].Value)
+                .ToList();
+
+            // Make prompt for confirmation
+            string prompt;
+            if (idsToDelete?.Count == 1) {
+                prompt = $"Вы действительно хотите удалить набор с ID = {idsToDelete.First()}?";
+            } else {
+                prompt = "Вы действительно хотите удалить все выделенные наборы?";
+            }
+
+            // Confirm deleting
+            if (MessageBox.Show(prompt, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) {
+                return;
+            }
+
+            dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
             try {
-                isUpdatingCellValue = true;
-
-                using (var _context = new OrderContextFactory().CreateDbContext([])) {
-                    dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
-
-                    // Get DbSet<entityType> 
-                    var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
-                    dynamic? dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
-
-                    if ((sender as DataGridView)?.Columns[e.ColumnIndex].Name == "Id") { // Column "Id"
-                        TypeId value = TypeId.Parse((sender as DataGridView)?
-                            .Rows[e.RowIndex]?
-                            .Cells[e.ColumnIndex]?
-                            .Value?
-                            .ToString());
-                        var entityExists = await repository?.GetByIdAsync(value);
-                        if (entityExists != null) {
-                            MessageBox.Show(
-                                $"Сущность с id = {value} уже существует.",
-                                AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            (sender as DataGridView)?.Rows[e.RowIndex]?.Cells[e.ColumnIndex]?.Value = currentCell;
-                            return;
-                        }
-                    }
-                    ApplyChangesToDatabase(_context);
+                // Delete selected sets
+                foreach (var id in idsToDelete) {
+                    await repository?.DeleteAsync(id);
                 }
-            } finally {
-                isUpdatingCellValue = false;
+
+                await ApplyChangesToDatabase(_context);
+
+                // Update DataGridView
+                grid?.DataSource = Tools.DbSetFilterByRole(
+                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                    Rights, tableMapping[_tblCmBox.Text]);
+
+                MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -228,69 +247,23 @@ namespace gui.forms {
 
                 //grid.DataSource = Tools.GetDbSet(_context, selectBox.Text == "Orders" ? typeof(Order) : typeof(Customer));
             } catch (DbUpdateException ex) {
-                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}");
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (InvalidDataException ex) {
-                MessageBox.Show($"Некорректные данные: {ex.Message}");
+                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (Microsoft.Data.SqlClient.SqlException ex) {
-                MessageBox.Show($"Ошибка SQL: {ex.Message}");
+                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (ArgumentNullException ex) {
-                MessageBox.Show($"Аргумент не может быть null: {ex.Message}");
+                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (InvalidOperationException ex) {
-                MessageBox.Show($"Операция недопустима: {ex.Message}");
+                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (Exception ex) {
-                MessageBox.Show($"Неизвестная ошибка: {ex.Message}");
+                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
         #endregion Пользовательские методы
 
 
-        private async void dbGrid_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode != Keys.Delete) {
-                return;
-            }
-
-
-            // Get Id to deleted
-            var grid = sender as DataGridView;
-            var idsToDelete = grid?.SelectedRows
-                .Cast<DataGridViewRow>()
-                .Where(row => row.Cells["Id"]?.Value is int id)
-                .Select(row => (int)row.Cells["Id"].Value)
-                .ToList();
-
-            // Создаем сообщение для подтверждения
-            string prompt;
-            if (idsToDelete?.Count == 1) {
-                prompt = $"Вы действительно хотите удалить набор с ID = {idsToDelete.First()}?";
-            } else {
-                prompt = "Вы действительно хотите удалить все выделенные наборы?";
-            }
-
-            // Подтверждение удаления
-            if (MessageBox.Show(prompt, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) {
-                return;
-            }
-
-            try {
-                var repository = new OrderRepository(_context);
-
-                // Удаляем выбранные записи
-                foreach (var id in idsToDelete) {
-                    await repository.DeleteAsync(id);
-                }
-
-                // Обновляем DataGridView
-                grid?.DataSource = Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, typeof(Order)),
-                    Rights,
-                    typeof(Order)
-                );
-
-                MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Exception ex) {
-                MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        
     }
 }
