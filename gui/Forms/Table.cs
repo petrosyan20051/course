@@ -166,6 +166,10 @@ namespace gui.Forms {
             await DeleteSetsFromGrid(_grid);
         }
 
+        private async void setRecoverStrip_Click(object sender, EventArgs e) {
+            await RecoverSetsFromGrid(_grid);
+        }
+
         #region Пользовательские методы
 
         private void InitVariables() {
@@ -200,17 +204,17 @@ namespace gui.Forms {
             if (newRights != UserRights.Admin) {
                 _grid.ReadOnly = true; // user is not admin so can't edit grid
                 Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
-                
+
                 // Set enability for controllers when rights are changed
                 _setAdd.Enabled = false;
-                _setDelete.Enabled = false; 
+                _setDelete.Enabled = false;
                 _setRecover.Enabled = false;
             } else {
                 _grid.ReadOnly = false; // user is admin
                 Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
 
                 // Set enability for controllers when rights are changed
-                _setAdd.Enabled = true; 
+                _setAdd.Enabled = true;
                 _setDelete.Enabled = true;
                 _setRecover.Enabled = true;
             }
@@ -280,6 +284,49 @@ namespace gui.Forms {
             }
         }
 
+        private async Task RecoverSetsFromGrid(DataGridView? grid) {
+            // Get Id to deleted
+            var idsToRecover = grid?.SelectedRows
+                .Cast<DataGridViewRow>()
+                .Where(row => row.Cells["Id"]?.Value is int id)
+                .Select(row => (int)row.Cells["Id"].Value)
+                .ToList();
+
+            // Make prompt for confirmation
+            string prompt;
+            if (idsToRecover?.Count == 1) {
+                prompt = $"Вы действительно хотите восстановить набор с ID = {idsToRecover.First()}?";
+            } else {
+                prompt = "Вы действительно хотите восстановить все выделенные наборы?";
+            }
+
+            // Confirm recovering
+            if (MessageBox.Show(prompt, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) {
+                return;
+            }
+
+            dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
+            try {
+                // Delete selected sets
+                foreach (var id in idsToRecover) {
+                    await repository?.RecoverAsync(id);
+                }
+
+                await ApplyChangesToDatabase(_context);
+
+                // Update DataGridView
+                grid?.DataSource = Tools.DbSetFilterByRole(
+                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                    Rights, tableMapping[_tblCmBox.Text]);
+
+                MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"Ошибка при восстановлении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         #endregion Пользовательские методы
+
+        
     }
 }

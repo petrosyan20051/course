@@ -23,11 +23,8 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Table));
             dbGrid = new DataGridView();
-            gridMenu = new ContextMenuStrip(components);
-            toolStripTextBox1 = new ToolStripTextBox();
             choosePnl = new Panel();
             tablesLbl = new Label();
             tableLst = new ComboBox();
@@ -36,7 +33,6 @@
             setDeleteStrip = new ToolStripMenuItem();
             setRecoverStrip = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dbGrid).BeginInit();
-            gridMenu.SuspendLayout();
             choosePnl.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
@@ -46,7 +42,6 @@
             dbGrid.AllowUserToDeleteRows = false;
             dbGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dbGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dbGrid.ContextMenuStrip = gridMenu;
             dbGrid.Dock = DockStyle.Fill;
             dbGrid.Location = new Point(0, 24);
             dbGrid.Margin = new Padding(4, 3, 4, 3);
@@ -62,18 +57,6 @@
             dbGrid.CellParsing += dbGrid_CellParsing;
             dbGrid.DataError += dbGrid_DataError;
             dbGrid.KeyDown += dbGrid_KeyDown;
-            // 
-            // gridMenu
-            // 
-            gridMenu.Items.AddRange(new ToolStripItem[] { toolStripTextBox1 });
-            gridMenu.Name = "gridMenu";
-            gridMenu.Size = new Size(161, 29);
-            // 
-            // toolStripTextBox1
-            // 
-            toolStripTextBox1.Name = "toolStripTextBox1";
-            toolStripTextBox1.Size = new Size(100, 23);
-            toolStripTextBox1.Text = "Добавить";
             // 
             // choosePnl
             // 
@@ -140,6 +123,7 @@
             setRecoverStrip.Name = "setRecoverStrip";
             setRecoverStrip.Size = new Size(169, 20);
             setRecoverStrip.Text = "Восстановить набор(-ы)";
+            setRecoverStrip.Click += setRecoverStrip_Click;
             // 
             // Table
             // 
@@ -155,8 +139,6 @@
             Name = "Table";
             Load += TableInformation_Load;
             ((System.ComponentModel.ISupportInitialize)dbGrid).EndInit();
-            gridMenu.ResumeLayout(false);
-            gridMenu.PerformLayout();
             choosePnl.ResumeLayout(false);
             choosePnl.PerformLayout();
             menuStrip1.ResumeLayout(false);
@@ -171,8 +153,6 @@
         private System.Windows.Forms.Panel choosePnl;
         private ComboBox tableLst;
         private Label tablesLbl;
-        private ContextMenuStrip gridMenu;
-        private ToolStripTextBox toolStripTextBox1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem setAddStrip;
         private ToolStripMenuItem setDeleteStrip;
