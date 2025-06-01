@@ -1,6 +1,4 @@
-﻿using TypeId = int;
-
-namespace db.Models {
+﻿namespace db.Models {
 
     public class Route : BaseModel {
         public string BoardingAddress { get; set; } = string.Empty;

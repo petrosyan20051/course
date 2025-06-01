@@ -1,6 +1,5 @@
 ﻿using db.Contexts;
 using db.Repositories;
-using System.Collections;
 using System.Reflection;
 
 namespace db.Factories {
@@ -8,13 +7,13 @@ namespace db.Factories {
         private readonly OrderDbContext _context;
 
         public RepositoryFactory(OrderDbContext context) {
-            _context = context; 
+            _context = context;
         }
 
         public TRepository? CreateRepository() {
             return typeof(TRepository)
                 .GetConstructor(new Type[] { typeof(OrderDbContext) })?
-                .Invoke(new object[] {_context}) as TRepository;
+                .Invoke(new object[] { _context }) as TRepository;
         }
     }
 

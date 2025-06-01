@@ -17,8 +17,7 @@ namespace db.Repositories {
         }
 
         public async Task<IEnumerable<Order>> GetAllAsync() {
-            return await _context.Orders.Where(o => o.isDeleted == null)
-                .ToListAsync();
+            return await _context.Orders.ToListAsync();
         }
 
         public async Task AddAsync(Order entity) {
@@ -33,6 +32,8 @@ namespace db.Repositories {
         }
 
         public async Task UpdateAsync(Order entity) {
+            //_context.Orders.Attach(entity);
+            //_context.Entry(entity).Property(o => o.CustomerId).IsModified = true;
             _context.Orders.Update(entity);
             await _context.SaveChangesAsync();
         }
@@ -49,22 +50,19 @@ namespace db.Repositories {
         public async Task<TypeId> NewIdToAdd() {
             var entities = await GetAllAsync();
             if (entities == null)
-                return -1; // entities are not found
+                return 0; // entities are not found so can use id = 0
 
             // Get All deleted Ids in ascending order
-            var deletedIds = entities
-                .Where(e => e.isDeleted != null)
+            var Ids = entities
+                //.Where(e => e.isDeleted != null || e.isDeleted is null)
                 .Select(e => e.Id)
                 .OrderBy(id => id)
                 .ToList();
-            if (deletedIds.Any())
-                return deletedIds.First(); // return first free id
-            var usedIds = new HashSet<TypeId>(entities.Select(c => c.Id).Where(id => id > 0).OrderBy(id => id));
-            for (TypeId i = 1; i < TypeId.MaxValue; i++) {
-                if (!usedIds.Contains(i))
-                    return i;
+            if (Ids.Last() == TypeId.MaxValue) {
+                return -1; // all seats are reserved
             }
-            return TypeId.MaxValue; // maybe all seats are reserved
+
+            return Ids.Last() + 1; // maybe all seats are reserved
         }
     }
 }
