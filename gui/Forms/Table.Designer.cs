@@ -47,9 +47,9 @@
             dbGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dbGrid.Size = new Size(900, 385);
             dbGrid.TabIndex = 0;
+            dbGrid.CellEndEdit += dbGrid_CellEndEdit;
             dbGrid.CellPainting += dbGrid_CellPainting;
             dbGrid.CellParsing += dbGrid_CellParsing;
-            dbGrid.CellValueChanged += dbGrid_CellValueChanged;
             dbGrid.DataError += dbGrid_DataError;
             dbGrid.KeyDown += dbGrid_KeyDown;
             // 
@@ -102,7 +102,7 @@
             tableLst.TabIndex = 0;
             tableLst.SelectedIndexChanged += tableLst_SelectedIndexChanged;
             // 
-            // TableInformation
+            // Table
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -111,7 +111,7 @@
             Controls.Add(choosePnl);
             FormBorderStyle = FormBorderStyle.None;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "TableInformation";
+            Name = "Table";
             Load += TableInformation_Load;
             ((System.ComponentModel.ISupportInitialize)dbGrid).EndInit();
             choosePnl.ResumeLayout(false);

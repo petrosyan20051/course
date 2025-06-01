@@ -26,6 +26,7 @@ namespace gui.Forms {
         }
 
         private string? currentCell;
+        private bool IsUpdatingCellValue { get; set; } = false;
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
@@ -142,17 +143,6 @@ namespace gui.Forms {
             e?.Handled = true;
         }
 
-        private async void dbGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e) {
-            var grid = sender as DataGridView;
-            
-            await ApplyChangesToDatabase(_context);
-
-            // Update DataGridView
-            grid?.DataSource = Tools.DbSetFilterByRole(
-                Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
-                Rights, tableMapping[_tblCmBox.Text]);
-        }
-
         private async void dbGrid_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode != Keys.Delete) {
                 return;
@@ -184,7 +174,7 @@ namespace gui.Forms {
             try {
                 // Delete selected sets
                 foreach (var id in idsToDelete) {
-                    await repository?.DeleteAsync(id);
+                    await repository?.SoftDeleteAsync(id);
                 }
 
                 await ApplyChangesToDatabase(_context);
@@ -266,6 +256,11 @@ namespace gui.Forms {
         #endregion Пользовательские методы
 
 
-        
+
+        private async void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+            var grid = sender as DataGridView;
+            await ApplyChangesToDatabase(_context);
+            grid.DataSource = Tools.GetDbSet(new OrderContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
+        }
     }
 }
