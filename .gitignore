@@ -1,4 +1,0 @@
-# Ignore build files
-.vs/
-gui/bin
-gui/obj
