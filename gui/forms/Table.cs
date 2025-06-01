@@ -2,22 +2,24 @@
 using db.Factories;
 using db.Models;
 using db.Repositories;
-using gui.classes;
+using gui.Classes;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using static gui.Classes.IInformation;
 
 using TypeId = int;
 
-namespace gui.forms {
+namespace gui.Forms {
 
-    public partial class TableInformation : BaseForm {
+    public partial class Table : Form, IInformation {
         private Dictionary<string, Type> tableMapping;
 
-        public override UserRights Rights {
-            get => base.Rights;
+        private UserRights _rights;
+        public UserRights Rights {
+            get => _rights;
             set {
-                if (base.Rights != value) {
-                    base.Rights = value;
+                if (_rights != value) {
+                    _rights = value;
                     OnUserRightsChanged(value, _tblCmBox.Text);
                 }
             }
@@ -31,7 +33,7 @@ namespace gui.forms {
 
         private OrderDbContext _context; // db context
 
-        public TableInformation(UserRights userRights = UserRights.Admin) {
+        public Table(UserRights userRights = UserRights.Admin) {
             InitializeComponent();
             InitVariables();
             this.TopLevel = false;

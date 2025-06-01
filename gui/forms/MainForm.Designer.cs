@@ -1,4 +1,4 @@
-﻿namespace gui.forms {
+﻿namespace gui.Forms {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.

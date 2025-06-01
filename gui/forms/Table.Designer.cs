@@ -1,5 +1,5 @@
-﻿namespace gui.forms {
-    partial class TableInformation {
+﻿namespace gui.Forms {
+    partial class Table {
         /// <summary>
         /// Required designer variable.
         /// </summary>

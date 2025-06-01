@@ -1,20 +1,26 @@
-﻿using gui.classes;
+﻿using gui.Classes;
 
-namespace gui.forms {
+namespace gui.Forms {
 
     public partial class MainForm {
 
         private void gridPnl_Click(object sender, EventArgs e) {
-            style.UpdateMenuState(_gridMenuPnl);
+            styler.UpdateMenuState(_gridMenuPnl);
             _menuPnl.Tag = _gridMenuPnl; // update which point of menu is chosen
         }
 
         private void mainPnl_Click(object sender, EventArgs e) {
-            style.UpdateMenuState(_mainMenuPnl);
+            styler.UpdateMenuState(_mainMenuPnl);
             _menuPnl.Tag = _mainMenuPnl; // update which point of menu is chosen
         }
 
         #region Пользовательские методы
+
+
+
+        #endregion Пользовательские методы
+
+        #region Deprecated
 
         // Method to change full design of app between light and dark mode
         private void ChangeDesign(int modeToChange) {
@@ -32,6 +38,6 @@ namespace gui.forms {
             _controlSpl.BackColor = modeToChange == Design.LightTheme ? Design.SplitterLightDefaultColor : Design.SplitterDarkDefaultColor;
         }
 
-        #endregion Пользовательские методы
+        #endregion
     }
 }

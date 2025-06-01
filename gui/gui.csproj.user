@@ -4,16 +4,13 @@
     <Compile Update="Controllers\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="Forms\BaseForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\MainFormDesign.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\TableInformation.cs">
+    <Compile Update="Forms\Table.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

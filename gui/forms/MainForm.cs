@@ -1,8 +1,10 @@
-﻿using gui.classes;
+﻿using gui.Classes;
+using gui.controllers;
+using static gui.Classes.IInformation;
 
-namespace gui.forms {
+namespace gui.Forms {
 
-    public partial class MainForm : BaseForm {
+    public partial class MainForm : Form, IInformation {
         private bool isDragging { get; set; } = false; // форма находится в состоянии перемещения
         private bool isResizing { get; set; } = false; // форма находится в состоянии изменения размера
 
@@ -14,9 +16,10 @@ namespace gui.forms {
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
         private Label _mainLabel, _gridLabel;
-        private BaseForm _currentForm;
+        private Table _currentForm;
 
-        private StyleManager style;
+        private StyleManager styler;
+        private UserRights Rights { get; set; }
 
         public MainForm() {
             InitializeComponent();
@@ -40,30 +43,40 @@ namespace gui.forms {
             _mainGridPanel = this.mainPnlGrid;
             _userBtn = this.userBtn;
 
-            style = new StyleManager(
+            Rights = UserRights.Admin;
+
+            styler = new StyleManager(
                 Design.DarkTheme,
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "icons")
             ); // Make style manager
             foreach (var control in _menuPnl.Controls) { // Add panels into manager
                 if (control is Panel panel) {
-                    style.AddPanel(panel, panel.Name);
+                    styler.AddPanel(panel, panel.Name);
                 }
             }
             foreach (var control in this.Controls) { // add splitter into manager
                 if (control is Splitter splitter) {
-                    style.AddSplitter(splitter);
+                    styler.AddSplitter(splitter);
                 }
             }
 
-            Rights = UserRights.Admin;
+            foreach (var control in _controlPnl.Controls) { // add control button into manager
+                if (control is RoundedButton roundedButton) {
+                    styler.AddButton(roundedButton);
+                }
+            }
+
+            styler.AddForm(this);
+            styler.AddPanel(_menuPnl, _menuPnl.Name);
+            styler.AddPanel(_controlPnl, _controlPnl.Name);
         }
 
         private void MainForm_Load(object sender, EventArgs e) {
             this.InitVariables();
 
             // Add from about general information of tables
-            _currentForm = new TableInformation();
-            style.AddDataGrid(_currentForm.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
+            _currentForm = new Table();
+            styler.AddDataGrid(_currentForm.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
 
             _currentForm.Height = _mainGridPanel.Height;
             _currentForm.Dock = DockStyle.Fill;
@@ -213,14 +226,14 @@ namespace gui.forms {
         private void styleBtn_Click(object sender, EventArgs e) {
             // Change theme
             int tag = (int)_styleBtn.Tag;
-            style.ChangeMenuPanelTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, (Panel)_menuPnl.Tag);
-            (sender as Button).Image = StyleManager
+            //style.ChangeMenuPanelTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, );
+            (sender as Button)?.Image = StyleManager
                 .LoadIcon(
-                    Path.Combine(style.iconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"),
-                    style.iconsPath
+                    Path.Combine(styler.iconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"),
+                    styler.iconsPath
                 );
 
-            ChangeDesign(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme);
+            styler.ChangeFullTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, (Panel)_menuPnl.Tag);
 
             _styleBtn.Tag = (int)_styleBtn.Tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme;
             styleTip.SetToolTip(

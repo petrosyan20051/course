@@ -6,9 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
-using static gui.forms.BaseForm;
+using static gui.Classes.IInformation;
 
-namespace gui.classes {
+namespace gui.Classes {
 
     public class Tools {
 

@@ -1,4 +1,4 @@
-using gui.forms;
+using gui.Forms;
 
 namespace gui {
 

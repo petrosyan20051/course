@@ -1,4 +1,4 @@
-﻿namespace gui.classes {
+﻿namespace gui.Classes {
 
     public class Design {
 
