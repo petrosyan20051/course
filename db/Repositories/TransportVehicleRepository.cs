@@ -36,11 +36,19 @@ namespace db.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(TypeId id) {
+        public async Task SoftDeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
                 entity.isDeleted = DateTime.Now; // soft delete
                 entity.WhenChanged = DateTime.Now;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteAsync(TypeId id) {
+            var entity = await GetByIdAsync(id);
+            if (entity != null) {
+                _context.TransportVehicles.Remove(entity);
                 await _context.SaveChangesAsync();
             }
         }

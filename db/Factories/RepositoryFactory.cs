@@ -31,10 +31,10 @@ namespace db.Factories {
             //}
 
             var constructorGeneric = repositoryType.GetConstructor(
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                binder: null,
-                types: new[] { typeof(OrderDbContext) },
-                modifiers: null
+                BindingFlags.Instance | BindingFlags.Public,
+                //binder: null,
+                types: new[] { typeof(OrderDbContext) }
+                //modifiers: null
             );
 
             return constructorGeneric?.Invoke(new object[] { _context });
