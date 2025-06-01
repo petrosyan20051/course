@@ -226,7 +226,6 @@ namespace gui.Forms {
         private void styleBtn_Click(object sender, EventArgs e) {
             // Change theme
             int tag = (int)_styleBtn.Tag;
-            //style.ChangeMenuPanelTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, );
             (sender as Button)?.Image = StyleManager
                 .LoadIcon(
                     Path.Combine(styler.iconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"),
