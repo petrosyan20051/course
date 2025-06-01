@@ -23,13 +23,21 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Table));
             dbGrid = new DataGridView();
+            gridMenu = new ContextMenuStrip(components);
+            toolStripTextBox1 = new ToolStripTextBox();
             choosePnl = new Panel();
-            addSetBtn = new gui.controllers.RoundedButton();
             tablesLbl = new Label();
             tableLst = new ComboBox();
+            menuStrip1 = new MenuStrip();
+            setAddStrip = new ToolStripMenuItem();
+            setDeleteStrip = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dbGrid).BeginInit();
+            gridMenu.SuspendLayout();
             choosePnl.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // dbGrid
@@ -37,15 +45,16 @@
             dbGrid.AllowUserToDeleteRows = false;
             dbGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dbGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dbGrid.ContextMenuStrip = gridMenu;
             dbGrid.Dock = DockStyle.Fill;
-            dbGrid.Location = new Point(0, 0);
+            dbGrid.Location = new Point(0, 24);
             dbGrid.Margin = new Padding(4, 3, 4, 3);
             dbGrid.Name = "dbGrid";
             dbGrid.ReadOnly = true;
             dbGrid.RowHeadersVisible = false;
             dbGrid.RowHeadersWidth = 92;
             dbGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dbGrid.Size = new Size(900, 385);
+            dbGrid.Size = new Size(900, 361);
             dbGrid.TabIndex = 0;
             dbGrid.CellEndEdit += dbGrid_CellEndEdit;
             dbGrid.CellPainting += dbGrid_CellPainting;
@@ -53,9 +62,20 @@
             dbGrid.DataError += dbGrid_DataError;
             dbGrid.KeyDown += dbGrid_KeyDown;
             // 
+            // gridMenu
+            // 
+            gridMenu.Items.AddRange(new ToolStripItem[] { toolStripTextBox1 });
+            gridMenu.Name = "gridMenu";
+            gridMenu.Size = new Size(161, 29);
+            // 
+            // toolStripTextBox1
+            // 
+            toolStripTextBox1.Name = "toolStripTextBox1";
+            toolStripTextBox1.Size = new Size(100, 23);
+            toolStripTextBox1.Text = "Добавить";
+            // 
             // choosePnl
             // 
-            choosePnl.Controls.Add(addSetBtn);
             choosePnl.Controls.Add(tablesLbl);
             choosePnl.Controls.Add(tableLst);
             choosePnl.Dock = DockStyle.Bottom;
@@ -65,27 +85,11 @@
             choosePnl.Size = new Size(900, 61);
             choosePnl.TabIndex = 1;
             // 
-            // addSetBtn
-            // 
-            addSetBtn.BackColor = SystemColors.ButtonShadow;
-            addSetBtn.BorderRadius = 10;
-            addSetBtn.FlatAppearance.BorderSize = 0;
-            addSetBtn.FlatStyle = FlatStyle.Flat;
-            addSetBtn.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            addSetBtn.Location = new Point(418, 16);
-            addSetBtn.Margin = new Padding(1);
-            addSetBtn.Name = "addSetBtn";
-            addSetBtn.Size = new Size(164, 32);
-            addSetBtn.TabIndex = 2;
-            addSetBtn.Text = "Добавить набор";
-            addSetBtn.UseVisualStyleBackColor = false;
-            addSetBtn.Click += addSetBtn_Click;
-            // 
             // tablesLbl
             // 
             tablesLbl.AutoSize = true;
             tablesLbl.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            tablesLbl.Location = new Point(12, 23);
+            tablesLbl.Location = new Point(288, 19);
             tablesLbl.Name = "tablesLbl";
             tablesLbl.Size = new Size(88, 25);
             tablesLbl.TabIndex = 1;
@@ -96,11 +100,38 @@
             tableLst.DropDownStyle = ComboBoxStyle.DropDownList;
             tableLst.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             tableLst.FormattingEnabled = true;
-            tableLst.Location = new Point(106, 20);
+            tableLst.Location = new Point(382, 16);
             tableLst.Name = "tableLst";
             tableLst.Size = new Size(160, 33);
             tableLst.TabIndex = 0;
             tableLst.SelectedIndexChanged += tableLst_SelectedIndexChanged;
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { setAddStrip, setDeleteStrip });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.RenderMode = ToolStripRenderMode.System;
+            menuStrip1.Size = new Size(900, 24);
+            menuStrip1.Stretch = false;
+            menuStrip1.TabIndex = 2;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // setAddStrip
+            // 
+            setAddStrip.Image = (Image)resources.GetObject("setAddStrip.Image");
+            setAddStrip.Name = "setAddStrip";
+            setAddStrip.Size = new Size(124, 20);
+            setAddStrip.Text = "Добавить набор";
+            setAddStrip.Click += addSetStrip_Click;
+            // 
+            // setDeleteStrip
+            // 
+            setDeleteStrip.Image = (Image)resources.GetObject("setDeleteStrip.Image");
+            setDeleteStrip.Name = "setDeleteStrip";
+            setDeleteStrip.Size = new Size(138, 20);
+            setDeleteStrip.Text = "Удалить набор(-ы)";
+            setDeleteStrip.Click += setDeleteStrip_Click;
             // 
             // Table
             // 
@@ -109,14 +140,21 @@
             ClientSize = new Size(900, 446);
             Controls.Add(dbGrid);
             Controls.Add(choosePnl);
+            Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.None;
+            MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 3, 4, 3);
             Name = "Table";
             Load += TableInformation_Load;
             ((System.ComponentModel.ISupportInitialize)dbGrid).EndInit();
+            gridMenu.ResumeLayout(false);
+            gridMenu.PerformLayout();
             choosePnl.ResumeLayout(false);
             choosePnl.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -125,6 +163,10 @@
         private System.Windows.Forms.Panel choosePnl;
         private ComboBox tableLst;
         private Label tablesLbl;
-        private controllers.RoundedButton addSetBtn;
+        private ContextMenuStrip gridMenu;
+        private ToolStripTextBox toolStripTextBox1;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem setAddStrip;
+        private ToolStripMenuItem setDeleteStrip;
     }
 }

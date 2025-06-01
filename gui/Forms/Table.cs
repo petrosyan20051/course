@@ -30,7 +30,7 @@ namespace gui.Forms {
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
-        private Button _addSetBtn;
+        private ToolStripMenuItem _setAdd, _setDelete;
 
         private OrderDbContext _context; // db context
 
@@ -55,7 +55,9 @@ namespace gui.Forms {
             _grid.AutoResizeColumns(); // resize columns
 
             _grid.ReadOnly = userRights == UserRights.Admin ? false : true; // install right to edit db
-            _addSetBtn.Enabled = userRights == UserRights.Admin ? true : false; // install right to edit db
+            _setAdd.Enabled = userRights == UserRights.Admin ? true : false; // install right to add sets to db
+            _setDelete.Enabled = userRights == UserRights.Admin ? true : false; // install right to remove sets from db
+
         }
 
         private void TableInformation_Load(object sender, EventArgs e) {
@@ -69,7 +71,7 @@ namespace gui.Forms {
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
-        private async void addSetBtn_Click(object sender, EventArgs e) {
+        private async void addSetStrip_Click(object sender, EventArgs e) {
             try {
                 // Get DbSet<entityType> 
                 var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
@@ -148,9 +150,88 @@ namespace gui.Forms {
                 return;
             }
 
+            await DeleteSetsFromGrid(sender as DataGridView); // delete sets from datagridview
+        }
 
-            // Get Id to deleted
+
+        private async void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             var grid = sender as DataGridView;
+            await ApplyChangesToDatabase(_context);
+            grid.DataSource = Tools.GetDbSet(new OrderContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
+        }
+
+        private async void setDeleteStrip_Click(object sender, EventArgs e) {
+            await DeleteSetsFromGrid(_grid);
+        }
+
+        #region Пользовательские методы
+
+        private void InitVariables() {
+            _grid = this.dbGrid;
+            _tblCmBox = this.tableLst;
+            _setAdd = this.setAddStrip;
+            _setDelete = this.setDeleteStrip;
+
+            // Make instance db context
+            var factory = new OrderContextFactory();
+            _context = factory.CreateDbContext([]);
+
+            // Making mapping for tables: string TableName -> Type TableType
+            tableMapping = new Dictionary<string, Type>();
+            foreach (var entityType in _context.Model.GetEntityTypes()) {
+                tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
+            }
+
+        }
+
+        private void OnUserRightsChanged(UserRights newRights, string dbSetName) {
+            if (!tableMapping.ContainsKey(_tblCmBox.Text))
+                return;
+            _grid.DataSource =
+                Tools.DbSetFilterByRole(
+                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]) as IList,
+                    Rights,
+                    tableMapping[_tblCmBox.Text]);
+            Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
+
+            if (newRights != UserRights.Admin) {
+                _grid.ReadOnly = true; // user is not admin so can't edit grid
+                Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
+                _setAdd.Enabled = false; // install right to edit db
+                _setDelete.Enabled = false; // install right to edit db
+            } else {
+                _grid.ReadOnly = false; // user is admin
+                Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
+                _setAdd.Enabled = true; // install right to edit db
+                _setDelete.Enabled = true; // install right to edit db
+            }
+
+            _grid.Invalidate();
+        }
+
+        private async Task ApplyChangesToDatabase(OrderDbContext _context) {
+            try {
+                await _context.SaveChangesAsync();
+                // Updata Data Source
+
+                //grid.DataSource = Tools.GetDbSet(_context, selectBox.Text == "Orders" ? typeof(Order) : typeof(Customer));
+            } catch (DbUpdateException ex) {
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (InvalidDataException ex) {
+                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Microsoft.Data.SqlClient.SqlException ex) {
+                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (ArgumentNullException ex) {
+                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (InvalidOperationException ex) {
+                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private async Task DeleteSetsFromGrid(DataGridView? grid) {
+            // Get Id to deleted
             var idsToDelete = grid?.SelectedRows
                 .Cast<DataGridViewRow>()
                 .Where(row => row.Cells["Id"]?.Value is int id)
@@ -190,77 +271,6 @@ namespace gui.Forms {
             }
         }
 
-        #region Пользовательские методы
-
-        private void InitVariables() {
-            _grid = this.dbGrid;
-            _tblCmBox = this.tableLst;
-            _addSetBtn = this.addSetBtn;
-
-            // Make instance db context
-            var factory = new OrderContextFactory();
-            _context = factory.CreateDbContext([]);
-
-            // Making mapping for tables: string TableName -> Type TableType
-            tableMapping = new Dictionary<string, Type>();
-            foreach (var entityType in _context.Model.GetEntityTypes()) {
-                tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
-            }
-
-        }
-
-        private void OnUserRightsChanged(UserRights newRights, string dbSetName) {
-            if (!tableMapping.ContainsKey(_tblCmBox.Text))
-                return;
-            _grid.DataSource =
-                Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]) as IList,
-                    Rights,
-                    tableMapping[_tblCmBox.Text]);
-            Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
-
-            if (newRights != UserRights.Admin) {
-                _grid.ReadOnly = true; // user is not admin so can't edit grid
-                Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
-                _addSetBtn.Enabled = false; // install right to edit db
-            } else {
-                _grid.ReadOnly = false; // user is admin
-                Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
-                _addSetBtn.Enabled = true; // install right to edit db
-            }
-
-            _grid.Invalidate();
-        }
-
-        private async Task ApplyChangesToDatabase(OrderDbContext _context) {
-            try {
-                await _context.SaveChangesAsync();
-                // Updata Data Source
-
-                //grid.DataSource = Tools.GetDbSet(_context, selectBox.Text == "Orders" ? typeof(Order) : typeof(Customer));
-            } catch (DbUpdateException ex) {
-                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (InvalidDataException ex) {
-                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Microsoft.Data.SqlClient.SqlException ex) {
-                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (ArgumentNullException ex) {
-                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (InvalidOperationException ex) {
-                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Exception ex) {
-                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
         #endregion Пользовательские методы
-
-
-
-        private async void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
-            var grid = sender as DataGridView;
-            await ApplyChangesToDatabase(_context);
-            grid.DataSource = Tools.GetDbSet(new OrderContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
-        }
     }
 }
