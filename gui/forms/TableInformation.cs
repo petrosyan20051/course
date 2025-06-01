@@ -68,27 +68,37 @@ namespace gui.forms {
         }
 
         private async void addSetBtn_Click(object sender, EventArgs e) {
-            dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
+            try {
+                // Get DbSet<entityType> 
+                var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
+                var dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
 
-            // Get DbSet<entityType> 
-            var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
-            dynamic? dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
+                // Make entity instance
+                var entityInstance = Activator.CreateInstance(tableMapping[_tblCmBox.Text]);
 
-            // Get entity constructor and its instance
-            var entityConstructor = tableMapping[_tblCmBox.Text].GetConstructor(new Type[] { });
-            dynamic? entityInstance = entityConstructor?.Invoke(new object[] { });
+                // Get new ID with repos
+                var repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
+                var newId = await repository?.NewIdToAdd();
+                if (newId == -1) {
+                    MessageBox.Show(
+                        $"Невозможно получить новый ID.{Environment.NewLine}Все ID заняты",
+                        AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            // Set Id to instance
-            entityInstance.Id = await repository?.NewIdToAdd();
+                // Set Id to instance
+                tableMapping[_tblCmBox.Text].GetProperty("Id")?.SetValue(entityInstance, newId);
+                _context.Add(entityInstance);
 
-            // Make instance for new object set 
-            await dbSet?.AddAsync(entityInstance);
-
-            await _context.SaveChangesAsync();
+                await ApplyChangesToDatabase(_context);
+            } catch (Exception error) {
+                MessageBox.Show($"Произошла ошибка: {error.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
-
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+            _grid.Refresh();
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0]; 
         }
 
         private void dbGrid_DataError(object sender, DataGridViewDataErrorEventArgs e) {
@@ -162,8 +172,6 @@ namespace gui.forms {
                         }
                     }
                     ApplyChangesToDatabase(_context);
-
-                    _grid.DataSource = Tools.GetDbSet(this._context, tableMapping[_tblCmBox.Text]);
                 }
             } finally {
                 isUpdatingCellValue = false;
@@ -212,18 +220,24 @@ namespace gui.forms {
             _grid.Invalidate();
         }
 
-        private async void ApplyChangesToDatabase(OrderDbContext _context) {
+        private async Task ApplyChangesToDatabase(OrderDbContext _context) {
             try {
-                if (_context.ChangeTracker.HasChanges()) {
-                    await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+                // Updata Data Source
 
-                    // Updata Data Source
-                    _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
-                }
-            } catch (DbUpdateException dbEx) {
-                MessageBox.Show($"Ошибка при обновлении базы данных: {dbEx.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //grid.DataSource = Tools.GetDbSet(_context, selectBox.Text == "Orders" ? typeof(Order) : typeof(Customer));
+            } catch (DbUpdateException ex) {
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}");
+            } catch (InvalidDataException ex) {
+                MessageBox.Show($"Некорректные данные: {ex.Message}");
+            } catch (Microsoft.Data.SqlClient.SqlException ex) {
+                MessageBox.Show($"Ошибка SQL: {ex.Message}");
+            } catch (ArgumentNullException ex) {
+                MessageBox.Show($"Аргумент не может быть null: {ex.Message}");
+            } catch (InvalidOperationException ex) {
+                MessageBox.Show($"Операция недопустима: {ex.Message}");
             } catch (Exception ex) {
-                MessageBox.Show($"Произошла ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Неизвестная ошибка: {ex.Message}");
             }
         }
 
