@@ -1,4 +1,6 @@
-﻿namespace db.Repositories {
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace db.Repositories {
     public interface IRepository<TEntity, TKey> where TEntity : class {
         Task<TEntity> GetByIdAsync(TKey id);
         Task<IEnumerable<TEntity>> GetAllAsync();
@@ -8,5 +10,6 @@
 
         // Some addictive methods
         Task<TKey> NewIdToAdd();
+        Task<bool> RecoverAsync(TKey id);
     }
 }

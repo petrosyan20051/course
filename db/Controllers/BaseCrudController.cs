@@ -75,5 +75,19 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         return TypeId.MaxValue; // maybe all seats are reserved
     }
 
+    // Update: api/RecoverById
+    [HttpGet("RecoverById")]
+    public virtual async Task<IActionResult> RecoverAsync(TKey id) {
+        var entity = await _repository.GetByIdAsync(id);
+        if (entity != null) {
+            entity.isDeleted = null;
+            entity.WhenChanged = DateTime.Now;
+
+            return Ok("Восстановление прошло успешно");
+        }
+
+        return NotFound("Сущность не найдено или уже существует");
+    }
+
     protected abstract TKey GetEntityId(TEntity entity);
 }

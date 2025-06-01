@@ -53,6 +53,18 @@ namespace db.Repositories {
                 }
             }
 
+            public async Task<bool> RecoverAsync(TypeId id) {
+                var entity = await GetByIdAsync(id);
+                if (entity?.Id != null) {
+                    entity.isDeleted = null;
+                    entity.WhenChanged = DateTime.Now;
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                }
+                return false;
+            }
+
             public async Task<TypeId> NewIdToAdd() {
                 var entities = await GetAllAsync();
                 if (entities == null)

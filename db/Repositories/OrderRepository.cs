@@ -47,12 +47,16 @@ namespace db.Repositories {
             }
         }
 
-        public async Task DeleteAsync(TypeId id) {
-            var entity = await GetByIdAsync(id);
+        public async Task<bool> RecoverAsync(TypeId id) {
+            var entity = await _context.Customers.FindAsync(id);
             if (entity != null) {
-                _context.Orders.Remove(entity);
+                entity.isDeleted = null;
+                entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
+                return true;
             }
+
+            return false;
         }
 
         public async Task<TypeId> NewIdToAdd() {
@@ -71,6 +75,14 @@ namespace db.Repositories {
             }
 
             return Ids.Last() + 1; // maybe all seats are reserved
+        }
+
+        public async Task DeleteAsync(TypeId id) {
+            var entity = await GetByIdAsync(id);
+            if (entity != null) {
+                _context.Orders.Remove(entity);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

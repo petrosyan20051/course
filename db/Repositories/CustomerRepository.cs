@@ -70,5 +70,21 @@ namespace db.Repositories {
 
             return Ids.Last() + 1; // maybe all seats are reserved
         }
+
+        public async Task<bool> RecoverAsync(TypeId id) {
+            var entity = await _context.Customers.FindAsync(id);
+            if (entity != null) {
+                entity.isDeleted = null;
+                entity.WhenChanged = DateTime.Now;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
+        public Task<bool> Recover(TypeId id) {
+            throw new NotImplementedException();
+        }
     }
 }
