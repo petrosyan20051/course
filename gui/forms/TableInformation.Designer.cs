@@ -40,18 +40,18 @@
             dbGrid.Dock = DockStyle.Fill;
             dbGrid.Location = new Point(0, 0);
             dbGrid.Margin = new Padding(4, 3, 4, 3);
-            dbGrid.MultiSelect = false;
             dbGrid.Name = "dbGrid";
             dbGrid.ReadOnly = true;
             dbGrid.RowHeadersVisible = false;
             dbGrid.RowHeadersWidth = 92;
-            dbGrid.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dbGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dbGrid.Size = new Size(900, 385);
             dbGrid.TabIndex = 0;
             dbGrid.CellPainting += dbGrid_CellPainting;
             dbGrid.CellParsing += dbGrid_CellParsing;
             dbGrid.CellValueChanged += dbGrid_CellValueChanged;
             dbGrid.DataError += dbGrid_DataError;
+            dbGrid.KeyDown += dbGrid_KeyDown;
             // 
             // choosePnl
             // 
@@ -85,7 +85,7 @@
             // 
             tablesLbl.AutoSize = true;
             tablesLbl.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            tablesLbl.Location = new Point(19, 19);
+            tablesLbl.Location = new Point(12, 23);
             tablesLbl.Name = "tablesLbl";
             tablesLbl.Size = new Size(88, 25);
             tablesLbl.TabIndex = 1;
@@ -96,7 +96,7 @@
             tableLst.DropDownStyle = ComboBoxStyle.DropDownList;
             tableLst.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 204);
             tableLst.FormattingEnabled = true;
-            tableLst.Location = new Point(118, 19);
+            tableLst.Location = new Point(106, 20);
             tableLst.Name = "tableLst";
             tableLst.Size = new Size(160, 33);
             tableLst.TabIndex = 0;

@@ -1,6 +1,7 @@
 ﻿using db.Contexts;
 using db.Factories;
 using db.Models;
+using db.Repositories;
 using gui.classes;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
@@ -98,7 +99,7 @@ namespace gui.forms {
 
             _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
             _grid.Refresh();
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0]; 
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
         private void dbGrid_DataError(object sender, DataGridViewDataErrorEventArgs e) {
@@ -244,5 +245,52 @@ namespace gui.forms {
         #endregion Пользовательские методы
 
 
+        private async void dbGrid_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode != Keys.Delete) {
+                return;
+            }
+
+
+            // Get Id to deleted
+            var grid = sender as DataGridView;
+            var idsToDelete = grid?.SelectedRows
+                .Cast<DataGridViewRow>()
+                .Where(row => row.Cells["Id"]?.Value is int id)
+                .Select(row => (int)row.Cells["Id"].Value)
+                .ToList();
+
+            // Создаем сообщение для подтверждения
+            string prompt;
+            if (idsToDelete?.Count == 1) {
+                prompt = $"Вы действительно хотите удалить набор с ID = {idsToDelete.First()}?";
+            } else {
+                prompt = "Вы действительно хотите удалить все выделенные наборы?";
+            }
+
+            // Подтверждение удаления
+            if (MessageBox.Show(prompt, AppName, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No) {
+                return;
+            }
+
+            try {
+                var repository = new OrderRepository(_context);
+
+                // Удаляем выбранные записи
+                foreach (var id in idsToDelete) {
+                    await repository.DeleteAsync(id);
+                }
+
+                // Обновляем DataGridView
+                grid?.DataSource = Tools.DbSetFilterByRole(
+                    Tools.GetDbSet(_context, typeof(Order)),
+                    Rights,
+                    typeof(Order)
+                );
+
+                MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
