@@ -30,7 +30,7 @@ namespace gui.Forms {
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
-        private ToolStripMenuItem _setAdd, _setDelete;
+        private ToolStripMenuItem _setAdd, _setDelete, _setRecover;
 
         private OrderDbContext _context; // db context
 
@@ -54,9 +54,11 @@ namespace gui.Forms {
             Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
             _grid.AutoResizeColumns(); // resize columns
 
+            // Install enability for controllers
             _grid.ReadOnly = userRights == UserRights.Admin ? false : true; // install right to edit db
             _setAdd.Enabled = userRights == UserRights.Admin ? true : false; // install right to add sets to db
             _setDelete.Enabled = userRights == UserRights.Admin ? true : false; // install right to remove sets from db
+            _setRecover.Enabled = userRights == UserRights.Admin ? true : false; // install right to recover sets from db
 
         }
 
@@ -171,6 +173,7 @@ namespace gui.Forms {
             _tblCmBox = this.tableLst;
             _setAdd = this.setAddStrip;
             _setDelete = this.setDeleteStrip;
+            _setRecover = this.setRecoverStrip;
 
             // Make instance db context
             var factory = new OrderContextFactory();
@@ -197,13 +200,19 @@ namespace gui.Forms {
             if (newRights != UserRights.Admin) {
                 _grid.ReadOnly = true; // user is not admin so can't edit grid
                 Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
-                _setAdd.Enabled = false; // install right to edit db
-                _setDelete.Enabled = false; // install right to edit db
+                
+                // Set enability for controllers when rights are changed
+                _setAdd.Enabled = false;
+                _setDelete.Enabled = false; 
+                _setRecover.Enabled = false;
             } else {
                 _grid.ReadOnly = false; // user is admin
                 Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
-                _setAdd.Enabled = true; // install right to edit db
-                _setDelete.Enabled = true; // install right to edit db
+
+                // Set enability for controllers when rights are changed
+                _setAdd.Enabled = true; 
+                _setDelete.Enabled = true;
+                _setRecover.Enabled = true;
             }
 
             _grid.Invalidate();

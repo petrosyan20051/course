@@ -34,6 +34,7 @@
             menuStrip1 = new MenuStrip();
             setAddStrip = new ToolStripMenuItem();
             setDeleteStrip = new ToolStripMenuItem();
+            setRecoverStrip = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)dbGrid).BeginInit();
             gridMenu.SuspendLayout();
             choosePnl.SuspendLayout();
@@ -108,7 +109,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { setAddStrip, setDeleteStrip });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { setAddStrip, setDeleteStrip, setRecoverStrip });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.RenderMode = ToolStripRenderMode.System;
@@ -132,6 +133,13 @@
             setDeleteStrip.Size = new Size(138, 20);
             setDeleteStrip.Text = "Удалить набор(-ы)";
             setDeleteStrip.Click += setDeleteStrip_Click;
+            // 
+            // setRecoverStrip
+            // 
+            setRecoverStrip.Image = (Image)resources.GetObject("setRecoverStrip.Image");
+            setRecoverStrip.Name = "setRecoverStrip";
+            setRecoverStrip.Size = new Size(169, 20);
+            setRecoverStrip.Text = "Восстановить набор(-ы)";
             // 
             // Table
             // 
@@ -168,5 +176,6 @@
         private MenuStrip menuStrip1;
         private ToolStripMenuItem setAddStrip;
         private ToolStripMenuItem setDeleteStrip;
+        private ToolStripMenuItem setRecoverStrip;
     }
 }
