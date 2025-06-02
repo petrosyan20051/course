@@ -59,9 +59,9 @@
             controlPnl.BackColor = Color.FromArgb(12, 12, 16);
             controlPnl.Controls.Add(userBtn);
             controlPnl.Controls.Add(styleBtn);
-            controlPnl.Controls.Add(closeBtn);
-            controlPnl.Controls.Add(expandBtn);
             controlPnl.Controls.Add(minimizeBtn);
+            controlPnl.Controls.Add(expandBtn);
+            controlPnl.Controls.Add(closeBtn);
             controlPnl.Dock = DockStyle.Top;
             controlPnl.Location = new Point(0, 0);
             controlPnl.Name = "controlPnl";
@@ -74,10 +74,11 @@
             // userBtn
             // 
             userBtn.BorderRadius = 5;
+            userBtn.Dock = DockStyle.Right;
             userBtn.FlatAppearance.BorderSize = 0;
             userBtn.FlatStyle = FlatStyle.Flat;
             userBtn.Image = (Image)resources.GetObject("userBtn.Image");
-            userBtn.Location = new Point(691, 0);
+            userBtn.Location = new Point(690, 0);
             userBtn.Name = "userBtn";
             userBtn.Size = new Size(62, 32);
             userBtn.TabIndex = 8;
@@ -89,10 +90,11 @@
             // styleBtn
             // 
             styleBtn.BorderRadius = 5;
+            styleBtn.Dock = DockStyle.Right;
             styleBtn.FlatAppearance.BorderSize = 0;
             styleBtn.FlatStyle = FlatStyle.Flat;
             styleBtn.Image = (Image)resources.GetObject("styleBtn.Image");
-            styleBtn.Location = new Point(749, 0);
+            styleBtn.Location = new Point(752, 0);
             styleBtn.Name = "styleBtn";
             styleBtn.Size = new Size(62, 32);
             styleBtn.TabIndex = 7;
@@ -104,10 +106,11 @@
             // closeBtn
             // 
             closeBtn.BorderRadius = 5;
+            closeBtn.Dock = DockStyle.Right;
             closeBtn.FlatAppearance.BorderSize = 0;
             closeBtn.FlatStyle = FlatStyle.Flat;
             closeBtn.Image = (Image)resources.GetObject("closeBtn.Image");
-            closeBtn.Location = new Point(935, 0);
+            closeBtn.Location = new Point(938, 0);
             closeBtn.Name = "closeBtn";
             closeBtn.Size = new Size(62, 32);
             closeBtn.TabIndex = 6;
@@ -119,10 +122,11 @@
             // expandBtn
             // 
             expandBtn.BorderRadius = 5;
+            expandBtn.Dock = DockStyle.Right;
             expandBtn.FlatAppearance.BorderSize = 0;
             expandBtn.FlatStyle = FlatStyle.Flat;
             expandBtn.Image = (Image)resources.GetObject("expandBtn.Image");
-            expandBtn.Location = new Point(873, 0);
+            expandBtn.Location = new Point(876, 0);
             expandBtn.Name = "expandBtn";
             expandBtn.Size = new Size(62, 32);
             expandBtn.TabIndex = 5;
@@ -134,10 +138,11 @@
             // minimizeBtn
             // 
             minimizeBtn.BorderRadius = 5;
+            minimizeBtn.Dock = DockStyle.Right;
             minimizeBtn.FlatAppearance.BorderSize = 0;
             minimizeBtn.FlatStyle = FlatStyle.Flat;
             minimizeBtn.Image = (Image)resources.GetObject("minimizeBtn.Image");
-            minimizeBtn.Location = new Point(811, 0);
+            minimizeBtn.Location = new Point(814, 0);
             minimizeBtn.Name = "minimizeBtn";
             minimizeBtn.Size = new Size(62, 32);
             minimizeBtn.TabIndex = 4;
