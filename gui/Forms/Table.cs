@@ -45,7 +45,8 @@ namespace gui.Forms {
 
             // Get source for datagridview
             try {
-                _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+                //_grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+                _grid.DataSource = Tools.GetDataTableRaw(_context, _tblCmBox.Text);
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -53,6 +54,7 @@ namespace gui.Forms {
 
             Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
             _grid.AutoResizeColumns(); // resize columns
+            _grid.Refresh();
 
             // Install enability for controllers
             _grid.ReadOnly = userRights == UserRights.Admin ? false : true; // install right to edit db
@@ -69,7 +71,7 @@ namespace gui.Forms {
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
             var dbSet = Tools.GetDbSet(_context, tableMapping[cmbBox.Text]);
-            _grid.DataSource = Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
+            _grid.DataSource = Tools.GetDataTableRaw(_context, _tblCmBox.Text);//Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
@@ -102,7 +104,8 @@ namespace gui.Forms {
                 return;
             }
 
-            _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+            //_grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+            _grid.DataSource = Tools.GetDataTableRaw(_context, _tblCmBox.Text);
             _grid.Refresh();
             _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
@@ -128,12 +131,18 @@ namespace gui.Forms {
             // If user - admin so paint background for soft deleted and not deleted sets
             if (e.RowIndex < 0 || e.ColumnIndex < 0) {
                 return;
-            }
-
-            dynamic? entity = (sender as DataGridView)?
+            }            
+            var grid = sender as DataGridView;
+            var row = grid?.Rows[e.RowIndex];
+            /*dynamic? entity = (sender as DataGridView)?
                 .Rows[e.RowIndex]?
-                .DataBoundItem as dynamic;
-            var brushColor = entity?.isDeleted is null ? Design.IsSetExists : Design.SoftDeleteColor;
+                .DataBoundItem as dynamic;*/
+            Color brushColor;
+            if (row?.Cells["isDeleted"]?.Value == null || row?.Cells["Id"]?.Value == null) {
+                brushColor = Design.IsSetExists;
+            } else {
+                brushColor = Design.SoftDeleteColor;
+            }
 
             using (var brush = new SolidBrush(brushColor)) {
                 e?.Graphics?.FillRectangle(brush, e.CellBounds); // fill rect with brush
@@ -268,7 +277,7 @@ namespace gui.Forms {
             try {
                 // Delete selected sets
                 foreach (var id in idsToDelete) {
-                    await repository?.SoftDeleteAsync(id);
+                    repository?.SoftDeleteAsync(id);
                 }
 
                 await ApplyChangesToDatabase(_context);
