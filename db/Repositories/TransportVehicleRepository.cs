@@ -1,7 +1,5 @@
 ﻿using db.Contexts;
 using db.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using TypeId = int;

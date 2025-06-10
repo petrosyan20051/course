@@ -16,7 +16,7 @@ namespace db.Contexts {
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
 
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -24,14 +24,12 @@ namespace db.Contexts {
                 .Build(); // set appsettings for connectionStrings
 
             optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
-            //optionsBuilder.UseSqlServer("Server=192.168.1.140;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
-
-
+ 
             modelBuilder.Entity<Customer>(entity => {
                 entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
                 entity.Property(e => e.Forename).IsRequired();

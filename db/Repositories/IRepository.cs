@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace db.Repositories {
+﻿namespace db.Repositories {
     public interface IRepository<TEntity, TKey> where TEntity : class {
         Task<TEntity> GetByIdAsync(TKey id);
         Task<IEnumerable<TEntity>> GetAllAsync();

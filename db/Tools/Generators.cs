@@ -1,10 +1,9 @@
 ﻿using db.Models;
-using System.Text.Json;
 
 namespace db.Tools {
     public static class Generators {
         private static readonly Random _random = new Random(1000);
-        public static List<Customer> GenerateCustomers(int count) {        
+        public static List<Customer> GenerateCustomers(int count) {
             string[] firstNames = { "Иван", "Алексей", "Дмитрий", "Сергей", "Андрей", "Михаил", "Артем", "Николай", "Павел", "Егор" };
             string[] lastNames = { "Иванов", "Петров", "Сидоров", "Смирнов", "Кузнецов", "Васильев", "Попов", "Соколов", "Михайлов", "Новиков" };
             string[] domains = { "gmail.com", "mail.ru", "yandex.ru", "outlook.com", "hotmail.com" };
