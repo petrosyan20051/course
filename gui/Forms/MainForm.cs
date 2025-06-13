@@ -320,21 +320,12 @@ namespace gui.Forms {
         private void userBtn_Click(object sender, EventArgs e) {
             var authorizeForm = new AuthorizeForm();
             authorizeForm.ShowDialog();
-            _currentForm.UpdateForm(authorizeForm.Tag as DbContext);
-            
-            /*switch (Rights) {
-                case UserRights.Basic:
-                    this.Rights = UserRights.Admin;
-                    _currentForm.Rights = UserRights.Admin;
-                    userTip.SetToolTip(_userBtn, "Текущие права пользователя: администратор");
-                    break;
-
-                case UserRights.Admin:
-                    Rights = UserRights.Basic;
-                    _currentForm.Rights = UserRights.Basic;
-                    userTip.SetToolTip(_userBtn, "Текущие права пользователя: базовый пользователь");
-                    break;
-            }*/
+            object[] args = authorizeForm.Tag as object[];
+            if (args == null) { // user denied to authorize
+                return;
+            }
+            _currentForm.UpdateForm(args[0] as DbContext);
+            _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
         }
     }
 }

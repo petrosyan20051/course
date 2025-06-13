@@ -39,7 +39,7 @@
             // 
             mainLbl.AutoSize = true;
             mainLbl.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            mainLbl.Location = new Point(131, 20);
+            mainLbl.Location = new Point(112, 19);
             mainLbl.Name = "mainLbl";
             mainLbl.Size = new Size(228, 45);
             mainLbl.TabIndex = 0;
@@ -106,9 +106,9 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            enterBtn.Location = new Point(169, 323);
+            enterBtn.Location = new Point(145, 329);
             enterBtn.Name = "enterBtn";
-            enterBtn.Size = new Size(153, 57);
+            enterBtn.Size = new Size(168, 57);
             enterBtn.TabIndex = 7;
             enterBtn.Text = "Войти";
             enterBtn.UseVisualStyleBackColor = false;
@@ -147,8 +147,10 @@
             Controls.Add(ipTxtBox);
             Controls.Add(label1);
             Controls.Add(mainLbl);
+            DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "AuthorizeForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Авторизация";
             ResumeLayout(false);
             PerformLayout();

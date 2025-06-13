@@ -39,7 +39,7 @@ namespace gui.Forms {
 
         private OrderDbContext _context; // db context
 
-        public Table(UserRights userRights = UserRights.Admin) {
+        public Table(UserRights userRights = UserRights.Error) {
             InitializeComponent();
             InitVariables();
             this.TopLevel = false;
@@ -297,12 +297,17 @@ namespace gui.Forms {
             MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public void UpdateForm(DbContext context) {
+        public void UpdateForm(DbContext context, UserRights? userRights = null) {
             _context = context as OrderDbContext;
             if (_context == null) {
                 return;
             }
 
+            // Update user rights
+            if (userRights != null) {
+                Rights = (UserRights)userRights;
+            }
+            
             // Making mapping for tables: string TableName -> Type TableType
             if (tableMapping != null && tableMapping.Count > 0) {
                 tableMapping.Clear();

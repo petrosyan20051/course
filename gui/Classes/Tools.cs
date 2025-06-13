@@ -1,10 +1,12 @@
 ﻿using db.Models;
 using db.Repositories;
 using db.Tools;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using System.ComponentModel;
+using System.Data;
 using System.Reflection;
 using static gui.Classes.IInformation;
 
@@ -117,7 +119,25 @@ namespace gui.Classes {
             }
         }
 
-        
+        public static bool CheckSqlServerPermissionsForAdmin<TDbContext>(TDbContext context, string? userName) where TDbContext : DbContext {
+            using var connection = new SqlConnection(context.Database.GetConnectionString());
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = @$"
+                SELECT 
+                    IS_ROLEMEMBER('db_datawriter', p.name) AS can_write
+                FROM sys.database_principals p
+                WHERE p.type_desc = 'SQL_USER' 
+                    AND p.is_fixed_role = 0
+                    AND p.name = '{userName}';";
+            bool result = (int)command.ExecuteScalar() == 1;
+            connection.Close();
+
+            return result;         
+        }
+
+
 
         #region Deprecated
 
