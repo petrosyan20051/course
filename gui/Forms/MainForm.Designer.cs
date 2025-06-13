@@ -28,9 +28,9 @@
             controlPnl = new Panel();
             userBtn = new gui.controllers.RoundedButton();
             styleBtn = new gui.controllers.RoundedButton();
-            closeBtn = new gui.controllers.RoundedButton();
-            expandBtn = new gui.controllers.RoundedButton();
             minimizeBtn = new gui.controllers.RoundedButton();
+            expandBtn = new gui.controllers.RoundedButton();
+            closeBtn = new gui.controllers.RoundedButton();
             menuPnl = new Panel();
             gridPnl = new Panel();
             gridLbl = new Label();
@@ -103,21 +103,21 @@
             styleBtn.MouseEnter += styleBtn_MouseEnter;
             styleBtn.MouseLeave += styleBtn_MouseLeave;
             // 
-            // closeBtn
+            // minimizeBtn
             // 
-            closeBtn.BorderRadius = 5;
-            closeBtn.Dock = DockStyle.Right;
-            closeBtn.FlatAppearance.BorderSize = 0;
-            closeBtn.FlatStyle = FlatStyle.Flat;
-            closeBtn.Image = (Image)resources.GetObject("closeBtn.Image");
-            closeBtn.Location = new Point(938, 0);
-            closeBtn.Name = "closeBtn";
-            closeBtn.Size = new Size(62, 32);
-            closeBtn.TabIndex = 6;
-            closeBtn.UseVisualStyleBackColor = true;
-            closeBtn.Click += closeBtn_Click;
-            closeBtn.MouseEnter += closeBtn_MouseEnter;
-            closeBtn.MouseLeave += closeBtn_MouseLeave;
+            minimizeBtn.BorderRadius = 5;
+            minimizeBtn.Dock = DockStyle.Right;
+            minimizeBtn.FlatAppearance.BorderSize = 0;
+            minimizeBtn.FlatStyle = FlatStyle.Flat;
+            minimizeBtn.Image = (Image)resources.GetObject("minimizeBtn.Image");
+            minimizeBtn.Location = new Point(814, 0);
+            minimizeBtn.Name = "minimizeBtn";
+            minimizeBtn.Size = new Size(62, 32);
+            minimizeBtn.TabIndex = 4;
+            minimizeBtn.UseVisualStyleBackColor = true;
+            minimizeBtn.Click += minimizeBtn_Click;
+            minimizeBtn.MouseEnter += minimizeBtn_MouseEnter;
+            minimizeBtn.MouseLeave += minimizeBtn_MouseLeave;
             // 
             // expandBtn
             // 
@@ -135,21 +135,21 @@
             expandBtn.MouseEnter += expandBtn_MouseEnter;
             expandBtn.MouseLeave += expandBtn_MouseLeave;
             // 
-            // minimizeBtn
+            // closeBtn
             // 
-            minimizeBtn.BorderRadius = 5;
-            minimizeBtn.Dock = DockStyle.Right;
-            minimizeBtn.FlatAppearance.BorderSize = 0;
-            minimizeBtn.FlatStyle = FlatStyle.Flat;
-            minimizeBtn.Image = (Image)resources.GetObject("minimizeBtn.Image");
-            minimizeBtn.Location = new Point(814, 0);
-            minimizeBtn.Name = "minimizeBtn";
-            minimizeBtn.Size = new Size(62, 32);
-            minimizeBtn.TabIndex = 4;
-            minimizeBtn.UseVisualStyleBackColor = true;
-            minimizeBtn.Click += minimizeBtn_Click;
-            minimizeBtn.MouseEnter += minimizeBtn_MouseEnter;
-            minimizeBtn.MouseLeave += minimizeBtn_MouseLeave;
+            closeBtn.BorderRadius = 5;
+            closeBtn.Dock = DockStyle.Right;
+            closeBtn.FlatAppearance.BorderSize = 0;
+            closeBtn.FlatStyle = FlatStyle.Flat;
+            closeBtn.Image = (Image)resources.GetObject("closeBtn.Image");
+            closeBtn.Location = new Point(938, 0);
+            closeBtn.Name = "closeBtn";
+            closeBtn.Size = new Size(62, 32);
+            closeBtn.TabIndex = 6;
+            closeBtn.UseVisualStyleBackColor = true;
+            closeBtn.Click += closeBtn_Click;
+            closeBtn.MouseEnter += closeBtn_MouseEnter;
+            closeBtn.MouseLeave += closeBtn_MouseLeave;
             // 
             // menuPnl
             // 
@@ -283,7 +283,7 @@
             // 
             // userTip
             // 
-            userTip.ToolTipTitle = "Режим прав пользователя";
+            userTip.ToolTipTitle = "Авторизация";
             // 
             // MainForm
             // 

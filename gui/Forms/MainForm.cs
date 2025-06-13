@@ -1,5 +1,6 @@
 ﻿using gui.Classes;
 using gui.controllers;
+using Microsoft.EntityFrameworkCore;
 using static gui.Classes.IInformation;
 
 namespace gui.Forms {
@@ -20,6 +21,7 @@ namespace gui.Forms {
 
         private StyleManager styler;
         private UserRights Rights { get; set; }
+        private string? userName {  get; set; }
 
         public MainForm() {
             InitializeComponent();
@@ -43,7 +45,7 @@ namespace gui.Forms {
             _mainGridPanel = this.mainPnlGrid;
             _userBtn = this.userBtn;
 
-            Rights = UserRights.Admin;
+            Rights = UserRights.Error;
 
             styler = new StyleManager(
                 Design.DarkTheme,
@@ -124,9 +126,21 @@ namespace gui.Forms {
             minimizeTip.SetToolTip(_minimizeBtn, "Свернуть в трей");
             expandTip.SetToolTip(_expandBtn, "Растянуть на весь экран / вернуть в исходное положение");
             closeTip.SetToolTip(_closeBtn, "Завершение работы приложения");
-            userTip.SetToolTip(
-                _userBtn, $"Текущие права пользователя: " +
-                $"{(Rights == UserRights.Admin ? "администратор" : "базовый пользователь")}");
+
+            string? userString = "";
+            switch (Rights) {
+                case UserRights.Error:
+                    userString = "Войдите в профиль";
+                    break;
+                case UserRights.Basic:
+                    userString = $"Пользователь: {userName} (базовый пользователь)";
+                    break;
+                case UserRights.Admin:
+                    userString = $"Пользователь: {userName} (администратор)";
+                    break;
+            }
+
+            userTip.SetToolTip(_userBtn, userString);
         }
 
         private void closeBtn_MouseEnter(object sender, EventArgs e) {
@@ -304,7 +318,11 @@ namespace gui.Forms {
         }
 
         private void userBtn_Click(object sender, EventArgs e) {
-            switch (Rights) {
+            var authorizeForm = new AuthorizeForm();
+            authorizeForm.ShowDialog();
+            _currentForm.UpdateForm(authorizeForm.Tag as DbContext);
+            
+            /*switch (Rights) {
                 case UserRights.Basic:
                     this.Rights = UserRights.Admin;
                     _currentForm.Rights = UserRights.Admin;
@@ -316,7 +334,7 @@ namespace gui.Forms {
                     _currentForm.Rights = UserRights.Basic;
                     userTip.SetToolTip(_userBtn, "Текущие права пользователя: базовый пользователь");
                     break;
-            }
+            }*/
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using db.Models;
 using db.Repositories;
 using db.Tools;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections;
 using System.ComponentModel;
-using System.Data;
 using System.Reflection;
 using static gui.Classes.IInformation;
 
@@ -15,12 +13,13 @@ namespace gui.Classes {
     public class Tools {
 
         public static List<string>? GetTableNames<TContext>(TContext context) where TContext : DbContext {
-            DataTable table = null;
             return context.Model.GetEntityTypes()
                 .Select(e => e.GetTableName())
                 .Where(t => t != null)
                 .Distinct()
                 .ToList();
+
+            context.Set<Customer>().Local.ToBindingList();
         }
 
         public static IList? DbSetFilterByRole(IList db, UserRights newRights, Type entityType) {
@@ -70,14 +69,24 @@ namespace gui.Classes {
             }
         }
 
-        public static DataTable? GetDataTableRaw<TDbContext>(TDbContext? context, string? tableName) where TDbContext : DbContext {            
-            using (var connection = new SqlConnection(context?.Database.GetConnectionString())) {
-                connection?.Open();
-                var adapter = new SqlDataAdapter($"Select * FROM {tableName}", connection);
-                var table = new DataTable();
-                adapter?.Fill(table);
-                return table;
+        public static IBindingList? GetDbSet<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+            if (context is null || entityType is null) {
+                return null;
             }
+
+            // Get DbSet<entityType> 
+            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
+            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
+
+            // Make request and get List<entityType>
+            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
+
+            // Make BindingList<User>
+            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
+            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
+
+            return bindingList;
         }
 
         // Reoder columns data of datagridview using type of entity
@@ -108,6 +117,22 @@ namespace gui.Classes {
             }
         }
 
+        
+
+        #region Deprecated
+
+        // Method to convert "input" to type "targetType"
+        public static object? TryConvert(object input, Type targetType) {
+            var converter = TypeDescriptor.GetConverter(targetType);
+            try {
+                return converter.ConvertFrom(input);
+            } catch {
+                throw new ArgumentException($"Converting object cannot be casted" +
+                    $"to type \"{targetType.Name}\"");
+            }
+
+        }
+
         public static dynamic? GetRepositoryByName<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
             // Finding Id property to determine TKey
             var keyType = entityType?.GetProperty("Id")?.PropertyType;
@@ -126,39 +151,7 @@ namespace gui.Classes {
             return repositoryInstance;
         }
 
-        #region Deprecated
 
-        // Method to convert "input" to type "targetType"
-        public static object? TryConvert(object input, Type targetType) {
-            var converter = TypeDescriptor.GetConverter(targetType);
-            try {
-                return converter.ConvertFrom(input);
-            } catch {
-                throw new ArgumentException($"Converting object cannot be casted" +
-                    $"to type \"{targetType.Name}\"");
-            }
-
-        }
-
-        public static IBindingList? GetDbSet<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
-            if (context is null || entityType is null) {
-                return null;
-            }
-
-            // Get DbSet<entityType> 
-            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
-            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
-
-            // Make request and get List<entityType>
-            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
-            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
-
-            // Make BindingList<User>
-            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
-            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
-
-            return bindingList;
-        }
 
 
 

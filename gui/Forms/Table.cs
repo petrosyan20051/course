@@ -4,7 +4,11 @@ using db.Models;
 using db.Repositories;
 using gui.Classes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
+using System.Transactions;
 using static gui.Classes.IInformation;
 
 using TypeId = int;
@@ -27,6 +31,7 @@ namespace gui.Forms {
 
         private string? currentCell;
         private bool IsUpdatingCellValue { get; set; } = false;
+        private Point? SelectedCell { get; set; }
 
         private DataGridView _grid;
         private ComboBox _tblCmBox;
@@ -40,28 +45,10 @@ namespace gui.Forms {
             this.TopLevel = false;
             this.Rights = userRights;
 
-            // Combobox source: OrderDbContext table names
-            _tblCmBox.DataSource = Tools.GetTableNames(_context);
-
-            // Get source for datagridview
-            try {
-                //_grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
-                _grid.DataSource = Tools.GetDataTableRaw(_context, _tblCmBox.Text);
-            } catch (Exception ex) {
-                MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
-            _grid.AutoResizeColumns(); // resize columns
-            _grid.Refresh();
-
-            // Install enability for controllers
-            _grid.ReadOnly = userRights == UserRights.Admin ? false : true; // install right to edit db
-            _setAdd.Enabled = userRights == UserRights.Admin ? true : false; // install right to add sets to db
-            _setDelete.Enabled = userRights == UserRights.Admin ? true : false; // install right to remove sets from db
-            _setRecover.Enabled = userRights == UserRights.Admin ? true : false; // install right to recover sets from db
-
+            _grid.ReadOnly = true; // install right to edit db
+            _setAdd.Enabled = false; // install right to add sets to db
+            _setDelete.Enabled = false; // install right to remove sets from db
+            _setRecover.Enabled = false;
         }
 
         private void TableInformation_Load(object sender, EventArgs e) {
@@ -71,41 +58,19 @@ namespace gui.Forms {
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
             var dbSet = Tools.GetDbSet(_context, tableMapping[cmbBox.Text]);
-            _grid.DataSource = Tools.GetDataTableRaw(_context, _tblCmBox.Text);//Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
+            _grid.DataSource = Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
-        private async void addSetStrip_Click(object sender, EventArgs e) {
-            try {
-                // Get DbSet<entityType> 
-                var dbSetMethod = typeof(OrderDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(tableMapping[_tblCmBox.Text]);
-                var dbSet = dbSetMethod?.Invoke(_context, null); // DbSet<>
+        private void addSetStrip_Click(object sender, EventArgs e) {
+            // Making new entity
+            Type entityType = tableMapping[_tblCmBox.Text];
+            var newEntity = Activator.CreateInstance(entityType);
 
-                // Make entity instance
-                var entityInstance = Activator.CreateInstance(tableMapping[_tblCmBox.Text]);
+            _context?.Add(newEntity);
+            ApplyChangesToDatabase(_context);
 
-                // Get new ID with repos
-                var repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
-                var newId = await repository?.NewIdToAdd();
-                if (newId == -1) {
-                    MessageBox.Show(
-                        $"Невозможно получить новый ID.{Environment.NewLine}Все ID заняты",
-                        AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                // Set Id to instance
-                tableMapping[_tblCmBox.Text].GetProperty("Id")?.SetValue(entityInstance, newId);
-                _context.Add(entityInstance);
-
-                await ApplyChangesToDatabase(_context);
-            } catch (Exception error) {
-                MessageBox.Show($"Произошла ошибка: {error.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            //_grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
-            _grid.DataSource = Tools.GetDataTableRaw(_context, _tblCmBox.Text);
+            _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
             _grid.Refresh();
             _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
@@ -131,18 +96,12 @@ namespace gui.Forms {
             // If user - admin so paint background for soft deleted and not deleted sets
             if (e.RowIndex < 0 || e.ColumnIndex < 0) {
                 return;
-            }            
-            var grid = sender as DataGridView;
-            var row = grid?.Rows[e.RowIndex];
-            /*dynamic? entity = (sender as DataGridView)?
-                .Rows[e.RowIndex]?
-                .DataBoundItem as dynamic;*/
-            Color brushColor;
-            if (row?.Cells["isDeleted"]?.Value == null || row?.Cells["Id"]?.Value == null) {
-                brushColor = Design.IsSetExists;
-            } else {
-                brushColor = Design.SoftDeleteColor;
             }
+
+            dynamic? entity = (sender as DataGridView)?
+                .Rows[e.RowIndex]?
+                .DataBoundItem as dynamic;
+            var brushColor = entity?.isDeleted is null ? Design.IsSetExists : Design.SoftDeleteColor;
 
             using (var brush = new SolidBrush(brushColor)) {
                 e?.Graphics?.FillRectangle(brush, e.CellBounds); // fill rect with brush
@@ -156,27 +115,27 @@ namespace gui.Forms {
             e?.Handled = true;
         }
 
-        private async void dbGrid_KeyDown(object sender, KeyEventArgs e) {
+        private void dbGrid_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode != Keys.Delete) {
                 return;
             }
 
-            await DeleteSetsFromGrid(sender as DataGridView); // delete sets from datagridview
+            DeleteSetsFromGrid(sender as DataGridView); // delete sets from datagridview
         }
 
 
-        private async void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
+        private void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             var grid = sender as DataGridView;
-            await ApplyChangesToDatabase(_context);
-            grid.DataSource = Tools.GetDbSet(new OrderContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
+            ApplyChangesToDatabase(_context);
+            grid.DataSource = Tools.GetDbSet(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
         }
 
-        private async void setDeleteStrip_Click(object sender, EventArgs e) {
-            await DeleteSetsFromGrid(_grid);
+        private void setDeleteStrip_Click(object sender, EventArgs e) {
+            DeleteSetsFromGrid(_grid);
         }
 
-        private async void setRecoverStrip_Click(object sender, EventArgs e) {
-            await RecoverSetsFromGrid(_grid);
+        private void setRecoverStrip_Click(object sender, EventArgs e) {
+            RecoverSetsFromGrid(_grid);
         }
 
         #region Пользовательские методы
@@ -187,21 +146,13 @@ namespace gui.Forms {
             _setAdd = this.setAddStrip;
             _setDelete = this.setDeleteStrip;
             _setRecover = this.setRecoverStrip;
-
-            // Make instance db context
-            var factory = new OrderContextFactory();
-            _context = factory.CreateDbContext([]);
-
-            // Making mapping for tables: string TableName -> Type TableType
-            tableMapping = new Dictionary<string, Type>();
-            foreach (var entityType in _context.Model.GetEntityTypes()) {
-                tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
-            }
-
         }
 
-        private void OnUserRightsChanged(UserRights newRights, string dbSetName) {
-            if (!tableMapping.ContainsKey(_tblCmBox.Text))
+        private void OnUserRightsChanged(UserRights newRights, string? dbSetName) {
+
+            if (tableMapping == null) {
+                return;
+            } else if (!tableMapping.ContainsKey(_tblCmBox.Text))
                 return;
             _grid.DataSource =
                 Tools.DbSetFilterByRole(
@@ -231,12 +182,9 @@ namespace gui.Forms {
             _grid.Invalidate();
         }
 
-        private async Task ApplyChangesToDatabase(OrderDbContext _context) {
+        private void ApplyChangesToDatabase(DbContext _context) {
             try {
-                await _context.SaveChangesAsync();
-                // Updata Data Source
-
-                //grid.DataSource = Tools.GetDbSet(_context, selectBox.Text == "Orders" ? typeof(Order) : typeof(Customer));
+                _context.SaveChanges();
             } catch (DbUpdateException ex) {
                 MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (InvalidDataException ex) {
@@ -252,7 +200,9 @@ namespace gui.Forms {
             }
         }
 
-        private async Task DeleteSetsFromGrid(DataGridView? grid) {
+        private void DeleteSetsFromGrid(DataGridView? grid) {
+            SelectedCell = new Point(grid.CurrentCell.RowIndex, grid.CurrentCell.ColumnIndex);
+
             // Get Id to deleted
             var idsToDelete = grid?.SelectedRows
                 .Cast<DataGridViewRow>()
@@ -273,27 +223,34 @@ namespace gui.Forms {
                 return;
             }
 
-            dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
             try {
                 // Delete selected sets
                 foreach (var id in idsToDelete) {
-                    repository?.SoftDeleteAsync(id);
+                    dynamic? entityToDelete = _context.Find(tableMapping[_tblCmBox.Text], new object[] { id });
+
+                    // Update entities fields
+                    entityToDelete?.WhenChanged = DateTime.Now;
+                    entityToDelete?.isDeleted = DateTime.Now;
+                    _context.Update(entityToDelete);
                 }
 
-                await ApplyChangesToDatabase(_context);
+                ApplyChangesToDatabase(_context);
 
                 // Update DataGridView
                 grid?.DataSource = Tools.DbSetFilterByRole(
                     Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
                     Rights, tableMapping[_tblCmBox.Text]);
-
-                MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (Exception ex) {
                 MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            grid?.CurrentCell = grid?.Rows[SelectedCell.Value.X].Cells[SelectedCell.Value.Y]; // update selected cell
+            MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private async Task RecoverSetsFromGrid(DataGridView? grid) {
+        private void RecoverSetsFromGrid(DataGridView? grid) {
+            SelectedCell = new Point(grid.CurrentCell.RowIndex, grid.CurrentCell.ColumnIndex);
+
             // Get Id to deleted
             var idsToRecover = grid?.SelectedRows
                 .Cast<DataGridViewRow>()
@@ -314,28 +271,70 @@ namespace gui.Forms {
                 return;
             }
 
-            dynamic? repository = Tools.GetRepositoryByName(_context, tableMapping[_tblCmBox.Text]);
             try {
-                // Delete selected sets
+                // Recover selected sets
                 foreach (var id in idsToRecover) {
-                    await repository?.RecoverAsync(id);
+                    dynamic? entityToRecover = _context.Find(tableMapping[_tblCmBox.Text], new object[] { id });
+
+                    // Update entities fields
+                    entityToRecover?.WhenChanged = DateTime.Now;
+                    entityToRecover?.isDeleted = null;
+                    _context.Update(entityToRecover);
                 }
 
-                await ApplyChangesToDatabase(_context);
+                ApplyChangesToDatabase(_context);
 
                 // Update DataGridView
                 grid?.DataSource = Tools.DbSetFilterByRole(
                     Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
                     Rights, tableMapping[_tblCmBox.Text]);
 
-                MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             } catch (Exception ex) {
                 MessageBox.Show($"Ошибка при восстановлении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            grid?.CurrentCell = grid?.Rows[SelectedCell.Value.X].Cells[SelectedCell.Value.Y]; // update selected cell
+            MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public void UpdateForm(DbContext context) {
+            _context = context as OrderDbContext;
+            if (_context == null) {
+                return;
+            }
+
+            // Making mapping for tables: string TableName -> Type TableType
+            if (tableMapping != null && tableMapping.Count > 0) {
+                tableMapping.Clear();
+            }
+            tableMapping = new Dictionary<string, Type>();
+            foreach (var entityType in _context.Model.GetEntityTypes()) {
+                tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
+            }
+
+            // Combobox source: OrderDbContext table names
+            _tblCmBox.DataSource = Tools.GetTableNames(_context);
+
+            // Get source for datagridview
+            try {
+                _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+            } catch (Exception ex) {
+                MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
+            _grid.AutoResizeColumns(); // resize columns
+
+            // Install enability for controllers
+
+            _grid.ReadOnly = Rights == UserRights.Admin ? false : true; // install right to edit db
+            _setAdd.Enabled = Rights == UserRights.Admin ? true : false; // install right to add sets to db
+            _setDelete.Enabled = Rights == UserRights.Admin ? true : false; // install right to remove sets from db
+            _setRecover.Enabled = Rights == UserRights.Admin ? true : false; // install right to recover sets from db
+
         }
 
         #endregion Пользовательские методы
-
-        
     }
 }

@@ -1,0 +1,65 @@
+﻿using gui.Classes;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using db.Factories;
+
+namespace gui.Forms {
+    public partial class AuthorizeForm : Form {
+        private TextBox? _dbBox, _ipBox, _loginBox, _passwordBox;
+
+        public AuthorizeForm() {
+            InitializeComponent();
+            InitVariables();
+        }
+
+        private void enterBtn_Click(object sender, EventArgs e) {
+            // Check whether all textboxes has text
+            string? errorMsg = null;
+            if (_ipBox.Text == string.Empty) {
+                errorMsg = "Введите IP-адрес подключения";
+            } else if (_dbBox.Text == string.Empty) {
+                errorMsg = "Введите идентификатор базы данных";
+            } else if (_loginBox.Text == string.Empty) {
+                errorMsg = "Введите логин пользователя";
+            } else if (_passwordBox.Text == string.Empty) {
+                errorMsg = "Введите пароль пользователя";
+            }
+
+            if (errorMsg != null) {
+                MessageBox.Show(errorMsg, IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Create OrderDbContext 
+            var dbContext = new OrderDbContextFactory().CreateDbContext(
+                new string[] { _ipBox.Text, _dbBox.Text, _loginBox.Text, _passwordBox.Text });
+            if (!dbContext.Database.CanConnect()) {
+                MessageBox.Show(
+                    $"Не удалось подключить к базе данных.{Environment.NewLine}" +
+                    $"Проверьте настройки подключения",
+                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            this.Tag = dbContext;
+            MessageBox.Show($"Подключение к базе данных {_dbBox.Text} прошло успешно{Environment.NewLine}" +
+                $"Можете безопасно закрыть окно авторизации", IInformation.AppName,
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Dispose();
+        }
+
+        private void InitVariables() {
+            _dbBox = this.dbNameTxtBox;
+            _ipBox = this.ipTxtBox;
+            _loginBox = this.userNameTxtBox;
+            _passwordBox = this.passwordTxtBox;
+        }
+    }
+}

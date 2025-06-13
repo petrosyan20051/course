@@ -4,6 +4,9 @@
     <Compile Update="Controllers\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Forms\AuthorizeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
