@@ -12,7 +12,7 @@ namespace db.Factories {
         //  2. Database Name
         //  3. User login
         //  4. User password
-        public OrderDbContext CreateDbContext(string[] args) {
+        public OrderDbContext CreateCustomDbContext(string[] args) {
             if (args.Length < 4) { // Must be 4 neccessary arguments
                 return null;
             }
@@ -24,7 +24,7 @@ namespace db.Factories {
         }
 
         // Create OrderDbContext using default connectionString in appsettings.json
-        public OrderDbContext CreateDefaultDbContext() {
+        public OrderDbContext CreateDbContext(string[] args) {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory()) // find appsetings.json
                 .AddJsonFile("appsettings.json")
