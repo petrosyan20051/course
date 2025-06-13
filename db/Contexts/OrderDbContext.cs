@@ -1,6 +1,7 @@
 ﻿using db.Models;
 using db.Tools;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace db.Contexts {
 
