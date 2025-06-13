@@ -3,6 +3,7 @@ using db.Models;
 using db.Repositories;
 using db.Repositories.db.Repositories;
 using Microsoft.EntityFrameworkCore;
+using db.Factories;
 
 using TypeId = int;
 
@@ -14,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// /*builder.Configuration.GetConnectionString("DefaultConnection")*/
 builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IRepository<Order, TypeId>, OrderRepository>();

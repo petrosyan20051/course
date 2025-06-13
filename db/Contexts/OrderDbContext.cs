@@ -16,22 +16,22 @@ namespace db.Contexts {
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            Database.EnsureCreated();
+            //var config = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json")
+            //    .Build(); // set appsettings for connectionStrings
+            //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
 
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build(); // set appsettings for connectionStrings
-
-            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=KR;Trusted_Connection=True;");
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
- 
+
+
             modelBuilder.Entity<Customer>(entity => {
-                entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.Forename).IsRequired();
                 entity.Property(e => e.Surname).IsRequired();
                 entity.Property(e => e.PhoneNumber).IsRequired();
@@ -47,7 +47,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Driver>(entity => {
-                entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.Forename).IsRequired();
                 entity.Property(e => e.Surname).IsRequired();
                 entity.Property(e => e.PhoneNumber).IsRequired();
@@ -64,7 +64,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Models.Route>(entity => {
-                entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.BoardingAddress).IsRequired();
                 entity.Property(e => e.DropAddress).IsRequired();
                 entity.Property(e => e.WhoAdded).IsRequired();
@@ -78,7 +78,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<TransportVehicle>(entity => {
-                entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.DriverId).IsRequired();
                 entity.Property(e => e.Number).IsRequired();
                 entity.Property(e => e.Series).IsRequired();
@@ -96,7 +96,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Rate>(entity => {
-                entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.Forename).IsRequired();
                 entity.Property(e => e.DriverId).IsRequired();
                 entity.Property(e => e.VehicleId).IsRequired();
@@ -111,7 +111,7 @@ namespace db.Contexts {
             modelBuilder.Entity<Rate>().HasData(rates);
 
             modelBuilder.Entity<Order>(entity => {
-                entity.Property(e => e.Id).IsRequired().ValueGeneratedNever();
+                entity.Property(e => e.Id).IsRequired();
                 entity.Property(e => e.CustomerId).IsRequired();
                 entity.Property(e => e.RouteId).IsRequired();
                 entity.Property(e => e.RateId).IsRequired();

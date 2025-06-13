@@ -15,5 +15,9 @@ namespace db.Models {
         public TypeId RateId { get; set; }
 
         public int Distance { get; set; }
+
+        //public ICollection<Customer> Customers { get; set; } = new List<Customer>();
+        //public ICollection<Route> Routes { get; set; } = new List<Route>();
+        //public ICollection<Rate> Rates { get; set; } = new List<Rate>();
     }
 }
