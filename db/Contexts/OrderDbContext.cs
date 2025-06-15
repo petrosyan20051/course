@@ -23,7 +23,7 @@ namespace db.Contexts {
             //    .Build(); // set appsettings for connectionStrings
             //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
 
-            optionsBuilder.UseSqlServer("Server=192.168.1.54;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=192.168.1.140;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
