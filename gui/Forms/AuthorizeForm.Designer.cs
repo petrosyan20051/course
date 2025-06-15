@@ -24,58 +24,53 @@
         /// </summary>
         private void InitializeComponent() {
             mainLbl = new Label();
-            label1 = new Label();
-            ipTxtBox = new TextBox();
+            servNameLbl = new Label();
             userNameTxtBox = new TextBox();
             userNameLbl = new Label();
             passwordTxtBox = new TextBox();
             passwordLbl = new Label();
             enterBtn = new gui.controllers.RoundedButton();
-            dbNameTxtBox = new TextBox();
             dbNameLbl = new Label();
+            servNameBox = new ComboBox();
+            secCheckLbl = new Label();
+            secCheckBox = new ComboBox();
+            dbNameBox = new ComboBox();
             SuspendLayout();
             // 
             // mainLbl
             // 
             mainLbl.AutoSize = true;
             mainLbl.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            mainLbl.Location = new Point(112, 19);
+            mainLbl.Location = new Point(195, 19);
             mainLbl.Name = "mainLbl";
             mainLbl.Size = new Size(228, 45);
             mainLbl.TabIndex = 0;
             mainLbl.Text = "Авторизация";
             // 
-            // label1
+            // servNameLbl
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            label1.Location = new Point(59, 104);
-            label1.Name = "label1";
-            label1.Size = new Size(90, 25);
-            label1.TabIndex = 1;
-            label1.Text = "IP-адрес:";
-            // 
-            // ipTxtBox
-            // 
-            ipTxtBox.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            ipTxtBox.Location = new Point(155, 104);
-            ipTxtBox.Name = "ipTxtBox";
-            ipTxtBox.Size = new Size(233, 32);
-            ipTxtBox.TabIndex = 2;
+            servNameLbl.AutoSize = true;
+            servNameLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            servNameLbl.Location = new Point(20, 107);
+            servNameLbl.Name = "servNameLbl";
+            servNameLbl.Size = new Size(129, 25);
+            servNameLbl.TabIndex = 1;
+            servNameLbl.Text = "Имя сервера:";
             // 
             // userNameTxtBox
             // 
+            userNameTxtBox.Enabled = false;
             userNameTxtBox.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            userNameTxtBox.Location = new Point(155, 216);
+            userNameTxtBox.Location = new Point(266, 205);
             userNameTxtBox.Name = "userNameTxtBox";
-            userNameTxtBox.Size = new Size(233, 32);
+            userNameTxtBox.Size = new Size(340, 32);
             userNameTxtBox.TabIndex = 4;
             // 
             // userNameLbl
             // 
             userNameLbl.AutoSize = true;
             userNameLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            userNameLbl.Location = new Point(80, 219);
+            userNameLbl.Location = new Point(20, 208);
             userNameLbl.Name = "userNameLbl";
             userNameLbl.Size = new Size(69, 25);
             userNameLbl.TabIndex = 3;
@@ -83,17 +78,18 @@
             // 
             // passwordTxtBox
             // 
+            passwordTxtBox.Enabled = false;
             passwordTxtBox.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            passwordTxtBox.Location = new Point(155, 269);
+            passwordTxtBox.Location = new Point(266, 258);
             passwordTxtBox.Name = "passwordTxtBox";
-            passwordTxtBox.Size = new Size(233, 32);
+            passwordTxtBox.Size = new Size(340, 32);
             passwordTxtBox.TabIndex = 5;
             // 
             // passwordLbl
             // 
             passwordLbl.AutoSize = true;
             passwordLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            passwordLbl.Location = new Point(67, 272);
+            passwordLbl.Location = new Point(20, 261);
             passwordLbl.Name = "passwordLbl";
             passwordLbl.Size = new Size(82, 25);
             passwordLbl.TabIndex = 5;
@@ -106,7 +102,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            enterBtn.Location = new Point(137, 324);
+            enterBtn.Location = new Point(225, 369);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(168, 57);
             enterBtn.TabIndex = 7;
@@ -114,38 +110,72 @@
             enterBtn.UseVisualStyleBackColor = false;
             enterBtn.Click += enterBtn_Click;
             // 
-            // dbNameTxtBox
-            // 
-            dbNameTxtBox.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            dbNameTxtBox.Location = new Point(155, 160);
-            dbNameTxtBox.Name = "dbNameTxtBox";
-            dbNameTxtBox.Size = new Size(233, 32);
-            dbNameTxtBox.TabIndex = 3;
-            // 
             // dbNameLbl
             // 
             dbNameLbl.AutoSize = true;
             dbNameLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            dbNameLbl.Location = new Point(25, 163);
+            dbNameLbl.Location = new Point(25, 316);
             dbNameLbl.Name = "dbNameLbl";
             dbNameLbl.Size = new Size(124, 25);
             dbNameLbl.TabIndex = 8;
             dbNameLbl.Text = "База данных:";
             // 
+            // servNameBox
+            // 
+            servNameBox.Font = new Font("Segoe UI", 14F);
+            servNameBox.FormattingEnabled = true;
+            servNameBox.Location = new Point(266, 107);
+            servNameBox.Name = "servNameBox";
+            servNameBox.Size = new Size(340, 33);
+            servNameBox.TabIndex = 9;
+            // 
+            // secCheckLbl
+            // 
+            secCheckLbl.AutoSize = true;
+            secCheckLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            secCheckLbl.Location = new Point(20, 157);
+            secCheckLbl.Name = "secCheckLbl";
+            secCheckLbl.Size = new Size(221, 25);
+            secCheckLbl.TabIndex = 10;
+            secCheckLbl.Text = "Проверка подлинности:";
+            // 
+            // secCheckBox
+            // 
+            secCheckBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            secCheckBox.Font = new Font("Segoe UI", 14F);
+            secCheckBox.FormattingEnabled = true;
+            secCheckBox.Items.AddRange(new object[] { "Проверка подлинности Windows", "Проверка подлинности SQL Server" });
+            secCheckBox.Location = new Point(266, 157);
+            secCheckBox.Name = "secCheckBox";
+            secCheckBox.Size = new Size(340, 33);
+            secCheckBox.TabIndex = 11;
+            secCheckBox.SelectedIndexChanged += secCheckBox_SelectedIndexChanged;
+            // 
+            // dbNameBox
+            // 
+            dbNameBox.Font = new Font("Segoe UI", 14F);
+            dbNameBox.FormattingEnabled = true;
+            dbNameBox.Location = new Point(266, 313);
+            dbNameBox.Name = "dbNameBox";
+            dbNameBox.Size = new Size(340, 33);
+            dbNameBox.TabIndex = 12;
+            // 
             // AuthorizeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(440, 398);
-            Controls.Add(dbNameTxtBox);
+            ClientSize = new Size(618, 458);
+            Controls.Add(dbNameBox);
+            Controls.Add(secCheckBox);
+            Controls.Add(secCheckLbl);
+            Controls.Add(servNameBox);
             Controls.Add(dbNameLbl);
             Controls.Add(enterBtn);
             Controls.Add(passwordTxtBox);
             Controls.Add(passwordLbl);
             Controls.Add(userNameTxtBox);
             Controls.Add(userNameLbl);
-            Controls.Add(ipTxtBox);
-            Controls.Add(label1);
+            Controls.Add(servNameLbl);
             Controls.Add(mainLbl);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -162,8 +192,7 @@
         #endregion
 
         private Label mainLbl;
-        private Label label1;
-        private TextBox ipTxtBox;
+        private Label servNameLbl;
         private TextBox userNameTxtBox;
         private Label userNameLbl;
         private TextBox passwordTxtBox;
@@ -171,5 +200,9 @@
         private controllers.RoundedButton enterBtn;
         private TextBox dbNameTxtBox;
         private Label dbNameLbl;
+        private ComboBox servNameBox;
+        private Label secCheckLbl;
+        private ComboBox secCheckBox;
+        private ComboBox dbNameBox;
     }
 }

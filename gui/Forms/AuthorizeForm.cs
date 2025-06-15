@@ -12,28 +12,31 @@ using db.Factories;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Net.Sockets;
+using db.Custom_Classes;
+using static db.Custom_Classes.SqlConnect;
 
 namespace gui.Forms {
     public partial class AuthorizeForm : Form {
-        private TextBox? _dbBox, _ipBox, _loginBox, _passwordBox;
+        private TextBox? _loginBox, _passwordBox;
+        private ComboBox _serverNameBox, _dbNameBox, _secBox;
 
         public AuthorizeForm() {
             InitializeComponent();
             InitVariables();
 
-            _ipBox.Text = GetLocalIPAddress();
+            _secBox.Text = _secBox.Items[0]?.ToString();
         }
 
         private void enterBtn_Click(object sender, EventArgs e) {
             // Check whether all textboxes has text
             string? errorMsg = null;
-            if (_ipBox.Text == string.Empty) {
-                errorMsg = "Введите IP-адрес подключения";
-            } else if (_dbBox.Text == string.Empty) {
-                errorMsg = "Введите идентификатор базы данных";
-            } else if (_loginBox.Text == string.Empty) {
+            if (_serverNameBox.Text == string.Empty) {
+                errorMsg = "Введите имя сервера";
+            } else if (_dbNameBox.Text == string.Empty) {
+                errorMsg = "Введите имя базы данных";
+            } else if (_loginBox.Enabled && _loginBox.Text == string.Empty) {
                 errorMsg = "Введите логин пользователя";
-            } else if (_passwordBox.Text == string.Empty) {
+            } else if (_passwordBox.Enabled && _passwordBox.Text == string.Empty) {
                 errorMsg = "Введите пароль пользователя";
             }
 
@@ -44,18 +47,19 @@ namespace gui.Forms {
 
             // Create OrderDbContext 
             var dbContext = new OrderDbContextFactory().CreateCustomDbContext(
-                new string[] { _ipBox.Text, _dbBox.Text, _loginBox.Text, _passwordBox.Text });
+                new string[] { _loginBox.Enabled ? ConnectMode.SqlServerSecure.ToString() : ConnectMode.WindowsSecure.ToString(),
+                    _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text });
             if (!dbContext.Database.CanConnect()) {
                 MessageBox.Show(
                     $"Не удалось подключиться к базе данных.{Environment.NewLine}" +
                     $"Проверьте настройки подключения",
                     IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            } 
+            }
 
             // Tag as array of dbcontext and whether user is admin
             this.Tag = new object[] { dbContext, Tools.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text) };
-            MessageBox.Show($"Подключение к базе данных {_dbBox.Text} прошло успешно{Environment.NewLine}", 
+            MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             this.Dispose();
@@ -64,10 +68,11 @@ namespace gui.Forms {
         #region Пользовательские методы
 
         private void InitVariables() {
-            _dbBox = this.dbNameTxtBox;
-            _ipBox = this.ipTxtBox;
+            _dbNameBox = this.dbNameBox;
+            _serverNameBox = this.servNameBox;
             _loginBox = this.userNameTxtBox;
             _passwordBox = this.passwordTxtBox;
+            _secBox = this.secCheckBox;
         }
 
         private string? GetLocalIPAddress() {
@@ -79,5 +84,16 @@ namespace gui.Forms {
         }
 
         #endregion
+
+        private void secCheckBox_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox box = sender as ComboBox;
+            if (box?.Text == "Проверка подлинности Windows") {
+                _loginBox.Enabled = false;
+                _passwordBox.Enabled = false;
+            } else {
+                _loginBox.Enabled = true;
+                _passwordBox.Enabled = true;
+            }
+        }
     }
 }

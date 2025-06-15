@@ -63,7 +63,6 @@ namespace gui.Forms {
         }
 
         private void addSetStrip_Click(object sender, EventArgs e) {
-            _context.Set<Customer>().ToList();
 
             // Making new entity
             Type entityType = tableMapping[_tblCmBox.Text];
