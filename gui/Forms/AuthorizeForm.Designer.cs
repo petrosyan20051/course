@@ -106,7 +106,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            enterBtn.Location = new Point(145, 329);
+            enterBtn.Location = new Point(137, 324);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(168, 57);
             enterBtn.TabIndex = 7;
@@ -136,7 +136,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(440, 418);
+            ClientSize = new Size(440, 398);
             Controls.Add(dbNameTxtBox);
             Controls.Add(dbNameLbl);
             Controls.Add(enterBtn);
@@ -149,7 +149,10 @@
             Controls.Add(mainLbl);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "AuthorizeForm";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Авторизация";
             ResumeLayout(false);
