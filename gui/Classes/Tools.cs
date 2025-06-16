@@ -119,7 +119,11 @@ namespace gui.Classes {
             }
         }
 
-        public static bool CheckSqlServerPermissionsForAdmin<TDbContext>(TDbContext context, string? userName) where TDbContext : DbContext {
+        public static bool CheckSqlServerPermissionsForAdmin<TDbContext>(TDbContext context, string userName) where TDbContext : DbContext {
+            if (userName == string.Empty) {
+                return true;
+            }
+            
             using var connection = new SqlConnection(context.Database.GetConnectionString());
             connection.Open();
 
