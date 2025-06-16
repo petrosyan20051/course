@@ -3,6 +3,7 @@ using db.Custom_Classes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
+
 namespace db.Factories {
 
     public class OrderDbContextFactory : IDesignTimeDbContextFactory<OrderDbContext> {
@@ -18,7 +19,9 @@ namespace db.Factories {
             }
             
             var optionsBuilder = new DbContextOptionsBuilder<OrderDbContext>();
-            optionsBuilder.UseSqlServer(SqlConnect.GetConnectionString(args[0], args[1], args[2], args[3]));
+            int mode;
+            int.TryParse(args[0], out mode);
+            optionsBuilder.UseSqlServer(SqlConnect.GetConnectionString((SqlConnect.ConnectMode)mode, args[1], args[2], args[3], args[4]));
 
             return new OrderDbContext(optionsBuilder.Options);
         }

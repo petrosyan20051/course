@@ -14,6 +14,7 @@ namespace db.Contexts {
         public DbSet<Customer> Customers { get; set; }
 
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) {
+            //Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
@@ -23,13 +24,13 @@ namespace db.Contexts {
             //    .Build(); // set appsettings for connectionStrings
             //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
 
-            optionsBuilder.UseSqlServer("Server=192.168.1.140;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
+           // optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=KR;Trusted_Connection=True");
+            //optionsBuilder.UseSqlServer("Server=192.168.1.140;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
-
 
             modelBuilder.Entity<Customer>(entity => {
                 entity.Property(e => e.Id).IsRequired();
