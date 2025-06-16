@@ -30,7 +30,7 @@ namespace gui.Forms {
         private void enterBtn_Click(object sender, EventArgs e) {
             // Check whether all textboxes has text
             string? errorMsg = null;
-            if (_serverNameBox.Text == string.Empty) {
+            if (_serverNameBox.Enabled && _serverNameBox.Text == string.Empty) {
                 errorMsg = "Введите имя сервера";
             } else if (_dbNameBox.Text == string.Empty) {
                 errorMsg = "Введите имя базы данных";
@@ -57,8 +57,13 @@ namespace gui.Forms {
                 return;
             }
 
-            // Tag as array of dbcontext and whether user is admin
-            this.Tag = new object[] { dbContext, Tools.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text) };
+            // Tag:
+            //  1. OrderDbContext
+            //  2. Whether user is admin (bool)
+            //  3. User's name (returns "Локальная БД" if local db)
+            this.Tag = new object[] { dbContext, 
+                Tools.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text),
+                (_loginBox.Enabled ? _loginBox.Text : "Локальная БД")};
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -90,9 +95,11 @@ namespace gui.Forms {
             if (box?.Text == "Проверка подлинности Windows") {
                 _loginBox.Enabled = false;
                 _passwordBox.Enabled = false;
+                _serverNameBox.Enabled = false;
             } else {
                 _loginBox.Enabled = true;
                 _passwordBox.Enabled = true;
+                _serverNameBox.Enabled = true;
             }
         }
     }

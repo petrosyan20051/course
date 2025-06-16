@@ -135,7 +135,12 @@ namespace gui.Classes {
                 WHERE p.type_desc = 'SQL_USER' 
                     AND p.is_fixed_role = 0
                     AND p.name = '{userName}';";
-            bool result = (int)command.ExecuteScalar() == 1;
+            var scalarResult = command.ExecuteScalar();
+            if (scalarResult == null || scalarResult == DBNull.Value) { // user not found
+                return false;
+            }
+
+            bool result = (int)scalarResult == 1;
             connection.Close();
 
             return result;         

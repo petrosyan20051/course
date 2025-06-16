@@ -29,12 +29,12 @@
             userNameLbl = new Label();
             passwordTxtBox = new TextBox();
             passwordLbl = new Label();
-            enterBtn = new gui.controllers.RoundedButton();
             dbNameLbl = new Label();
             servNameBox = new ComboBox();
             secCheckLbl = new Label();
             secCheckBox = new ComboBox();
             dbNameBox = new ComboBox();
+            enterBtn = new gui.controllers.RoundedButton();
             SuspendLayout();
             // 
             // mainLbl
@@ -64,7 +64,7 @@
             userNameTxtBox.Location = new Point(266, 205);
             userNameTxtBox.Name = "userNameTxtBox";
             userNameTxtBox.Size = new Size(340, 32);
-            userNameTxtBox.TabIndex = 4;
+            userNameTxtBox.TabIndex = 3;
             // 
             // userNameLbl
             // 
@@ -83,7 +83,7 @@
             passwordTxtBox.Location = new Point(266, 258);
             passwordTxtBox.Name = "passwordTxtBox";
             passwordTxtBox.Size = new Size(340, 32);
-            passwordTxtBox.TabIndex = 5;
+            passwordTxtBox.TabIndex = 4;
             // 
             // passwordLbl
             // 
@@ -94,21 +94,6 @@
             passwordLbl.Size = new Size(82, 25);
             passwordLbl.TabIndex = 5;
             passwordLbl.Text = "Пароль:";
-            // 
-            // enterBtn
-            // 
-            enterBtn.BackColor = SystemColors.ButtonShadow;
-            enterBtn.BorderRadius = 5;
-            enterBtn.FlatAppearance.BorderSize = 0;
-            enterBtn.FlatStyle = FlatStyle.Flat;
-            enterBtn.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            enterBtn.Location = new Point(225, 369);
-            enterBtn.Name = "enterBtn";
-            enterBtn.Size = new Size(168, 57);
-            enterBtn.TabIndex = 7;
-            enterBtn.Text = "Войти";
-            enterBtn.UseVisualStyleBackColor = false;
-            enterBtn.Click += enterBtn_Click;
             // 
             // dbNameLbl
             // 
@@ -127,7 +112,7 @@
             servNameBox.Location = new Point(266, 107);
             servNameBox.Name = "servNameBox";
             servNameBox.Size = new Size(340, 33);
-            servNameBox.TabIndex = 9;
+            servNameBox.TabIndex = 1;
             // 
             // secCheckLbl
             // 
@@ -148,7 +133,7 @@
             secCheckBox.Location = new Point(266, 157);
             secCheckBox.Name = "secCheckBox";
             secCheckBox.Size = new Size(340, 33);
-            secCheckBox.TabIndex = 11;
+            secCheckBox.TabIndex = 2;
             secCheckBox.SelectedIndexChanged += secCheckBox_SelectedIndexChanged;
             // 
             // dbNameBox
@@ -158,19 +143,34 @@
             dbNameBox.Location = new Point(266, 313);
             dbNameBox.Name = "dbNameBox";
             dbNameBox.Size = new Size(340, 33);
-            dbNameBox.TabIndex = 12;
+            dbNameBox.TabIndex = 5;
+            // 
+            // enterBtn
+            // 
+            enterBtn.BackColor = SystemColors.AppWorkspace;
+            enterBtn.BorderRadius = 5;
+            enterBtn.FlatAppearance.BorderSize = 0;
+            enterBtn.FlatStyle = FlatStyle.Flat;
+            enterBtn.Font = new Font("Segoe UI", 14F);
+            enterBtn.Location = new Point(239, 376);
+            enterBtn.Name = "enterBtn";
+            enterBtn.Size = new Size(141, 44);
+            enterBtn.TabIndex = 6;
+            enterBtn.Text = "Войти";
+            enterBtn.UseVisualStyleBackColor = false;
+            enterBtn.Click += enterBtn_Click;
             // 
             // AuthorizeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(618, 458);
+            Controls.Add(enterBtn);
             Controls.Add(dbNameBox);
             Controls.Add(secCheckBox);
             Controls.Add(secCheckLbl);
             Controls.Add(servNameBox);
             Controls.Add(dbNameLbl);
-            Controls.Add(enterBtn);
             Controls.Add(passwordTxtBox);
             Controls.Add(passwordLbl);
             Controls.Add(userNameTxtBox);
@@ -197,12 +197,12 @@
         private Label userNameLbl;
         private TextBox passwordTxtBox;
         private Label passwordLbl;
-        private controllers.RoundedButton enterBtn;
         private TextBox dbNameTxtBox;
         private Label dbNameLbl;
         private ComboBox servNameBox;
         private Label secCheckLbl;
         private ComboBox secCheckBox;
         private ComboBox dbNameBox;
+        private controllers.RoundedButton enterBtn;
     }
 }

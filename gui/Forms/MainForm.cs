@@ -326,6 +326,7 @@ namespace gui.Forms {
             }
             _currentForm.UpdateForm(args[0] as DbContext);
             _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
+            userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
         }
     }
 }
