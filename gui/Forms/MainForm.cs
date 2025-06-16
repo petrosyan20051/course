@@ -17,7 +17,7 @@ namespace gui.Forms {
         private Splitter _menuSpl, _controlSpl;
         private PictureBox _mainImage, _gridImage;
         private Label _mainLabel, _gridLabel;
-        private Table _currentForm;
+        private TableForm _currentForm;
 
         private StyleManager styler;
         private UserRights Rights { get; set; }
@@ -77,7 +77,7 @@ namespace gui.Forms {
             this.InitVariables();
 
             // Add from about general information of tables
-            _currentForm = new Table();
+            _currentForm = new TableForm();
             styler.AddDataGrid(_currentForm.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
 
             _currentForm.Height = _mainGridPanel.Height;

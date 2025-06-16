@@ -35,7 +35,7 @@ namespace gui.Forms {
 
             // Create OrderDbContext 
             var dbContext = new OrderDbContextFactory().CreateCustomDbContext(
-                new string[] { _loginBox.Enabled ? ConnectMode.SqlServerSecure.ToString() : ConnectMode.WindowsSecure.ToString(),
+                new string[] { _loginBox.Enabled ? ((int)ConnectMode.SqlServerSecure).ToString() : ((int)ConnectMode.WindowsSecure).ToString(),
                     _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text });
             if (!dbContext.Database.CanConnect()) {
                 MessageBox.Show(
@@ -75,11 +75,9 @@ namespace gui.Forms {
             if (box?.Text == "Проверка подлинности Windows") {
                 _loginBox.Enabled = false;
                 _passwordBox.Enabled = false;
-                _serverNameBox.Enabled = false;
             } else {
                 _loginBox.Enabled = true;
                 _passwordBox.Enabled = true;
-                _serverNameBox.Enabled = true;
             }
         }
     }

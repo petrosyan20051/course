@@ -23,7 +23,6 @@ namespace gui.Classes {
             // Find entity type using typeName
             var entityType = context.Model.FindEntityType(entityTypeName);
             
-
             // Get ClrType of entity
             var clrType = entityType?.ClrType;
 
@@ -45,7 +44,7 @@ namespace gui.Classes {
             return (IBindingList)toBindingListMethod?.Invoke(localValue, null);
         }
 
-        public static IBindingList? GetDbSet<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+        public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
             if (context is null || entityType is null) {
                 return null;
             }
@@ -65,7 +64,7 @@ namespace gui.Classes {
             return bindingList;
         }
 
-        /*public static IBindingList? GetDbSet<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+        /*public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
             if (context is null || entityType is null) {
                 return null;
             }

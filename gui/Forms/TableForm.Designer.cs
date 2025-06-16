@@ -1,5 +1,5 @@
 ﻿namespace gui.Forms {
-    partial class Table {
+    partial class TableForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Table));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TableForm));
             dbGrid = new DataGridView();
             choosePnl = new Panel();
             tablesLbl = new Label();
