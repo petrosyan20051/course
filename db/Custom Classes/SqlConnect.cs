@@ -1,10 +1,10 @@
 ﻿namespace db.Custom_Classes {
     public static class SqlConnect {
-        public enum ConnectMode { WindowsSecure, SqlServerSecure};
-        
+        public enum ConnectMode { WindowsSecure, SqlServerSecure };
+
         public static string? GetConnectionString(ConnectMode mode, string? ip, string? dbName, string? login, string? password, bool isTrustedConnection = true, bool trustServerSertificate = true) {
             string? connectionString = "";
-                
+
             connectionString += $"Server={(ip == null ? "" : mode == ConnectMode.WindowsSecure ? "(localdb)\\mssqllocaldb" : ip)};";
             connectionString += $"Database={(dbName == null ? "" : dbName)};";
 

@@ -3,7 +3,6 @@ using db.Models;
 using db.Repositories;
 using db.Repositories.db.Repositories;
 using Microsoft.EntityFrameworkCore;
-using db.Factories;
 
 using TypeId = int;
 

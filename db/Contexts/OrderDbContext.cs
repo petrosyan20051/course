@@ -1,7 +1,6 @@
 ﻿using db.Models;
 using db.Tools;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace db.Contexts {
 
@@ -24,7 +23,7 @@ namespace db.Contexts {
             //    .Build(); // set appsettings for connectionStrings
             //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
 
-           // optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=KR;Trusted_Connection=True");
+            // optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=KR;Trusted_Connection=True");
             //optionsBuilder.UseSqlServer("Server=192.168.1.140;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
             optionsBuilder.EnableSensitiveDataLogging();
         }

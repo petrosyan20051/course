@@ -17,7 +17,7 @@ namespace db.Factories {
             if (args.Length < 4) { // Must be 4 neccessary arguments
                 return null;
             }
-            
+
             var optionsBuilder = new DbContextOptionsBuilder<OrderDbContext>();
             int mode;
             int.TryParse(args[0], out mode);
