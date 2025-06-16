@@ -1,17 +1,10 @@
 ﻿using db.Contexts;
 using db.Factories;
 using db.Models;
-using db.Repositories;
 using gui.Classes;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections;
-using System.Transactions;
 using static gui.Classes.IInformation;
-
-using TypeId = int;
 
 namespace gui.Forms {
 
@@ -57,7 +50,7 @@ namespace gui.Forms {
 
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
-            var dbSet = Tools.GetDbSet(_context, tableMapping[cmbBox.Text]);
+            var dbSet = EFCoreConnect.GetDbSet(_context, tableMapping[cmbBox.Text]);
             _grid.DataSource = Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
@@ -71,7 +64,7 @@ namespace gui.Forms {
             _context?.Add(newEntity);
             ApplyChangesToDatabase(_context);
 
-            _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+            _grid.DataSource = EFCoreConnect.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
             _grid.Refresh();
             _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
@@ -128,7 +121,7 @@ namespace gui.Forms {
         private void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             var grid = sender as DataGridView;
             ApplyChangesToDatabase(_context);
-            grid.DataSource = Tools.GetDbSet(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
+            grid.DataSource = EFCoreConnect.GetDbSet(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
         }
 
         private void setDeleteStrip_Click(object sender, EventArgs e) {
@@ -157,7 +150,7 @@ namespace gui.Forms {
                 return;
             _grid.DataSource =
                 Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]) as IList,
+                    EFCoreConnect.GetDbSet(_context, tableMapping[_tblCmBox.Text]) as IList,
                     Rights,
                     tableMapping[_tblCmBox.Text]);
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
@@ -239,7 +232,7 @@ namespace gui.Forms {
 
                 // Update DataGridView
                 grid?.DataSource = Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                    EFCoreConnect.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
                     Rights, tableMapping[_tblCmBox.Text]);
             } catch (Exception ex) {
                 MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -287,7 +280,7 @@ namespace gui.Forms {
 
                 // Update DataGridView
                 grid?.DataSource = Tools.DbSetFilterByRole(
-                    Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
+                    EFCoreConnect.GetDbSet(_context, tableMapping[_tblCmBox.Text]),
                     Rights, tableMapping[_tblCmBox.Text]);
 
             } catch (Exception ex) {
@@ -308,7 +301,7 @@ namespace gui.Forms {
             if (userRights != null) {
                 Rights = (UserRights)userRights;
             }
-            
+
             // Making mapping for tables: string TableName -> Type TableType
             if (tableMapping != null && tableMapping.Count > 0) {
                 tableMapping.Clear();
@@ -319,11 +312,11 @@ namespace gui.Forms {
             }
 
             // Combobox source: OrderDbContext table names
-            _tblCmBox.DataSource = Tools.GetTableNames(_context);
+            _tblCmBox.DataSource = EFCoreConnect.GetTableNames(_context);
 
             // Get source for datagridview
             try {
-                _grid.DataSource = Tools.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
+                _grid.DataSource = EFCoreConnect.GetDbSet(_context, tableMapping[_tblCmBox.Text]);
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

@@ -73,6 +73,7 @@
             // 
             // userBtn
             // 
+            userBtn.AutoSize = true;
             userBtn.BorderRadius = 5;
             userBtn.Dock = DockStyle.Right;
             userBtn.FlatAppearance.BorderSize = 0;
@@ -82,6 +83,7 @@
             userBtn.Name = "userBtn";
             userBtn.Size = new Size(62, 32);
             userBtn.TabIndex = 8;
+            userBtn.TextImageRelation = TextImageRelation.ImageAboveText;
             userBtn.UseVisualStyleBackColor = true;
             userBtn.Click += userBtn_Click;
             userBtn.MouseEnter += styleBtn_MouseEnter;
@@ -309,6 +311,7 @@
             MouseMove += MainForm_MouseMove;
             MouseUp += MainForm_MouseUp;
             controlPnl.ResumeLayout(false);
+            controlPnl.PerformLayout();
             menuPnl.ResumeLayout(false);
             gridPnl.ResumeLayout(false);
             gridPnl.PerformLayout();

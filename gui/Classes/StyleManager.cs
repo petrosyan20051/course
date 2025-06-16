@@ -17,7 +17,7 @@ namespace gui.Classes {
             this.theme = theme;
             this.iconsPath = iconsPath;
             this.panels = new List<Panel>();
-            this.splitters = new List<Splitter>() ;
+            this.splitters = new List<Splitter>();
             this.datagrids = new List<DataGridView>();
             this.buttons = new List<Button>();
             this.forms = new List<Form>();
@@ -131,10 +131,10 @@ namespace gui.Classes {
                     label.ForeColor = theme == Design.DarkTheme ?
                         Design.DefaultDarkTextColor : Design.DefaultLightTextColor;
                     pictureBox.Image = LoadIcon($"{panelName}_off_{(theme == Design.DarkTheme ? "dark" : "bright")}_theme.png");
-                }                   
+                }
 
                 panel.BackColor = theme == Design.DarkTheme ? Design.MenuPanelDarkDefaultColor : Design.MenuPanelLightDefaultColor;
-                    
+
             }
             foreach (var splitter in splitters) {
                 splitter.BackColor = theme == Design.DarkTheme ? Design.SplitterDarkDefaultColor : Design.SplitterLightDefaultColor;
@@ -143,7 +143,7 @@ namespace gui.Classes {
                 grid.BackgroundColor = theme == Design.DarkTheme ? Design.DataGridViewDarkThemeColor : Design.DataGridViewLightThemeColor;
             }
 
-            
+
         }
 
         // Get icon from file

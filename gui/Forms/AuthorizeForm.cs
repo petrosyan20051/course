@@ -1,18 +1,6 @@
-﻿using gui.Classes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using db.Factories;
+﻿using db.Factories;
+using gui.Classes;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
-using System.Net.Sockets;
-using db.Custom_Classes;
 using static db.Custom_Classes.SqlConnect;
 
 namespace gui.Forms {
@@ -61,8 +49,8 @@ namespace gui.Forms {
             //  1. OrderDbContext
             //  2. Whether user is admin (bool)
             //  3. User's name (returns "Локальная БД" if local db)
-            this.Tag = new object[] { dbContext, 
-                Tools.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text),
+            this.Tag = new object[] { dbContext,
+                EFCoreConnect.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text),
                 (_loginBox.Enabled ? _loginBox.Text : "Локальная БД")};
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -78,14 +66,6 @@ namespace gui.Forms {
             _loginBox = this.userNameTxtBox;
             _passwordBox = this.passwordTxtBox;
             _secBox = this.secCheckBox;
-        }
-
-        private string? GetLocalIPAddress() {
-            var host = Dns.GetHostEntry(Dns.GetHostName()); // get all net interfaces
-            return host.AddressList
-                .Where(a => a.AddressFamily == AddressFamily.InterNetwork)?
-                .FirstOrDefault()?
-                .ToString();
         }
 
         #endregion

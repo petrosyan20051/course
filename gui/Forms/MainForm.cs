@@ -21,7 +21,7 @@ namespace gui.Forms {
 
         private StyleManager styler;
         private UserRights Rights { get; set; }
-        private string? userName {  get; set; }
+        private string? userName { get; set; }
 
         public MainForm() {
             InitializeComponent();
