@@ -503,3 +503,7 @@ C:\Users\Laptop\source\repos\course_work\db\db\obj\Debug\net8.0\refint\db.dll
 C:\Users\Laptop\source\repos\course_work\db\db\obj\Debug\net8.0\db.pdb
 C:\Users\Laptop\source\repos\course_work\db\db\obj\Debug\net8.0\db.genruntimeconfig.cache
 C:\Users\Laptop\source\repos\course_work\db\db\obj\Debug\net8.0\ref\db.dll
+C:\Users\sante\source\repos\course_work\db\db\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\sante\source\repos\course_work\db\db\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\sante\source\repos\course_work\db\db\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\sante\source\repos\course_work\db\db\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

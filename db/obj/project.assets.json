@@ -5158,23 +5158,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Laptop\\.nuget\\packages\\": {},
-    "D:\\Apps\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\sante\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Laptop\\source\\repos\\course_work\\db\\db\\db.csproj",
+      "projectUniqueName": "C:\\Users\\sante\\source\\repos\\course_work\\db\\db\\db.csproj",
       "projectName": "db",
-      "projectPath": "C:\\Users\\Laptop\\source\\repos\\course_work\\db\\db\\db.csproj",
-      "packagesPath": "C:\\Users\\Laptop\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Laptop\\source\\repos\\course_work\\db\\db\\obj\\",
+      "projectPath": "C:\\Users\\sante\\source\\repos\\course_work\\db\\db\\db.csproj",
+      "packagesPath": "C:\\Users\\sante\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sante\\source\\repos\\course_work\\db\\db\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "D:\\Apps\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Laptop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\sante\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
