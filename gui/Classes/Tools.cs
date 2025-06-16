@@ -12,54 +12,6 @@ using static gui.Classes.IInformation;
 namespace gui.Classes {
 
     public class Tools {
-
-        public static IList? DbSetFilterByRole(IList db, UserRights newRights, Type entityType) {
-            if (db is null || entityType is null) {
-                return null;
-            }
-
-            // Make generic methods using reflection
-            var filterGenericMethod = typeof(Tools).GetMethod("Filter", BindingFlags.Static | BindingFlags.NonPublic)?.MakeGenericMethod(entityType);
-            var castGenericMathod = typeof(Enumerable)?.GetMethod("Cast", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
-            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
-
-            var castedDb = castGenericMathod?.Invoke(null, new object[] { db }); // casted: IList db -> List<entityType>
-            var castedDbToList = toListGenericMethod?.Invoke(null, new object[] { castedDb }); // db.ToList()
-            return (IList)filterGenericMethod?.Invoke(null, new object[] { castedDbToList, newRights }); // FilterByRoles using    
-        }
-
-        public static void HideColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
-            if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
-                return;
-            }
-
-            foreach (var columnName in columnNames) {
-                if (grid.Columns.Contains(columnName)) {
-                    grid.Columns[columnName].Visible = false;
-                }
-            }
-        }
-
-        public static void ShowUpColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
-            if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
-                return;
-            }
-
-            foreach (var columnName in columnNames) {
-                if (grid.Columns.Contains(columnName)) {
-                    grid.Columns[columnName].Visible = true;
-                }
-            }
-        }
-
-        private static IList? Filter<TEntity>(List<TEntity> db, UserRights newRights) where TEntity : BaseModel {
-            if (newRights != UserRights.Admin) {
-                return db?.Where(o => o.isDeleted == null).ToList();
-            } else {
-                return db?.ToList();
-            }
-        }
-
         // Reoder columns data of datagridview using type of entity
         public static void ReorderColumnsAccordingToDbContextByType(DataGridView grid, Type entityType) {
             if (grid is null || entityType is null) {
@@ -120,9 +72,52 @@ namespace gui.Classes {
             return repositoryInstance;
         }
 
+        public static IList? DbSetFilterByRole(IList db, UserRights newRights, Type entityType) {
+            if (db is null || entityType is null) {
+                return null;
+            }
 
+            // Make generic methods using reflection
+            var filterGenericMethod = typeof(Tools).GetMethod("Filter", BindingFlags.Static | BindingFlags.NonPublic)?.MakeGenericMethod(entityType);
+            var castGenericMathod = typeof(Enumerable)?.GetMethod("Cast", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
 
+            var castedDb = castGenericMathod?.Invoke(null, new object[] { db }); // casted: IList db -> List<entityType>
+            var castedDbToList = toListGenericMethod?.Invoke(null, new object[] { castedDb }); // db.ToList()
+            return (IList)filterGenericMethod?.Invoke(null, new object[] { castedDbToList, newRights }); // FilterByRoles using    
+        }
 
+        private static IList? Filter<TEntity>(List<TEntity> db, UserRights newRights) where TEntity : BaseModel {
+            if (newRights != UserRights.Admin) {
+                return db?.Where(o => o.isDeleted == null).ToList();
+            } else {
+                return db?.ToList();
+            }
+        }
+
+        public static void HideColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
+            if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
+                return;
+            }
+
+            foreach (var columnName in columnNames) {
+                if (grid.Columns.Contains(columnName)) {
+                    grid.Columns[columnName].Visible = false;
+                }
+            }
+        }
+
+        public static void ShowUpColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
+            if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
+                return;
+            }
+
+            foreach (var columnName in columnNames) {
+                if (grid.Columns.Contains(columnName)) {
+                    grid.Columns[columnName].Visible = true;
+                }
+            }
+        }
 
         #endregion
 

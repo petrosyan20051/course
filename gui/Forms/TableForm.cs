@@ -51,8 +51,8 @@ namespace gui.Forms {
 
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
-            var dbSet = EFCoreConnect.GetBindingListByEntityName(_context, cmbBox.Text);
-            _grid.DataSource = Tools.DbSetFilterByRole(dbSet, Rights, tableMapping[cmbBox.Text]);
+            var dbSet = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[cmbBox.Text]);
+            FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }
 
@@ -150,16 +150,14 @@ namespace gui.Forms {
                 return;
             } else if (!tableMapping.ContainsKey(_tblCmBox.Text))
                 return;
-            _grid.DataSource =
-                Tools.DbSetFilterByRole(
-                    EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]) as IList,
-                    Rights,
-                    tableMapping[_tblCmBox.Text]);
+            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
+
+            FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
 
             if (newRights != UserRights.Admin) {
                 _grid.ReadOnly = true; // user is not admin so can't edit grid
-                Tools.HideColumnsFromDataGridView(_grid, ["isDeleted"]);
+
 
                 // Set enability for controllers when rights are changed
                 _setAdd.Enabled = false;
@@ -167,7 +165,6 @@ namespace gui.Forms {
                 _setRecover.Enabled = false;
             } else {
                 _grid.ReadOnly = false; // user is admin
-                Tools.ShowUpColumnsFromDataGridView(_grid, ["isDeleted"]);
 
                 // Set enability for controllers when rights are changed
                 _setAdd.Enabled = true;
@@ -233,13 +230,12 @@ namespace gui.Forms {
                 ApplyChangesToDatabase(_context);
 
                 // Update DataGridView
-                grid?.DataSource = Tools.DbSetFilterByRole(
-                    EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]),
-                    Rights, tableMapping[_tblCmBox.Text]);
+                grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
             } catch (Exception ex) {
                 MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
             grid?.CurrentCell = grid?.Rows[SelectedCell.Value.X].Cells[SelectedCell.Value.Y]; // update selected cell
             MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -281,14 +277,13 @@ namespace gui.Forms {
                 ApplyChangesToDatabase(_context);
 
                 // Update DataGridView
-                grid?.DataSource = Tools.DbSetFilterByRole(
-                    EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]),
-                    Rights, tableMapping[_tblCmBox.Text]);
+                grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
 
             } catch (Exception ex) {
                 MessageBox.Show($"Ошибка при восстановлении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
             grid?.CurrentCell = grid?.Rows[SelectedCell.Value.X].Cells[SelectedCell.Value.Y]; // update selected cell
             MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -318,7 +313,7 @@ namespace gui.Forms {
 
             // Get source for datagridview
             try {
-                _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, _tblCmBox.Text);
+                _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -336,6 +331,11 @@ namespace gui.Forms {
 
         }
 
+        private void FilterColumnsByRights() {
+            if (_grid.Columns.Contains("isDeleted")) {
+                _grid.Columns["isDeleted"].Visible = Rights == UserRights.Admin;
+            }
+        }
         #endregion Пользовательские методы
     }
 }
