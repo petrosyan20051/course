@@ -3,8 +3,6 @@ using db.Factories;
 using db.Models;
 using gui.Classes;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.ComponentModel;
 using static gui.Classes.IInformation;
 
 namespace gui.Forms {
@@ -133,7 +131,7 @@ namespace gui.Forms {
             RecoverSetsFromGrid(_grid);
         }
 
-        
+
         #region Пользовательские методы
 
         private void InitVariables() {

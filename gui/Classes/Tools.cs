@@ -120,7 +120,5 @@ namespace gui.Classes {
         }
 
         #endregion
-
-
     }
 }

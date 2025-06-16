@@ -22,7 +22,7 @@ namespace gui.Classes {
         public static IBindingList? GetBindingListByEntityName(DbContext context, string entityTypeName) {
             // Find entity type using typeName
             var entityType = context.Model.FindEntityType(entityTypeName);
-            
+
             // Get ClrType of entity
             var clrType = entityType?.ClrType;
 
