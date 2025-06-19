@@ -21,7 +21,8 @@ namespace gui.Forms {
             }
         }
 
-        private string? currentCell;
+        private string? currentCell; // tracking current table grid cell value
+        private string currentTable; // tracking current combobox text
         private bool IsUpdatingCellValue { get; set; } = false;
         private Point? SelectedCell { get; set; }
 
@@ -56,8 +57,11 @@ namespace gui.Forms {
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
 
             // Delete adding new set controller and splitter if it exists
-            dataPnl.Controls.Remove(dataPnl.Controls.OfType<UserControl>().FirstOrDefault()); // delete custom controller
-            dataPnl.Controls.Remove(dataPnl.Controls.OfType<Splitter>().FirstOrDefault()); // delete splitter
+            if (cmbBox.Text != currentTable) {
+                dataPnl.Controls.Remove(dataPnl.Controls.OfType<UserControl>().FirstOrDefault()); // delete custom controller
+                dataPnl.Controls.Remove(dataPnl.Controls.OfType<Splitter>().FirstOrDefault()); // delete splitter
+            }
+            currentTable = cmbBox.Text;
         }
 
         private void addSetStrip_Click(object sender, EventArgs e) {
@@ -72,11 +76,6 @@ namespace gui.Forms {
 
             dataPnl.Controls.Add(splitter); // add splitter
             dataPnl.Controls.Add(control); // add control
-
-
-            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
-            _grid.Refresh();
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
 
             // Making new entity
             /*Type entityType = tableMapping[_tblCmBox.Text];
@@ -162,6 +161,8 @@ namespace gui.Forms {
             _setAdd = this.setAddStrip;
             _setDelete = this.setDeleteStrip;
             _setRecover = this.setRecoverStrip;
+
+            currentTable = _tblCmBox.Text;
         }
 
         private void OnUserRightsChanged(UserRights newRights, string? dbSetName) {

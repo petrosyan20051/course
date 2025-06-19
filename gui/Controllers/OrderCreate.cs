@@ -12,13 +12,15 @@ namespace gui.Controllers {
         string User { get; set; }
 
         TextBox _customerId, _routeId, _rateId, _distanceBox, _noteBox;
+        DataGridView? _grid;
 
-        public OrderCreate(DbContext context, string author) {
+        public OrderCreate(DbContext context, string author, DataGridView? grid = null) {
             InitializeComponent();
             InitVariables();
 
             this._context = (OrderDbContext)context;
             this.User = author;
+            _grid = grid;
         }
 
         private void enterBtn_Click(object sender, EventArgs e) {
@@ -69,9 +71,5 @@ namespace gui.Controllers {
         }
 
         #endregion
-
-        private void rateTxtBox_TextChanged(object sender, EventArgs e) {
-
-        }
     }
 }

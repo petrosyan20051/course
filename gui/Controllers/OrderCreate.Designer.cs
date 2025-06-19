@@ -66,9 +66,9 @@
             noteLbl.Font = new Font("Segoe UI", 12F);
             noteLbl.Location = new Point(17, 322);
             noteLbl.Name = "noteLbl";
-            noteLbl.Size = new Size(104, 21);
+            noteLbl.Size = new Size(101, 21);
             noteLbl.TabIndex = 21;
-            noteLbl.Text = "Примечание:";
+            noteLbl.Text = "Примечание";
             // 
             // distanceTxtBox
             // 
@@ -84,9 +84,9 @@
             distanceLbl.Font = new Font("Segoe UI", 12F);
             distanceLbl.Location = new Point(17, 260);
             distanceLbl.Name = "distanceLbl";
-            distanceLbl.Size = new Size(94, 21);
+            distanceLbl.Size = new Size(91, 21);
             distanceLbl.TabIndex = 19;
-            distanceLbl.Text = "Расстояние:";
+            distanceLbl.Text = "Расстояние";
             // 
             // rateTxtBox
             // 
@@ -95,7 +95,6 @@
             rateTxtBox.Name = "rateTxtBox";
             rateTxtBox.Size = new Size(333, 29);
             rateTxtBox.TabIndex = 18;
-            rateTxtBox.TextChanged += rateTxtBox_TextChanged;
             // 
             // rateLbl
             // 
@@ -103,9 +102,9 @@
             rateLbl.Font = new Font("Segoe UI", 12F);
             rateLbl.Location = new Point(17, 197);
             rateLbl.Name = "rateLbl";
-            rateLbl.Size = new Size(76, 21);
+            rateLbl.Size = new Size(73, 21);
             rateLbl.TabIndex = 17;
-            rateLbl.Text = "ID тариф:";
+            rateLbl.Text = "ID тариф";
             // 
             // routeTxtBox
             // 
@@ -121,9 +120,9 @@
             routeLbl.Font = new Font("Segoe UI", 12F);
             routeLbl.Location = new Point(17, 131);
             routeLbl.Name = "routeLbl";
-            routeLbl.Size = new Size(97, 21);
+            routeLbl.Size = new Size(94, 21);
             routeLbl.TabIndex = 15;
-            routeLbl.Text = "ID маршрут:";
+            routeLbl.Text = "ID маршрут";
             // 
             // customerTxtBox
             // 
@@ -139,9 +138,9 @@
             customerLbl.Font = new Font("Segoe UI", 12F);
             customerLbl.Location = new Point(17, 68);
             customerLbl.Name = "customerLbl";
-            customerLbl.Size = new Size(96, 21);
+            customerLbl.Size = new Size(93, 21);
             customerLbl.TabIndex = 13;
-            customerLbl.Text = "ID заказчик:";
+            customerLbl.Text = "ID заказчик";
             // 
             // headerLbl
             // 
