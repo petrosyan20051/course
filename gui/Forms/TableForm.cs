@@ -1,5 +1,4 @@
 ﻿using db.Contexts;
-using db.Factories;
 using db.Models;
 using gui.Classes;
 using Microsoft.EntityFrameworkCore;
@@ -55,7 +54,6 @@ namespace gui.Forms {
         }
 
         private void addSetStrip_Click(object sender, EventArgs e) {
-
             // Making new entity
             Type entityType = tableMapping[_tblCmBox.Text];
             var newEntity = Activator.CreateInstance(entityType);
@@ -120,7 +118,7 @@ namespace gui.Forms {
         private void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             var grid = sender as DataGridView;
             ApplyChangesToDatabase(_context);
-            grid.DataSource = EFCoreConnect.GetBindingListByEntityType(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
+            //grid.DataSource = EFCoreConnect.GetBindingListByEntityType(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
         }
 
         private void setDeleteStrip_Click(object sender, EventArgs e) {
@@ -173,7 +171,7 @@ namespace gui.Forms {
             _grid.Invalidate();
         }
 
-        private void ApplyChangesToDatabase(DbContext _context) {
+        void ApplyChangesToDatabase(DbContext _context) {
             try {
                 _context.SaveChanges();
             } catch (DbUpdateException ex) {

@@ -183,6 +183,7 @@
             MinimizeBox = false;
             Name = "AuthorizeForm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Авторизация";
             ResumeLayout(false);

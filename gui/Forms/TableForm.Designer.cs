@@ -32,9 +32,11 @@
             setAddStrip = new ToolStripMenuItem();
             setDeleteStrip = new ToolStripMenuItem();
             setRecoverStrip = new ToolStripMenuItem();
+            dataPnl = new Panel();
             ((System.ComponentModel.ISupportInitialize)dbGrid).BeginInit();
             choosePnl.SuspendLayout();
             menuStrip1.SuspendLayout();
+            dataPnl.SuspendLayout();
             SuspendLayout();
             // 
             // dbGrid
@@ -43,7 +45,7 @@
             dbGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dbGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dbGrid.Dock = DockStyle.Fill;
-            dbGrid.Location = new Point(0, 24);
+            dbGrid.Location = new Point(0, 0);
             dbGrid.Margin = new Padding(4, 3, 4, 3);
             dbGrid.Name = "dbGrid";
             dbGrid.ReadOnly = true;
@@ -125,24 +127,34 @@
             setRecoverStrip.Text = "Восстановить набор(-ы)";
             setRecoverStrip.Click += setRecoverStrip_Click;
             // 
-            // Table
+            // dataPnl
+            // 
+            dataPnl.Controls.Add(dbGrid);
+            dataPnl.Dock = DockStyle.Fill;
+            dataPnl.Location = new Point(0, 24);
+            dataPnl.Name = "dataPnl";
+            dataPnl.Size = new Size(900, 361);
+            dataPnl.TabIndex = 2;
+            // 
+            // TableForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(900, 446);
-            Controls.Add(dbGrid);
+            Controls.Add(dataPnl);
             Controls.Add(choosePnl);
             Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.None;
             MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "Table";
+            Name = "TableForm";
             Load += TableInformation_Load;
             ((System.ComponentModel.ISupportInitialize)dbGrid).EndInit();
             choosePnl.ResumeLayout(false);
             choosePnl.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            dataPnl.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
 
@@ -157,5 +169,6 @@
         private ToolStripMenuItem setAddStrip;
         private ToolStripMenuItem setDeleteStrip;
         private ToolStripMenuItem setRecoverStrip;
+        private Panel dataPnl;
     }
 }
