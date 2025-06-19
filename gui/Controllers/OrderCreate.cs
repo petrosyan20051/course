@@ -69,5 +69,9 @@ namespace gui.Controllers {
         }
 
         #endregion
+
+        private void rateTxtBox_TextChanged(object sender, EventArgs e) {
+
+        }
     }
 }

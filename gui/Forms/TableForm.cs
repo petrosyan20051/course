@@ -49,7 +49,8 @@ namespace gui.Forms {
 
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
-            var dbSet = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[cmbBox.Text]);
+
+            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[cmbBox.Text]);
             FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
         }

@@ -44,7 +44,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F);
-            enterBtn.Location = new Point(206, 369);
+            enterBtn.Location = new Point(116, 398);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 23;
@@ -54,91 +54,92 @@
             // 
             // noteTxtBox
             // 
-            noteTxtBox.Font = new Font("Segoe UI", 16F);
-            noteTxtBox.Location = new Point(182, 309);
+            noteTxtBox.Font = new Font("Segoe UI", 12F);
+            noteTxtBox.Location = new Point(17, 346);
             noteTxtBox.Name = "noteTxtBox";
-            noteTxtBox.Size = new Size(333, 36);
+            noteTxtBox.Size = new Size(333, 29);
             noteTxtBox.TabIndex = 22;
             // 
             // noteLbl
             // 
             noteLbl.AutoSize = true;
-            noteLbl.Font = new Font("Segoe UI", 16F);
-            noteLbl.Location = new Point(17, 309);
+            noteLbl.Font = new Font("Segoe UI", 12F);
+            noteLbl.Location = new Point(17, 322);
             noteLbl.Name = "noteLbl";
-            noteLbl.Size = new Size(148, 30);
+            noteLbl.Size = new Size(104, 21);
             noteLbl.TabIndex = 21;
             noteLbl.Text = "Примечание:";
             // 
             // distanceTxtBox
             // 
-            distanceTxtBox.Font = new Font("Segoe UI", 16F);
-            distanceTxtBox.Location = new Point(182, 253);
+            distanceTxtBox.Font = new Font("Segoe UI", 12F);
+            distanceTxtBox.Location = new Point(17, 284);
             distanceTxtBox.Name = "distanceTxtBox";
-            distanceTxtBox.Size = new Size(333, 36);
+            distanceTxtBox.Size = new Size(333, 29);
             distanceTxtBox.TabIndex = 20;
             // 
             // distanceLbl
             // 
             distanceLbl.AutoSize = true;
-            distanceLbl.Font = new Font("Segoe UI", 16F);
-            distanceLbl.Location = new Point(17, 253);
+            distanceLbl.Font = new Font("Segoe UI", 12F);
+            distanceLbl.Location = new Point(17, 260);
             distanceLbl.Name = "distanceLbl";
-            distanceLbl.Size = new Size(132, 30);
+            distanceLbl.Size = new Size(94, 21);
             distanceLbl.TabIndex = 19;
             distanceLbl.Text = "Расстояние:";
             // 
             // rateTxtBox
             // 
-            rateTxtBox.Font = new Font("Segoe UI", 16F);
-            rateTxtBox.Location = new Point(182, 198);
+            rateTxtBox.Font = new Font("Segoe UI", 12F);
+            rateTxtBox.Location = new Point(17, 221);
             rateTxtBox.Name = "rateTxtBox";
-            rateTxtBox.Size = new Size(333, 36);
+            rateTxtBox.Size = new Size(333, 29);
             rateTxtBox.TabIndex = 18;
+            rateTxtBox.TextChanged += rateTxtBox_TextChanged;
             // 
             // rateLbl
             // 
             rateLbl.AutoSize = true;
-            rateLbl.Font = new Font("Segoe UI", 16F);
-            rateLbl.Location = new Point(17, 198);
+            rateLbl.Font = new Font("Segoe UI", 12F);
+            rateLbl.Location = new Point(17, 197);
             rateLbl.Name = "rateLbl";
-            rateLbl.Size = new Size(106, 30);
+            rateLbl.Size = new Size(76, 21);
             rateLbl.TabIndex = 17;
             rateLbl.Text = "ID тариф:";
             // 
             // routeTxtBox
             // 
-            routeTxtBox.Font = new Font("Segoe UI", 16F);
-            routeTxtBox.Location = new Point(182, 136);
+            routeTxtBox.Font = new Font("Segoe UI", 12F);
+            routeTxtBox.Location = new Point(17, 155);
             routeTxtBox.Name = "routeTxtBox";
-            routeTxtBox.Size = new Size(333, 36);
+            routeTxtBox.Size = new Size(333, 29);
             routeTxtBox.TabIndex = 16;
             // 
             // routeLbl
             // 
             routeLbl.AutoSize = true;
-            routeLbl.Font = new Font("Segoe UI", 16F);
-            routeLbl.Location = new Point(17, 136);
+            routeLbl.Font = new Font("Segoe UI", 12F);
+            routeLbl.Location = new Point(17, 131);
             routeLbl.Name = "routeLbl";
-            routeLbl.Size = new Size(135, 30);
+            routeLbl.Size = new Size(97, 21);
             routeLbl.TabIndex = 15;
             routeLbl.Text = "ID маршрут:";
             // 
             // customerTxtBox
             // 
-            customerTxtBox.Font = new Font("Segoe UI", 16F);
-            customerTxtBox.Location = new Point(182, 75);
+            customerTxtBox.Font = new Font("Segoe UI", 12F);
+            customerTxtBox.Location = new Point(17, 92);
             customerTxtBox.Name = "customerTxtBox";
-            customerTxtBox.Size = new Size(333, 36);
+            customerTxtBox.Size = new Size(333, 29);
             customerTxtBox.TabIndex = 14;
             // 
             // customerLbl
             // 
             customerLbl.AutoSize = true;
-            customerLbl.Font = new Font("Segoe UI", 16F);
-            customerLbl.Location = new Point(17, 75);
+            customerLbl.Font = new Font("Segoe UI", 12F);
+            customerLbl.Location = new Point(17, 68);
             customerLbl.Name = "customerLbl";
-            customerLbl.Size = new Size(134, 30);
+            customerLbl.Size = new Size(96, 21);
             customerLbl.TabIndex = 13;
             customerLbl.Text = "ID заказчик:";
             // 
@@ -146,7 +147,7 @@
             // 
             headerLbl.AutoSize = true;
             headerLbl.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-            headerLbl.Location = new Point(164, 13);
+            headerLbl.Location = new Point(84, 13);
             headerLbl.Name = "headerLbl";
             headerLbl.Size = new Size(224, 37);
             headerLbl.TabIndex = 12;
@@ -156,6 +157,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             Controls.Add(enterBtn);
             Controls.Add(noteTxtBox);
             Controls.Add(noteLbl);
@@ -169,7 +171,7 @@
             Controls.Add(customerLbl);
             Controls.Add(headerLbl);
             Name = "OrderCreate";
-            Size = new Size(532, 445);
+            Size = new Size(392, 463);
             ResumeLayout(false);
             PerformLayout();
         }
