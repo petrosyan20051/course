@@ -1,6 +1,7 @@
 ﻿using db.Contexts;
 using db.Models;
 using gui.Classes;
+using gui.Factories;
 using Microsoft.EntityFrameworkCore;
 using static gui.Classes.IInformation;
 
@@ -54,8 +55,25 @@ namespace gui.Forms {
         }
 
         private void addSetStrip_Click(object sender, EventArgs e) {
+            var control = EntityFactory.CreateEntityFormByName(_tblCmBox.Text, _context, (string)this.Parent.Tag);
+            control.Dock = DockStyle.Right;
+            control.BackColor = Color.Beige;
+
+            var splitter = new Splitter();
+            splitter.Dock = DockStyle.Right;
+            splitter.Width = 5;
+            splitter.BackColor = Color.Gray;
+
+            dataPnl.Controls.Add(splitter); // add splitter
+            dataPnl.Controls.Add(control); // add control
+
+
+            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
+            _grid.Refresh();
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+
             // Making new entity
-            Type entityType = tableMapping[_tblCmBox.Text];
+            /*Type entityType = tableMapping[_tblCmBox.Text];
             var newEntity = Activator.CreateInstance(entityType);
 
             _context?.Add(newEntity);
@@ -63,7 +81,7 @@ namespace gui.Forms {
 
             _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
             _grid.Refresh();
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];*/
         }
 
         private void dbGrid_DataError(object sender, DataGridViewDataErrorEventArgs e) {
@@ -117,7 +135,7 @@ namespace gui.Forms {
 
         private void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             var grid = sender as DataGridView;
-            ApplyChangesToDatabase(_context);
+            EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
             //grid.DataSource = EFCoreConnect.GetBindingListByEntityType(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
         }
 
@@ -171,24 +189,6 @@ namespace gui.Forms {
             _grid.Invalidate();
         }
 
-        void ApplyChangesToDatabase(DbContext _context) {
-            try {
-                _context.SaveChanges();
-            } catch (DbUpdateException ex) {
-                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (InvalidDataException ex) {
-                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Microsoft.Data.SqlClient.SqlException ex) {
-                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (ArgumentNullException ex) {
-                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (InvalidOperationException ex) {
-                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Exception ex) {
-                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
         private void DeleteSetsFromGrid(DataGridView? grid) {
             SelectedCell = new Point(grid.CurrentCell.RowIndex, grid.CurrentCell.ColumnIndex);
 
@@ -223,7 +223,7 @@ namespace gui.Forms {
                     _context.Update(entityToDelete);
                 }
 
-                ApplyChangesToDatabase(_context);
+                EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
 
                 // Update DataGridView
                 grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
@@ -270,7 +270,7 @@ namespace gui.Forms {
                     _context.Update(entityToRecover);
                 }
 
-                ApplyChangesToDatabase(_context);
+                EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
 
                 // Update DataGridView
                 grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);

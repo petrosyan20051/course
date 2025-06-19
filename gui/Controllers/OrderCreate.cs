@@ -2,19 +2,18 @@
 using db.Models;
 using gui.Classes;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Data;
+
 using TypeId = int;
 
-namespace gui.Forms {
-    public partial class OrderForm : Form, IInformation {
+namespace gui.Controllers {
+    public partial class OrderCreate : UserControl, IInformation {
         OrderDbContext _context;
         string User { get; set; }
 
-
         TextBox _customerId, _routeId, _rateId, _distanceBox, _noteBox;
 
-        public OrderForm(DbContext context, string author) {
+        public OrderCreate(DbContext context, string author) {
             InitializeComponent();
             InitVariables();
 
@@ -40,7 +39,7 @@ namespace gui.Forms {
             }
 
             _context.Orders.Add(order);
-
+            EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
         }
 
         #region Пользовательские функции
@@ -50,7 +49,7 @@ namespace gui.Forms {
             _routeId = this.routeTxtBox;
             _rateId = this.rateTxtBox;
             _distanceBox = this.distanceTxtBox;
-            _noteBox = this._noteBox;
+            _noteBox = this.noteTxtBox;
         }
 
         Classes.ValidationResult Validate(Order order) {
@@ -66,10 +65,9 @@ namespace gui.Forms {
                 errors.Add($"Расстояние маршрута должно быть положительным целым числом");
             }
 
-            return new Classes.ValidationResult(errors.Count == 0, errors);                
+            return new Classes.ValidationResult(errors.Count == 0, errors);
         }
+
         #endregion
-
-
-            }
+    }
 }

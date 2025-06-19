@@ -110,5 +110,23 @@ namespace gui.Classes {
 
             return result;
         }
+
+        public static void ApplyChangesToDatabase(DbContext _context, string AppName) {
+            try {
+                _context.SaveChanges();
+            } catch (DbUpdateException ex) {
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (InvalidDataException ex) {
+                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Microsoft.Data.SqlClient.SqlException ex) {
+                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (ArgumentNullException ex) {
+                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (InvalidOperationException ex) {
+                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

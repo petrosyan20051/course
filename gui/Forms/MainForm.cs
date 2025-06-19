@@ -27,7 +27,7 @@ namespace gui.Forms {
             InitializeComponent();
         }
 
-        private void InitVariables() {
+        void InitVariables() {
             _closeBtn = this.closeBtn;
             _minimizeBtn = this.minimizeBtn;
             _expandBtn = this.expandBtn;
@@ -44,6 +44,7 @@ namespace gui.Forms {
             _gridMenuPnl = this.gridPnl;
             _mainGridPanel = this.mainPnlGrid;
             _userBtn = this.userBtn;
+            this.Tag = "";
 
             Rights = UserRights.Error;
 
@@ -326,7 +327,9 @@ namespace gui.Forms {
             }
             _currentForm.UpdateForm(args[0] as DbContext);
             _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
+
             userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
+            this.Tag = args[2]; // form contains name of user
         }
     }
 }
