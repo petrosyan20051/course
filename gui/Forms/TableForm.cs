@@ -50,9 +50,14 @@ namespace gui.Forms {
         private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
 
+            // Update grid + filter
             _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[cmbBox.Text]);
             FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
             Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
+
+            // Delete adding new set controller and splitter if it exists
+            dataPnl.Controls.Remove(dataPnl.Controls.OfType<UserControl>().FirstOrDefault()); // delete custom controller
+            dataPnl.Controls.Remove(dataPnl.Controls.OfType<Splitter>().FirstOrDefault()); // delete splitter
         }
 
         private void addSetStrip_Click(object sender, EventArgs e) {
