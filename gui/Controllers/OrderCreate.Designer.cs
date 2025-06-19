@@ -50,6 +50,7 @@
             enterBtn.TabIndex = 23;
             enterBtn.Text = "Войти";
             enterBtn.UseVisualStyleBackColor = false;
+            enterBtn.Click += enterBtn_Click;
             // 
             // noteTxtBox
             // 

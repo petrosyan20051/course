@@ -25,8 +25,8 @@ namespace gui.Controllers {
             var order = new Order {
                 CustomerId = TypeId.TryParse(_customerId.Text, out var customer) ? customer : -1,
                 RouteId = TypeId.TryParse(_routeId.Text, out var route) ? route : -1,
-                RateId = TypeId.TryParse(_customerId.Text, out var rate) ? rate : 0,
-                Distance = TypeId.TryParse(_customerId.Text, out var distance) ? distance : 0,
+                RateId = TypeId.TryParse(_customerId.Text, out var rate) ? rate : -1,
+                Distance = TypeId.TryParse(_customerId.Text, out var distance) ? distance : -1,
                 WhoAdded = User,
                 WhenAdded = DateTime.Now,
                 Note = _noteBox.Text
@@ -39,7 +39,7 @@ namespace gui.Controllers {
             }
 
             _context.Orders.Add(order);
-            EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
+            EFCoreConnect.ApplyChangesToDatabase(_context);
         }
 
         #region Пользовательские функции
@@ -55,11 +55,11 @@ namespace gui.Controllers {
         Classes.ValidationResult Validate(Order order) {
             var errors = new List<string>();
 
-            if (_context.Orders.AsEnumerable().First(o => o.CustomerId == order.CustomerId) == null) {
+            if (_context.Orders.Where(o => o.CustomerId == order.CustomerId) == null) {
                 errors.Add($"Заказчик с ID = {order.CustomerId} не существует");
-            } else if (_context.Orders.AsEnumerable().First(o => o.RouteId == order.RouteId) == null) {
+            } else if (_context.Orders.Where(o => o.RouteId == order.RouteId) == null) {
                 errors.Add($"Маршрут с ID = {order.RouteId} не существует");
-            } else if (_context.Orders.AsEnumerable().First(o => o.RateId == order.RateId) == null) {
+            } else if (_context.Orders.Where(o => o.RateId == order.RateId) == null) {
                 errors.Add($"Тариф с ID = {order.RateId} не существует");
             } else if (order.Distance <= 0) {
                 errors.Add($"Расстояние маршрута должно быть положительным целым числом");

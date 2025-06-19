@@ -55,7 +55,7 @@ namespace gui.Forms {
         }
 
         private void addSetStrip_Click(object sender, EventArgs e) {
-            var control = EntityFactory.CreateEntityFormByName(_tblCmBox.Text, _context, (string)this.Parent.Tag);
+            var control = EntityFactory.CreateEntityFormByName(_tblCmBox.Text, _context, (string)this.Tag);
             control.Dock = DockStyle.Right;
             control.BackColor = Color.Beige;
 
@@ -135,7 +135,7 @@ namespace gui.Forms {
 
         private void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
             var grid = sender as DataGridView;
-            EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
+            EFCoreConnect.ApplyChangesToDatabase(_context);
             //grid.DataSource = EFCoreConnect.GetBindingListByEntityType(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
         }
 
@@ -223,7 +223,7 @@ namespace gui.Forms {
                     _context.Update(entityToDelete);
                 }
 
-                EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
+                EFCoreConnect.ApplyChangesToDatabase(_context);
 
                 // Update DataGridView
                 grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
@@ -270,7 +270,7 @@ namespace gui.Forms {
                     _context.Update(entityToRecover);
                 }
 
-                EFCoreConnect.ApplyChangesToDatabase(_context, IInformation.AppName);
+                EFCoreConnect.ApplyChangesToDatabase(_context);
 
                 // Update DataGridView
                 grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);

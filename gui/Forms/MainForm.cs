@@ -329,7 +329,7 @@ namespace gui.Forms {
             _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
 
             userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
-            this.Tag = args[2]; // form contains name of user
+            _currentForm.Tag = args[2]; // form contains name of user
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Reflection;
+using static gui.Classes.IInformation;
 
 namespace gui.Classes {
     public static class EFCoreConnect {
@@ -111,7 +112,7 @@ namespace gui.Classes {
             return result;
         }
 
-        public static void ApplyChangesToDatabase(DbContext _context, string AppName) {
+        public static void ApplyChangesToDatabase(DbContext _context) {
             try {
                 _context.SaveChanges();
             } catch (DbUpdateException ex) {
