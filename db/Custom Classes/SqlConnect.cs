@@ -16,7 +16,7 @@
             connectionString += $"Trusted_Connection={(isTrustedConnection ? "True" : "False")};";
 
             //if (mode == ConnectMode.SqlServerSecure) {
-                connectionString += $"TrustServerCertificate={(trustServerSertificate ? "True" : "False")};";
+            connectionString += $"TrustServerCertificate={(trustServerSertificate ? "True" : "False")};";
             //}
 
             return connectionString;

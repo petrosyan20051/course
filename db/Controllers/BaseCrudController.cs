@@ -45,6 +45,8 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         return NoContent();
     }
 
+    // PUT: api/{}
+
     // DELETE: api/{entity}
     [HttpDelete("{id}")]
     public virtual async Task<IActionResult> Delete(TKey id) {
@@ -90,4 +92,14 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
     }
 
     protected abstract TKey GetEntityId(TEntity entity);
+
+
+    /*// Class to validate creation of entity
+    protected class ValidationResult {
+        public bool IsValid { get; set; }
+        public List<string> Errors { get; set; } = new List<string>();
+    }*/
+
+
+
 }

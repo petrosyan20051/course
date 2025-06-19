@@ -11,7 +11,7 @@ namespace db.Controllers {
     public class OrderController : BaseCrudController<Order, TypeId> {
         public OrderController(IRepository<Order, TypeId> repository) : base(repository) { }
 
-        protected override int GetEntityId(Order entity) {
+        protected override TypeId GetEntityId(Order entity) {
             return entity.Id;
         }
 
