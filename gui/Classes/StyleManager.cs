@@ -5,7 +5,7 @@ namespace gui.Classes {
     public class StyleManager {
         private int theme { set; get; } // Current theme. Light or dark
 
-        public string iconsPath { private set; get; } // path with icons
+        public string IconsPath { private set; get; } // path with icons
 
         public List<Panel> panels { private set; get; }
         public List<Splitter> splitters { private set; get; }
@@ -15,7 +15,7 @@ namespace gui.Classes {
 
         public StyleManager(int theme, string iconsPath) {
             this.theme = theme;
-            this.iconsPath = iconsPath;
+            this.IconsPath = iconsPath;
             this.panels = new List<Panel>();
             this.splitters = new List<Splitter>();
             this.datagrids = new List<DataGridView>();
@@ -94,7 +94,7 @@ namespace gui.Classes {
 
         public void UpdateIconFolderPath(string path) {
             if (Directory.Exists(path)) {
-                this.iconsPath = path;
+                this.IconsPath = path;
             }
         }
 
@@ -123,6 +123,7 @@ namespace gui.Classes {
 
                 label.BackColor = theme == Design.DarkTheme ?
                         Design.MenuPanelDarkDefaultColor : Design.MenuPanelLightDefaultColor;
+
                 if (panel.Equals(clickedPanel)) { // change icon for clicked panel
                     label.ForeColor = theme == Design.DarkTheme ?
                         Design.ChosenDarkPanelColor : Design.onEnterLightPanelColor;
@@ -137,18 +138,16 @@ namespace gui.Classes {
 
             }
             foreach (var splitter in splitters) {
-                splitter.BackColor = theme == Design.DarkTheme ? Design.SplitterDarkDefaultColor : Design.SplitterLightDefaultColor;
+                splitter?.BackColor = theme == Design.DarkTheme ? Design.SplitterDarkDefaultColor : Design.SplitterLightDefaultColor;
             }
             foreach (var grid in datagrids) {
-                grid.BackgroundColor = theme == Design.DarkTheme ? Design.DataGridViewDarkThemeColor : Design.DataGridViewLightThemeColor;
+                grid?.BackgroundColor = theme == Design.DarkTheme ? Design.DataGridViewDarkThemeColor : Design.DataGridViewLightThemeColor;
             }
-
-
         }
 
         // Get icon from file
         private Image LoadIcon(string iconName) {
-            string iconPath = Path.Combine(iconsPath, iconName);
+            string iconPath = Path.Combine(IconsPath, iconName);
             if (File.Exists(iconPath)) {
                 return Image.FromFile(iconPath);
             }

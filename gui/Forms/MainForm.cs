@@ -243,8 +243,8 @@ namespace gui.Forms {
             int tag = (int)_styleBtn.Tag;
             (sender as Button)?.Image = StyleManager
                 .LoadIcon(
-                    Path.Combine(styler.iconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"),
-                    styler.iconsPath
+                    Path.Combine(styler.IconsPath, $"{(tag == Design.DarkTheme ? "light" : "dark")}_mode.png"),
+                    styler.IconsPath
                 );
 
             styler.ChangeFullTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, (Panel)_menuPnl.Tag);
