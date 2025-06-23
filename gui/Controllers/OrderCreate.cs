@@ -42,6 +42,13 @@ namespace gui.Controllers {
 
             _context.Orders.Add(order);
             EFCoreConnect.ApplyChangesToDatabase(_context);
+
+            if (_grid != null) {
+                _grid = this.Parent.Controls.OfType<DataGridView>().FirstOrDefault();
+            }
+                
+            _grid.DataSource = _context.Orders.ToList();
+            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
         #region Пользовательские функции

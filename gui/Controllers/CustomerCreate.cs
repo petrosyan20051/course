@@ -45,8 +45,7 @@ namespace gui.Controllers {
                 _grid = this.Parent?.Controls?.OfType<DataGridView>().FirstOrDefault();
             }
 
-            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, typeof(Customer));
-            _grid.Refresh();
+            _grid.DataSource = _context.Customers.ToList();
             _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
