@@ -1,5 +1,5 @@
 ﻿using db.Tools;
-
+using System.ComponentModel.DataAnnotations;
 using TypeId = int;
 
 namespace db.Models {
@@ -7,6 +7,7 @@ namespace db.Models {
     public abstract class BaseModel {
 
         [DisplayPriority(true)]
+        [Key]
         public TypeId Id { get; set; }
 
         [DisplayPriority(false)]
