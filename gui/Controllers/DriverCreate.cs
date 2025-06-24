@@ -2,9 +2,6 @@
 using db.Models;
 using gui.Classes;
 using Microsoft.EntityFrameworkCore;
-using System;
-
-using TypeId = int;
 
 namespace gui.Controllers {
     public partial class DriverCreate : UserControl, IInformation {
