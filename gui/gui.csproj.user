@@ -10,6 +10,9 @@
     <Compile Update="Controllers\OrderCreate.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Controllers\RateCreate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Controllers\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>

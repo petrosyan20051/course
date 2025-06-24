@@ -8,6 +8,7 @@ namespace gui.Factories {
                 "Orders" => new OrderCreate(context, author),
                 "Customers" => new CustomerCreate(context, author),
                 "Drivers" => new DriverCreate(context, author),
+                "Rates" => new RateCreate(context, author),
                 _ => null
             };
         }
