@@ -19,6 +19,9 @@
     <Compile Update="Controllers\RouteCreate.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Controllers\TransportVehicleCreate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\AuthorizeForm.cs">
       <SubType>Form</SubType>
     </Compile>

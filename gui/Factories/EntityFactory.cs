@@ -10,6 +10,7 @@ namespace gui.Factories {
                 "Drivers" => new DriverCreate(context, author),
                 "Rates" => new RateCreate(context, author),
                 "Routes" => new RouteCreate(context, author),
+                "TransportVehicles" => new TransportVehicleCreate(context, author),
                 _ => null
             };
         }
