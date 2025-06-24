@@ -66,6 +66,11 @@ namespace gui.Forms {
 
         private void addSetStrip_Click(object sender, EventArgs e) {
             var control = EntityFactory.CreateEntityFormByName(_tblCmBox.Text, _context, (string)this.Tag);
+            if (control == null) {
+                MessageBox.Show($"Не удалось создать контроллер для добавления набора в таблицу {_tblCmBox.Text}",
+                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             control.Dock = DockStyle.Right;
             control.BackColor = Color.Beige;
 
@@ -76,17 +81,6 @@ namespace gui.Forms {
 
             dataPnl.Controls.Add(splitter); // add splitter
             dataPnl.Controls.Add(control); // add control
-
-            // Making new entity
-            /*Type entityType = tableMapping[_tblCmBox.Text];
-            var newEntity = Activator.CreateInstance(entityType);
-
-            _context?.Add(newEntity);
-            ApplyChangesToDatabase(_context);
-
-            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
-            _grid.Refresh();
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];*/
         }
 
         private void dbGrid_DataError(object sender, DataGridViewDataErrorEventArgs e) {
