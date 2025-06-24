@@ -47,8 +47,8 @@ namespace gui.Controllers {
                 _grid = this.Parent.Controls.OfType<DataGridView>().FirstOrDefault();
             }
 
-            _grid.DataSource = _context.Orders.ToList();
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+            _grid?.DataSource = _context.Orders.ToList();
+            _grid?.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
         #region Пользовательские функции
@@ -67,9 +67,9 @@ namespace gui.Controllers {
             if (_context.Orders.Where(o => o.CustomerId == order.CustomerId) == null) {
                 errors.Add($"Заказчик с ID = {order.CustomerId} не существует");
             } else if (_context.Orders.Where(o => o.RouteId == order.RouteId) == null) {
-                errors.Add($"Маршрут с ID = {order.RouteId} не существует");
+                errors.Add($"Маршрут с ID = {_rateId.Text} не существует");
             } else if (_context.Orders.Where(o => o.RateId == order.RateId) == null) {
-                errors.Add($"Тариф с ID = {order.RateId} не существует");
+                errors.Add($"Тариф с ID = {_rateId.Text} не существует");
             } else if (order.Distance <= 0) {
                 errors.Add($"Расстояние маршрута должно быть положительным целым числом");
             }

@@ -48,8 +48,8 @@ namespace gui.Controllers {
                 _grid = this.Parent.Controls.OfType<DataGridView>().FirstOrDefault();
             }
 
-            _grid.DataSource = _context.Drivers.ToList();
-            _grid.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
+            _grid?.DataSource = _context.Drivers.ToList();
+            _grid?.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
         #region Пользовательские функции
