@@ -4,6 +4,9 @@
     <Compile Update="Controllers\CustomerCreate.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Controllers\DriverCreate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Controllers\OrderCreate.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -7,6 +7,7 @@ namespace gui.Factories {
             return name switch {
                 "Orders" => new OrderCreate(context, author),
                 "Customers" => new CustomerCreate(context, author),
+                "Drivers" => new DriverCreate(context, author),
                 _ => null
             };
         }
