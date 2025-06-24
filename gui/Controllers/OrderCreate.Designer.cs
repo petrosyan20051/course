@@ -48,7 +48,7 @@
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 23;
-            enterBtn.Text = "Войти";
+            enterBtn.Text = "Добавить";
             enterBtn.UseVisualStyleBackColor = false;
             enterBtn.Click += enterBtn_Click;
             // 
