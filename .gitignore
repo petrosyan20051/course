@@ -1,3 +1,4 @@
 # Ignore build files
 .vs/
 db/bin
+db/obj
