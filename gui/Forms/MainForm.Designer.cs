@@ -173,6 +173,7 @@
             gridPnl.Name = "gridPnl";
             gridPnl.Size = new Size(176, 70);
             gridPnl.TabIndex = 1;
+            gridPnl.Visible = false;
             gridPnl.Click += gridPnl_Click;
             gridPnl.MouseEnter += gridPnl_MouseEnter;
             gridPnl.MouseLeave += gridPnl_MouseLeave;
