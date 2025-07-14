@@ -19,6 +19,7 @@ namespace gui.controllers {
         public RoundedButton() {
             this.FlatStyle = FlatStyle.Flat;
             this.FlatAppearance.BorderSize = 0;
+            this.SetStyle(ControlStyles.StandardClick | ControlStyles.Selectable, false);
         }
 
         protected override void OnPaint(PaintEventArgs e) {
