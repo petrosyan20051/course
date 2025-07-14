@@ -247,7 +247,10 @@ namespace gui.Forms {
                     styler.IconsPath
                 );
 
+            this.SuspendLayout();
             styler.ChangeFullTheme(tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme, (Panel)_menuPnl.Tag);
+            this.Update();
+            this.ResumeLayout();
 
             _styleBtn.Tag = (int)_styleBtn.Tag == Design.DarkTheme ? Design.LightTheme : Design.DarkTheme;
             styleTip.SetToolTip(
