@@ -67,6 +67,7 @@
             controlPnl.Name = "controlPnl";
             controlPnl.Size = new Size(1000, 32);
             controlPnl.TabIndex = 0;
+            controlPnl.DoubleClick += controlPnl_DoubleClick;
             controlPnl.MouseDown += controlPnl_MouseDown;
             controlPnl.MouseMove += controlPnl_MouseMove;
             controlPnl.MouseUp += controlPnl_MouseUp;

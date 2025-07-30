@@ -1,6 +1,7 @@
 ﻿using gui.Classes;
 using gui.controllers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.Devices;
 using static gui.Classes.IInformation;
 
 namespace gui.Forms {
@@ -231,7 +232,19 @@ namespace gui.Forms {
             if (e.Button == MouseButtons.Left) {
                 isDragging = true; // начинаем перемещение
                 startPoint = new Point(e.X, e.Y);
+
+                if (this.WindowState == FormWindowState.Maximized) {
+                    this.WindowState = FormWindowState.Normal;
+                    // Обновляем позиции кнопок управления
+                    _closeBtn.Location = new Point(this.Width - _closeBtn.Width, _closeBtn.Location.Y);
+                    _expandBtn.Location = new Point(_closeBtn.Location.X - _expandBtn.Width, _expandBtn.Location.Y);
+                    _minimizeBtn.Location = new Point(_expandBtn.Location.X - _minimizeBtn.Width, _minimizeBtn.Location.Y);
+                    _styleBtn.Location = new Point(_minimizeBtn.Location.X - _styleBtn.Width, _styleBtn.Location.Y);
+                    _userBtn.Location = new Point(_styleBtn.Location.X - _userBtn.Width, _userBtn.Location.Y);                    
+                }
             }
+
+            
         }
 
         private void controlPnl_MouseUp(object sender, MouseEventArgs e) {
@@ -333,6 +346,18 @@ namespace gui.Forms {
 
             userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
             _currentForm.Tag = args[2]; // form contains name of user
+        }
+
+        private void controlPnl_DoubleClick(object sender, EventArgs e) {
+            this.WindowState = this.WindowState == FormWindowState.Maximized ?
+                FormWindowState.Normal :
+                FormWindowState.Maximized;
+            // Обновляем позиции кнопок управления
+            _closeBtn.Location = new Point(this.Width - _closeBtn.Width, _closeBtn.Location.Y);
+            _expandBtn.Location = new Point(_closeBtn.Location.X - _expandBtn.Width, _expandBtn.Location.Y);
+            _minimizeBtn.Location = new Point(_expandBtn.Location.X - _minimizeBtn.Width, _minimizeBtn.Location.Y);
+            _styleBtn.Location = new Point(_minimizeBtn.Location.X - _styleBtn.Width, _styleBtn.Location.Y);
+            _userBtn.Location = new Point(_styleBtn.Location.X - _userBtn.Width, _userBtn.Location.Y);
         }
     }
 }
