@@ -145,9 +145,14 @@ namespace gui.Forms {
             userTip.SetToolTip(_userBtn, userString);
         }
 
-        private void closeBtn_MouseEnter(object sender, EventArgs e) {
+        private void closeBtn_Enter(object sender, EventArgs e) {
             var _btn = sender as Button;
             _btn.BackColor = Design.ButtonCloseEnterColor;
+        }
+
+        private void closeBtn_MouseEnter(object sender, EventArgs e) {
+            var _btn = sender as Button;
+            _btn.BackColor = Color.Red;
         }
 
         private void closeBtn_MouseLeave(object sender, EventArgs e) {
@@ -240,11 +245,9 @@ namespace gui.Forms {
                     _expandBtn.Location = new Point(_closeBtn.Location.X - _expandBtn.Width, _expandBtn.Location.Y);
                     _minimizeBtn.Location = new Point(_expandBtn.Location.X - _minimizeBtn.Width, _minimizeBtn.Location.Y);
                     _styleBtn.Location = new Point(_minimizeBtn.Location.X - _styleBtn.Width, _styleBtn.Location.Y);
-                    _userBtn.Location = new Point(_styleBtn.Location.X - _userBtn.Width, _userBtn.Location.Y);                    
+                    _userBtn.Location = new Point(_styleBtn.Location.X - _userBtn.Width, _userBtn.Location.Y);
                 }
             }
-
-            
         }
 
         private void controlPnl_MouseUp(object sender, MouseEventArgs e) {
@@ -278,21 +281,24 @@ namespace gui.Forms {
                 newPoint.Offset(-startPoint.X, -startPoint.Y); // смещение новой точки относительно старой
                 this.Location = newPoint;
             }
-            // Переход с формы на панель в крайнем правом и левом положении должен сбрасывать иконку курсора
-            if (e.X >= this.Width - 5 || e.X <= 5) {
-                this.Cursor = Cursors.Default;
-            }
+            //// Переход с формы на панель в крайнем правом и левом положении должен сбрасывать иконку курсора
+            //if (e.X >= this.Width - 5 || e.X <= 5) {
+            //    this.Cursor = Cursors.Default;
+            //}
         }
 
         private void MainForm_MouseMove(object sender, MouseEventArgs e) {
             // Изменение значка курсора при масштабировании
             if (isResizing) {
-                if (this.Cursor == Cursors.SizeWE) {
-                    this.Size = new Size(
-                        Math.Max(this.MinimumSize.Width, e.X),
-                        this.Size.Height
-                    );
-                }
+
+                #region Deprecated
+                //if (this.Cursor == Cursors.SizeWE) {
+                //    this.Size = new Size(
+                //        Math.Max(this.MinimumSize.Width, e.X),
+                //        this.Size.Height
+                //    );
+                //}
+                #endregion
 
                 // Обновляем позиции кнопок управления
                 _closeBtn.Location = new Point(this.Width - 65, _closeBtn.Location.Y);
@@ -301,9 +307,9 @@ namespace gui.Forms {
             } else {
                 if ((e.X >= this.ClientSize.Width - 10 || e.X <= 10) &&
                     e.Y <= this.ClientSize.Height - _controlPnl.Height - 5) {
-                    this.Cursor = Cursors.SizeWE;
+                   //this.Cursor = Cursors.SizeWE;
                 } else {
-                    this.Cursor = Cursors.Default;
+                    //this.Cursor = Cursors.Default;
                 }
             }
         }

@@ -213,7 +213,7 @@
             mainPnl.Name = "mainPnl";
             mainPnl.Size = new Size(176, 66);
             mainPnl.TabIndex = 0;
-            mainPnl.Click += mainPnl_Click;
+            mainPnl.Click += this.mainPnl_Click;
             mainPnl.MouseEnter += mainPnl_MouseEnter;
             mainPnl.MouseLeave += mainPnl_MouseLeave;
             // 
@@ -227,7 +227,7 @@
             mainLbl.Size = new Size(80, 20);
             mainLbl.TabIndex = 1;
             mainLbl.Text = "Главная";
-            mainLbl.Click += mainPnl_Click;
+            mainLbl.Click += this.mainPnl_Click;
             mainLbl.MouseEnter += mainPnl_MouseEnter;
             // 
             // mainImage
@@ -238,7 +238,7 @@
             mainImage.Size = new Size(32, 32);
             mainImage.TabIndex = 0;
             mainImage.TabStop = false;
-            mainImage.Click += mainPnl_Click;
+            mainImage.Click += this.mainPnl_Click;
             mainImage.MouseEnter += mainPnl_MouseEnter;
             // 
             // menuSpl
