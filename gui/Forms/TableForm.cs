@@ -316,6 +316,7 @@ namespace gui.Forms {
                 return;
             }
 
+            FilterColumnsByRights();
             Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
             _grid.AutoResizeColumns(); // resize columns
 
@@ -329,6 +330,18 @@ namespace gui.Forms {
         }
 
         private void FilterColumnsByRights() {
+            // Hide rows where "isDeleted" != null for no admin  
+            if (Rights != UserRights.Admin) {
+                for (var i = 0; i < _grid.Rows.Count; ++i) {
+                    // Check whether set is "deleted"
+                    if (_grid.Rows[i].Cells["isDeleted"].Value != null &&
+                        _grid.Rows[i].Cells["isDeleted"].Value != DBNull.Value) {
+                        _grid.Rows[i].Visible = false;
+                    }
+                }
+            }
+
+            // Hide "isDeleted" column
             if (_grid.Columns.Contains("isDeleted")) {
                 _grid.Columns["isDeleted"].Visible = Rights == UserRights.Admin;
             }

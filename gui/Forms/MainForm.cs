@@ -347,9 +347,10 @@ namespace gui.Forms {
             if (args == null) { // user denied to authorize
                 return;
             }
-            _currentForm.UpdateForm(args[0] as DbContext);
-            _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
 
+            _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
+            _currentForm.UpdateForm(args[0] as DbContext);
+            
             userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
             _currentForm.Tag = args[2]; // form contains name of user
         }

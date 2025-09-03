@@ -65,7 +65,7 @@
             controlPnl.Dock = DockStyle.Top;
             controlPnl.Location = new Point(0, 0);
             controlPnl.Name = "controlPnl";
-            controlPnl.Size = new Size(1000, 32);
+            controlPnl.Size = new Size(1074, 32);
             controlPnl.TabIndex = 0;
             controlPnl.DoubleClick += controlPnl_DoubleClick;
             controlPnl.MouseDown += controlPnl_MouseDown;
@@ -80,7 +80,7 @@
             userBtn.FlatAppearance.BorderSize = 0;
             userBtn.FlatStyle = FlatStyle.Flat;
             userBtn.Image = (Image)resources.GetObject("userBtn.Image");
-            userBtn.Location = new Point(690, 0);
+            userBtn.Location = new Point(764, 0);
             userBtn.Name = "userBtn";
             userBtn.Size = new Size(62, 32);
             userBtn.TabIndex = 8;
@@ -97,7 +97,7 @@
             styleBtn.FlatAppearance.BorderSize = 0;
             styleBtn.FlatStyle = FlatStyle.Flat;
             styleBtn.Image = (Image)resources.GetObject("styleBtn.Image");
-            styleBtn.Location = new Point(752, 0);
+            styleBtn.Location = new Point(826, 0);
             styleBtn.Name = "styleBtn";
             styleBtn.Size = new Size(62, 32);
             styleBtn.TabIndex = 7;
@@ -113,7 +113,7 @@
             minimizeBtn.FlatAppearance.BorderSize = 0;
             minimizeBtn.FlatStyle = FlatStyle.Flat;
             minimizeBtn.Image = (Image)resources.GetObject("minimizeBtn.Image");
-            minimizeBtn.Location = new Point(814, 0);
+            minimizeBtn.Location = new Point(888, 0);
             minimizeBtn.Name = "minimizeBtn";
             minimizeBtn.Size = new Size(62, 32);
             minimizeBtn.TabIndex = 4;
@@ -129,7 +129,7 @@
             expandBtn.FlatAppearance.BorderSize = 0;
             expandBtn.FlatStyle = FlatStyle.Flat;
             expandBtn.Image = (Image)resources.GetObject("expandBtn.Image");
-            expandBtn.Location = new Point(876, 0);
+            expandBtn.Location = new Point(950, 0);
             expandBtn.Name = "expandBtn";
             expandBtn.Size = new Size(62, 32);
             expandBtn.TabIndex = 5;
@@ -145,7 +145,7 @@
             closeBtn.FlatAppearance.BorderSize = 0;
             closeBtn.FlatStyle = FlatStyle.Flat;
             closeBtn.Image = (Image)resources.GetObject("closeBtn.Image");
-            closeBtn.Location = new Point(938, 0);
+            closeBtn.Location = new Point(1012, 0);
             closeBtn.Name = "closeBtn";
             closeBtn.Size = new Size(62, 32);
             closeBtn.TabIndex = 6;
@@ -213,7 +213,7 @@
             mainPnl.Name = "mainPnl";
             mainPnl.Size = new Size(176, 66);
             mainPnl.TabIndex = 0;
-            mainPnl.Click += this.mainPnl_Click;
+            mainPnl.Click += mainPnl_Click;
             mainPnl.MouseEnter += mainPnl_MouseEnter;
             mainPnl.MouseLeave += mainPnl_MouseLeave;
             // 
@@ -227,7 +227,7 @@
             mainLbl.Size = new Size(80, 20);
             mainLbl.TabIndex = 1;
             mainLbl.Text = "Главная";
-            mainLbl.Click += this.mainPnl_Click;
+            mainLbl.Click += mainPnl_Click;
             mainLbl.MouseEnter += mainPnl_MouseEnter;
             // 
             // mainImage
@@ -238,7 +238,7 @@
             mainImage.Size = new Size(32, 32);
             mainImage.TabIndex = 0;
             mainImage.TabStop = false;
-            mainImage.Click += this.mainPnl_Click;
+            mainImage.Click += mainPnl_Click;
             mainImage.MouseEnter += mainPnl_MouseEnter;
             // 
             // menuSpl
@@ -257,7 +257,7 @@
             controlSpl.Enabled = false;
             controlSpl.Location = new Point(176, 32);
             controlSpl.Name = "controlSpl";
-            controlSpl.Size = new Size(824, 2);
+            controlSpl.Size = new Size(898, 2);
             controlSpl.TabIndex = 3;
             controlSpl.TabStop = false;
             // 
@@ -266,7 +266,7 @@
             mainPnlGrid.Dock = DockStyle.Fill;
             mainPnlGrid.Location = new Point(176, 34);
             mainPnlGrid.Name = "mainPnlGrid";
-            mainPnlGrid.Size = new Size(824, 632);
+            mainPnlGrid.Size = new Size(898, 632);
             mainPnlGrid.TabIndex = 4;
             // 
             // styleTip
@@ -294,7 +294,7 @@
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(26, 26, 26);
-            ClientSize = new Size(1000, 666);
+            ClientSize = new Size(1074, 666);
             ControlBox = false;
             Controls.Add(mainPnlGrid);
             Controls.Add(controlSpl);
