@@ -1,4 +1,9 @@
 # Ignore build files
 .vs/
+<<<<<<< HEAD
 gui/bin
 gui/obj
+=======
+db/bin
+db/obj
+>>>>>>> origin/db
