@@ -1,4 +1,5 @@
 ﻿using db.Contexts;
+using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,14 +37,14 @@ namespace db.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        /*public async Task SoftDeleteAsync(TypeId id) {
+        public async Task SoftDeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
                 entity.isDeleted = DateTime.Now; // soft delete
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
-        }*/
+        }
 
         public async Task DeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
@@ -53,7 +54,7 @@ namespace db.Repositories {
             }
         }
 
-        public async Task<TypeId> NewIdToAdd() {
+        public async Task<TypeId> NewIdToAddAsync() {
             throw new NotImplementedException();
         }
 

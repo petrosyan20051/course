@@ -34,17 +34,17 @@ namespace db.Contexts {
 
             int i = 1;
             modelBuilder.Entity<Customer>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.Forename).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.Surname).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.PhoneNumber).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.Email).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.WhenAdded).IsRequired().HasColumnOrder(i++);
-                entity.Property(e => e.Note).HasColumnOrder(i++);
-                entity.Property(e => e.WhoChanged).HasColumnOrder(i++);
-                entity.Property(e => e.WhenChanged).HasColumnOrder(i++);
-                entity.Property(e => e.isDeleted).HasColumnName("isDeleted").HasColumnOrder(i++);
+                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Forename).IsRequired().HasColumnOrder(2);
+                entity.Property(e => e.Surname).IsRequired().HasColumnOrder(3);
+                entity.Property(e => e.PhoneNumber).IsRequired().HasColumnOrder(4);
+                entity.Property(e => e.Email).IsRequired().HasColumnOrder(5);
+                entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(6);
+                entity.Property(e => e.WhenAdded).IsRequired().HasColumnOrder(7);
+                entity.Property(e => e.Note).HasColumnOrder(8);
+                entity.Property(e => e.WhoChanged).HasColumnOrder(9);
+                entity.Property(e => e.WhenChanged).HasColumnOrder(10);
+                entity.Property(e => e.isDeleted).HasColumnName("isDeleted").HasColumnOrder(11);
             });
 
             var customers = Generators.GenerateCustomers(500);

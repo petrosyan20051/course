@@ -12,7 +12,7 @@ using db.Contexts;
 namespace db.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20250906112900_InitialMigration")]
+    [Migration("20250906161525_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

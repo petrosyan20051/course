@@ -1,4 +1,5 @@
 ﻿using db.Contexts;
+using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +13,13 @@ namespace db.Repositories {
             _context = context;
         }
 
-        public async Task<TransportVehicle> GetByIdAsync(TypeId id) {
-            return await _context.TransportVehicles.FirstOrDefaultAsync(o => o.Id == id);
-        }
-
+        // Async versions
         public async Task<IEnumerable<TransportVehicle>> GetAllAsync() {
             return await _context.TransportVehicles.ToListAsync();
+        }
+
+        public async Task<TransportVehicle> GetByIdAsync(TypeId id) {
+            return await _context.TransportVehicles.FirstOrDefaultAsync(o => o.Id == id);
         }
 
         public async Task AddAsync(TransportVehicle entity) {
@@ -36,15 +38,6 @@ namespace db.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public async Task SoftDeleteAsync(TypeId id) {
-            var entity = await GetByIdAsync(id);
-            if (entity != null) {
-                entity.isDeleted = DateTime.Now; // soft delete
-                entity.WhenChanged = DateTime.Now;
-                await _context.SaveChangesAsync();
-            }
-        }
-
         public async Task DeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
@@ -53,19 +46,7 @@ namespace db.Repositories {
             }
         }
 
-        public async Task<bool> RecoverAsync(TypeId id) {
-            var entity = await GetByIdAsync(id);
-            if (entity?.Id != null) {
-                entity.isDeleted = null;
-                entity.WhenChanged = DateTime.Now;
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            return false;
-        }
-
-        public async Task<TypeId> NewIdToAdd() {
+        public async Task<TypeId> NewIdToAddAsync() {
             var entities = await GetAllAsync();
             if (entities == null)
                 return 0; // entities are not found so can use id = 0
@@ -81,6 +62,27 @@ namespace db.Repositories {
             }
 
             return Ids.Last() + 1; // maybe all seats are reserved
+        }
+
+        public async Task<bool> RecoverAsync(TypeId id) {
+            var entity = await GetByIdAsync(id);
+            if (entity?.Id != null) {
+                entity.isDeleted = null;
+                entity.WhenChanged = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            return false;
+        }
+
+        public async Task SoftDeleteAsync(TypeId id) {
+            var entity = await GetByIdAsync(id);
+            if (entity != null) {
+                entity.isDeleted = DateTime.Now; // soft delete
+                entity.WhenChanged = DateTime.Now;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

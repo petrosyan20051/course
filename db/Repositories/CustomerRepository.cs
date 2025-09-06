@@ -1,4 +1,5 @@
 ﻿using db.Contexts;
+using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,7 +54,7 @@ namespace db.Repositories {
             }
         }
 
-        public async Task<TypeId> NewIdToAdd() {
+        public async Task<TypeId> NewIdToAddAsync() {
             var entities = await GetAllAsync();
             if (entities == null)
                 return 0; // entities are not found so can use id = 0
@@ -73,7 +74,7 @@ namespace db.Repositories {
 
         public async Task<bool> RecoverAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
-            if (entity?.Id != null) {
+            if (entity != null) {
                 entity.isDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
