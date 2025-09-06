@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace db.Contexts {
 
-    public class OrderDbContext : BaseDbContext {
+    public class OrderDbContext : DbContext {
         public DbSet<Order> Orders { get; set; }
         public DbSet<Rate> Rates { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
         public DbSet<TransportVehicle> TransportVehicles { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Credential> Credentials { get; set; }
 
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) {
             //Database.EnsureCreated();
@@ -124,6 +125,17 @@ namespace db.Contexts {
 
             var orders = Generators.GenerateOrders(customers, routes, rates, 240);
             modelBuilder.Entity<Order>().HasData(orders);
+
+            ///////////////////////////
+
+            modelBuilder.Entity<Credential>(entity => {
+                entity.Property(e => e.Id).IsRequired();
+                entity.Property(e => e.Username).IsRequired();
+                entity.Property(e => e.Password).IsRequired();
+                entity.Property(e => e.Rights).IsRequired();
+            });
+
+            modelBuilder.Entity<Credential>().HasData();
         }
     }
 }

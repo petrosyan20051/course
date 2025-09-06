@@ -32,8 +32,6 @@ namespace db.Repositories {
         }
 
         public async Task UpdateAsync(Order entity) {
-            //_context.Orders.Attach(entity);
-            //_context.Entry(entity).Property(o => o.CustomerId).IsModified = true;
             _context.Orders.Update(entity);
             await _context.SaveChangesAsync();
         }

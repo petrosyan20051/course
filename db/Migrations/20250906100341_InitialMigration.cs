@@ -1,17 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace db.Migrations {
+namespace db.Migrations
+{
     /// <inheritdoc />
-    public partial class InitMigr : Migration {
+    public partial class InitialMigration : Migration
+    {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder) {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Credentials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rights = table.Column<int>(type: "int", nullable: false),
+                    WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credentials", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Customers",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Forename = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -25,13 +51,15 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Drivers",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Forename = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -46,13 +74,15 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Drivers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Orders",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
@@ -66,13 +96,15 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Rates",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Forename = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -87,13 +119,15 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Rates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Routes",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BoardingAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -105,13 +139,15 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Routes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TransportVehicles",
-                columns: table => new {
+                columns: table => new
+                {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DriverId = table.Column<int>(type: "int", nullable: false),
@@ -128,7 +164,8 @@ namespace db.Migrations {
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
-                constraints: table => {
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_TransportVehicles", x => x.Id);
                 });
 
@@ -2916,7 +2953,11 @@ namespace db.Migrations {
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder) {
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "Credentials");
+
             migrationBuilder.DropTable(
                 name: "Customers");
 

@@ -82,9 +82,5 @@ namespace db.Repositories {
             }
             return false;
         }
-
-        public Task<bool> Recover(TypeId id) {
-            throw new NotImplementedException();
-        }
     }
 }

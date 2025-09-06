@@ -14,28 +14,28 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         _repository = repository;
     }
 
-    // GET: api/{entity}
-    [HttpGet]
+    // GET: api/{entity}/GetAll
+    [HttpGet("GetAll")]
     public virtual async Task<ActionResult<IEnumerable<TEntity>>> GetAll() {
         return Ok(await _repository.GetAllAsync());
     }
 
-    // GET: api/{entity}
-    [HttpGet("{id}")]
+    // GET: api/{entity}/GetById
+    [HttpGet("GetById")]
     public virtual async Task<ActionResult<TEntity>> Get(TKey id) {
         var entity = await _repository.GetByIdAsync(id);
         return entity is null ? NotFound() : Ok(entity);
     }
 
-    // POST: api/{entity}
-    [HttpPost]
+    // POST: api/{entity}/Post
+    [HttpPost("Post")]
     public virtual async Task<ActionResult<TEntity>> Create([FromBody] TEntity entity) {
         await _repository.AddAsync(entity);
         return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
     }
 
-    // PUT: api/{entity}
-    [HttpPut("{id}")]
+    // PUT: api/{entity}/UpdateById
+    [HttpPut("UpdateById")]
     public virtual async Task<IActionResult> Update(TKey id, [FromBody] TEntity entity) {
         if (!id.Equals(GetEntityId(entity))) {
             return BadRequest();
@@ -47,14 +47,14 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
 
     // PUT: api/{}
 
-    // DELETE: api/{entity}
-    [HttpDelete("{id}")]
+    // DELETE: api/{entity}/DeleteById
+    [HttpDelete("DeleteById")]
     public virtual async Task<IActionResult> Delete(TKey id) {
         await _repository.DeleteAsync(id);
         return NoContent();
     }
 
-    // GET: api/{NewIdToAdd}
+    // GET: api/{entity}/NewIdToAdd
     [HttpGet("NewIdToAdd")]
     public virtual async Task<TypeId> NewIdToAdd() {
         var entities = await _repository.GetAllAsync();
@@ -77,7 +77,7 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase
         return TypeId.MaxValue; // maybe all seats are reserved
     }
 
-    // Update: api/RecoverById
+    // Update: api/{entity}/RecoverById
     [HttpGet("RecoverById")]
     public virtual async Task<IActionResult> RecoverAsync(TKey id) {
         var entity = await _repository.GetByIdAsync(id);

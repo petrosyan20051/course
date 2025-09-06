@@ -8,14 +8,14 @@ namespace db.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
-    public class CredentialController : BaseCrudController<Credential, TypeId> {
-        public CredentialController(IRepository<Credential, TypeId> repository) : base(repository) { }
+    public class CustomerController : BaseCrudController<Customer, TypeId> {
+        public CustomerController(IRepository<Customer, TypeId> repository) : base(repository) { }
 
-        protected override int GetEntityId(Credential entity) {
+        protected override int GetEntityId(Customer entity) {
             return entity.Id;
         }
 
-        /*[HttpPost("RecoverById")]
+        [HttpPost("RecoverById")]
         public virtual async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {
@@ -26,6 +26,6 @@ namespace db.Controllers {
             }
 
             return NotFound(new string("Сущность не удалена или не найдена"));
-        }*/
+        }
     }
 }

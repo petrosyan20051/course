@@ -12,8 +12,8 @@ using db.Contexts;
 namespace db.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20250613121246_InitMigr")]
-    partial class InitMigr
+    [Migration("20250906100341_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,49 @@ namespace db.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("db.Models.Credential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rights")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("WhenAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("WhenChanged")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("WhoAdded")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WhoChanged")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("isDeleted")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Credentials");
+                });
 
             modelBuilder.Entity("db.Models.Customer", b =>
                 {
