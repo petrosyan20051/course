@@ -24,9 +24,9 @@ namespace db.Migrations
                     Rights = table.Column<int>(type: "int", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -46,9 +46,9 @@ namespace db.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -69,9 +69,9 @@ namespace db.Migrations
                     DriverLicenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -91,9 +91,9 @@ namespace db.Migrations
                     Distance = table.Column<int>(type: "int", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -114,9 +114,9 @@ namespace db.Migrations
                     IdlePrice = table.Column<int>(type: "int", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -134,9 +134,9 @@ namespace db.Migrations
                     DropAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -159,9 +159,9 @@ namespace db.Migrations
                     ReleaseYear = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
