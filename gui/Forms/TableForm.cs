@@ -1,15 +1,16 @@
 ﻿using db.Contexts;
-using db.Models;
+using db.Factories;
+using db.Interfaces;
 using gui.Classes;
 using gui.Factories;
 using Microsoft.EntityFrameworkCore;
 using static gui.Classes.IInformation;
 
+using TypeId = int;
+
 namespace gui.Forms {
 
-    public partial class TableForm : Form, IInformation {
-        Dictionary<string, Type> tableMapping;
-
+    public partial class TableForm : Form, Classes.IInformation {
         private UserRights _rights;
         public UserRights Rights {
             get => _rights;
@@ -21,7 +22,8 @@ namespace gui.Forms {
             }
         }
 
-        private string? currentCell; // tracking current table grid cell value
+        private string? cellBeforeEdit; // tracking current table grid cell value before editing
+        private string? cellAfterEdit; // tracking current table grid cell value after editing (stop editing cell value)
         private string currentTable; // tracking current combobox text
         private bool IsUpdatingCellValue { get; set; } = false;
         private Point? SelectedCell { get; set; }
@@ -32,7 +34,7 @@ namespace gui.Forms {
 
         private OrderDbContext _context; // db context
 
-        public TableForm(UserRights userRights = UserRights.Error) {
+        public TableForm(UserRights userRights) {
             InitializeComponent();
             InitVariables();
             this.TopLevel = false;
@@ -52,9 +54,15 @@ namespace gui.Forms {
             ComboBox? cmbBox = sender as ComboBox;
 
             // Update grid + filter
-            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[cmbBox.Text]);
+            _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, cmbBox.Text);
             FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
-            Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[cmbBox.Text]); // reorder columns
+
+            // Reorder columns
+            switch (_tblCmBox.Text) {
+                case "Drivers": Tools.ReorderGridColumns(_grid, "Driver"); break;
+                case "Rates": Tools.ReorderGridColumns(_grid, "Rate"); break;
+                case "TransportVehicles": Tools.ReorderGridColumns(_grid, "TransportVehicle"); break;
+            }
 
             // Delete adding new set controller and splitter if it exists
             if (cmbBox.Text != currentTable) {
@@ -68,7 +76,7 @@ namespace gui.Forms {
             var control = EntityFactory.CreateEntityFormByName(_tblCmBox.Text, _context, (string)this.Tag);
             if (control == null) {
                 MessageBox.Show($"Не удалось создать контроллер для добавления набора в таблицу {_tblCmBox.Text}",
-                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Classes.IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             control.Dock = DockStyle.Right;
@@ -89,7 +97,7 @@ namespace gui.Forms {
 
                 _grid.CurrentCell = _grid.Rows[e.RowIndex].Cells[e.ColumnIndex];
                 MessageBox.Show(
-                    $"Некорректное значение \"{currentCell}\"",
+                    $"Некорректное значение \"{cellAfterEdit}\"",
                     AppName,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -97,7 +105,17 @@ namespace gui.Forms {
         }
 
         private void dbGrid_CellParsing(object sender, DataGridViewCellParsingEventArgs e) {
-            currentCell = e.Value?.ToString();
+            cellAfterEdit = e.Value?.ToString();
+        }
+
+        private void dbGrid_CellEnter(object sender, DataGridViewCellEventArgs e) {
+            DataGridView grid = (DataGridView)sender;
+            try {
+                cellBeforeEdit = grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+            } catch (Exception ex) {
+                cellBeforeEdit = string.Empty;
+            }
+            
         }
 
         private void dbGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
@@ -133,9 +151,10 @@ namespace gui.Forms {
 
 
         private void dbGrid_CellEndEdit(object sender, DataGridViewCellEventArgs e) {
-            var grid = sender as DataGridView;
+            DataGridView grid = sender as DataGridView;
+            if (grid.Columns.Contains("WhenChanged") && cellBeforeEdit != grid.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString())
+                grid.Rows[e.RowIndex].Cells["WhenChanged"].Value = DateTime.Now;
             EFCoreConnect.ApplyChangesToDatabase(_context);
-            //grid.DataSource = EFCoreConnect.GetBindingListByEntityType(new OrderDbContextFactory().CreateDbContext([]), tableMapping[_tblCmBox.Text]);
         }
 
         private void setDeleteStrip_Click(object sender, EventArgs e) {
@@ -157,22 +176,18 @@ namespace gui.Forms {
             _setRecover = this.setRecoverStrip;
 
             currentTable = _tblCmBox.Text;
+            _grid.AutoGenerateColumns = true;
         }
 
         private void OnUserRightsChanged(UserRights newRights, string? dbSetName) {
 
-            if (tableMapping == null) {
-                return;
-            } else if (!tableMapping.ContainsKey(_tblCmBox.Text))
-                return;
-            _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
+            _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, _tblCmBox.Text);
 
             FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
-            Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
+            //Tools.ReorderColumnsAccordingToDbContextByType(_grid, tableMapping[_tblCmBox.Text]); // reorder columns
 
             if (newRights != UserRights.Admin) {
                 _grid.ReadOnly = true; // user is not admin so can't edit grid
-
 
                 // Set enability for controllers when rights are changed
                 _setAdd.Enabled = false;
@@ -190,7 +205,7 @@ namespace gui.Forms {
             _grid.Invalidate();
         }
 
-        private void DeleteSetsFromGrid(DataGridView? grid) {
+        private async void DeleteSetsFromGrid(DataGridView? grid) {
             SelectedCell = new Point(grid.CurrentCell.RowIndex, grid.CurrentCell.ColumnIndex);
 
             // Get Id to deleted
@@ -213,38 +228,38 @@ namespace gui.Forms {
                 return;
             }
 
-            try {
-                // Delete selected sets
-                foreach (var id in idsToDelete) {
-                    dynamic? entityToDelete = _context.Find(tableMapping[_tblCmBox.Text], new object[] { id });
+            // Get IDeletable repository
+            IDeletable<TypeId> repository = _tblCmBox.Text switch {
+                "Customers" => new RepositoryFactory(_context).CreateDeletableRepository("Customer"),
+                "Drivers" => new RepositoryFactory(_context).CreateDeletableRepository("Driver"),
+                "Orders" => new RepositoryFactory(_context).CreateDeletableRepository("Order"),
+                "Rates" => new RepositoryFactory(_context).CreateDeletableRepository("Rate"),
+                "Routes" => new RepositoryFactory(_context).CreateDeletableRepository("Route"),
+                "TransportVehicles" => new RepositoryFactory(_context).CreateDeletableRepository("TransportVehicle")
+            };
 
-                    // Update entities fields
-                    entityToDelete?.WhenChanged = DateTime.Now;
-                    entityToDelete?.isDeleted = DateTime.Now;
-                    _context.Update(entityToDelete);
-                }
-
-                EFCoreConnect.ApplyChangesToDatabase(_context);
-
-                // Update DataGridView
-                grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
-            } catch (Exception ex) {
-                MessageBox.Show($"Ошибка при удалении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Delete by id
+            int startRow = grid.SelectedRows.Cast<DataGridViewRow>().Min(r => r.Index); // start index to redraw while recovering
+            grid.SuspendLayout(); // stop redrawing
+            foreach (var id in idsToDelete) {
+                await repository.SoftDeleteAsync(id);
+                grid.InvalidateRow(startRow++);
             }
 
-            FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
+            grid.ResumeLayout(); // resume redrawing
+            grid.Refresh();
             grid?.CurrentCell = grid?.Rows[SelectedCell.Value.X].Cells[SelectedCell.Value.Y]; // update selected cell
             MessageBox.Show("Удаление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void RecoverSetsFromGrid(DataGridView? grid) {
+        private async void RecoverSetsFromGrid(DataGridView grid) {
             SelectedCell = new Point(grid.CurrentCell.RowIndex, grid.CurrentCell.ColumnIndex);
 
             // Get Id to deleted
             var idsToRecover = grid?.SelectedRows
                 .Cast<DataGridViewRow>()
-                .Where(row => row.Cells["Id"]?.Value is int id)
-                .Select(row => (int)row.Cells["Id"].Value)
+                .Where(row => row.Cells["Id"]?.Value is TypeId id)
+                .Select(row => (TypeId)row.Cells["Id"].Value)
                 .ToList();
 
             // Make prompt for confirmation
@@ -260,27 +275,27 @@ namespace gui.Forms {
                 return;
             }
 
-            try {
-                // Recover selected sets
-                foreach (var id in idsToRecover) {
-                    dynamic? entityToRecover = _context.Find(tableMapping[_tblCmBox.Text], new object[] { id });
 
-                    // Update entities fields
-                    entityToRecover?.WhenChanged = DateTime.Now;
-                    entityToRecover?.isDeleted = null;
-                    _context.Update(entityToRecover);
-                }
+            // Get IRecovarable repository
+            IRecovarable<TypeId> repository = _tblCmBox.Text switch {
+                "Customers" => new RepositoryFactory(_context).CreateRecoverableRepository("Customer"),
+                "Drivers" => new RepositoryFactory(_context).CreateRecoverableRepository("Driver"),
+                "Orders" => new RepositoryFactory(_context).CreateRecoverableRepository("Order"),
+                "Rates" => new RepositoryFactory(_context).CreateRecoverableRepository("Rate"),
+                "Routes" => new RepositoryFactory(_context).CreateRecoverableRepository("Route"),
+                "TransportVehicles" => new RepositoryFactory(_context).CreateRecoverableRepository("TransportVehicle")
+            };
 
-                EFCoreConnect.ApplyChangesToDatabase(_context);
-
-                // Update DataGridView
-                grid?.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
-
-            } catch (Exception ex) {
-                MessageBox.Show($"Ошибка при восстановлении: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            // Recover by id
+            int startRow = grid.SelectedRows.Cast<DataGridViewRow>().Min(r => r.Index); // start index to redraw while recovering
+            grid.SuspendLayout(); // stop redrawing
+            foreach (var id in idsToRecover) {
+                await repository.RecoverAsync(id);
+                grid.InvalidateRow(startRow++);
             }
 
-            FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
+            grid.ResumeLayout(); // resume redrawing
+            grid.Refresh();
             grid?.CurrentCell = grid?.Rows[SelectedCell.Value.X].Cells[SelectedCell.Value.Y]; // update selected cell
             MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -296,28 +311,29 @@ namespace gui.Forms {
                 Rights = (UserRights)userRights;
             }
 
-            // Making mapping for tables: string TableName -> Type TableType
-            if (tableMapping != null && tableMapping.Count > 0) {
-                tableMapping.Clear();
-            }
-            tableMapping = new Dictionary<string, Type>();
-            foreach (var entityType in _context.Model.GetEntityTypes()) {
-                tableMapping.Add(entityType.GetTableName(), entityType.ClrType);
-            }
-
             // Combobox source: OrderDbContext table names
-            _tblCmBox.DataSource = EFCoreConnect.GetTableNames(_context);
+            _tblCmBox.DataSource = EFCoreConnect.GetTableNames(_context)
+                .Where(n => n != "Credentials")
+                .ToList();
 
             // Get source for datagridview
             try {
-                _grid.DataSource = EFCoreConnect.GetBindingListByEntityType(_context, tableMapping[_tblCmBox.Text]);
+                _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, _tblCmBox.Text);
             } catch (Exception ex) {
                 MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             FilterColumnsByRights();
-            Tools.ReorderColumnsAccordingToDbContext<Order>(_grid); // reorder columns
+
+            // Reorder columns
+            switch (_tblCmBox.Text) {
+                case "Drivers": Tools.ReorderGridColumns(_grid, "Driver"); break;
+                case "Rates": Tools.ReorderGridColumns(_grid, "Rate"); break;
+                case "TransportVehicles": Tools.ReorderGridColumns(_grid, "TransportVehicle"); break;
+            }
+
+
             _grid.AutoResizeColumns(); // resize columns
 
             // Install enability for controllers

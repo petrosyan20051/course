@@ -1,7 +1,6 @@
 ﻿using gui.Classes;
 using gui.controllers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.Devices;
 using static gui.Classes.IInformation;
 
 namespace gui.Forms {
@@ -47,8 +46,6 @@ namespace gui.Forms {
             _userBtn = this.userBtn;
             this.Tag = "";
 
-            Rights = UserRights.Error;
-
             styler = new StyleManager(
                 Design.DarkTheme,
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "icons")
@@ -79,7 +76,7 @@ namespace gui.Forms {
             this.InitVariables();
 
             // Add from about general information of tables
-            _currentForm = new TableForm();
+            _currentForm = new TableForm(Rights);
             styler.AddDataGrid(_currentForm.Controls.OfType<DataGridView>().FirstOrDefault()); // add data grid into manager
 
             _currentForm.Height = _mainGridPanel.Height;
@@ -131,9 +128,9 @@ namespace gui.Forms {
 
             string? userString = "";
             switch (Rights) {
-                case UserRights.Error:
-                    userString = "Войдите в профиль";
-                    break;
+                //case UserRights.Error:
+                //    userString = "Войдите в профиль";
+                //    break;
                 case UserRights.Basic:
                     userString = $"Пользователь: {userName} (базовый пользователь)";
                     break;
@@ -307,7 +304,7 @@ namespace gui.Forms {
             } else {
                 if ((e.X >= this.ClientSize.Width - 10 || e.X <= 10) &&
                     e.Y <= this.ClientSize.Height - _controlPnl.Height - 5) {
-                   //this.Cursor = Cursors.SizeWE;
+                    //this.Cursor = Cursors.SizeWE;
                 } else {
                     //this.Cursor = Cursors.Default;
                 }
@@ -350,7 +347,7 @@ namespace gui.Forms {
 
             _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
             _currentForm.UpdateForm(args[0] as DbContext);
-            
+
             userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
             _currentForm.Tag = args[2]; // form contains name of user
         }

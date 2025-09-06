@@ -8,6 +8,8 @@ namespace gui.Forms {
         private TextBox? _loginBox, _passwordBox;
         private ComboBox _serverNameBox, _dbNameBox, _secBox;
 
+        const string defaultDbName = "KR";
+
         public AuthorizeForm() {
             InitializeComponent();
             InitVariables();
@@ -15,7 +17,7 @@ namespace gui.Forms {
             _secBox.Text = _secBox.Items[0]?.ToString();
         }
 
-        private void enterBtn_Click(object sender, EventArgs e) {
+        private async void enterBtn_Click(object sender, EventArgs e) {
             // Check whether all textboxes has text
             string? errorMsg = null;
             if (_serverNameBox.Enabled && _serverNameBox.Text == string.Empty) {
@@ -33,11 +35,18 @@ namespace gui.Forms {
                 return;
             }
 
+            progressBar.Visible = true;
+
             // Create OrderDbContext 
             var dbContext = new OrderDbContextFactory().CreateCustomDbContext(
                 new string[] { _loginBox.Enabled ? ((int)ConnectMode.SqlServerSecure).ToString() : ((int)ConnectMode.WindowsSecure).ToString(),
                     _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text });
-            if (!dbContext.Database.CanConnect()) {
+
+            // Try to connect to db
+            bool connect = false;
+            await Task.Run(() => connect = dbContext.Database.CanConnect());
+            progressBar.Visible = false;
+            if (!connect) {
                 MessageBox.Show(
                     $"Не удалось подключиться к базе данных.{Environment.NewLine}" +
                     $"Проверьте настройки подключения",
@@ -66,6 +75,8 @@ namespace gui.Forms {
             _loginBox = this.userNameTxtBox;
             _passwordBox = this.passwordTxtBox;
             _secBox = this.secCheckBox;
+
+            _dbNameBox.Text = defaultDbName;
         }
 
         #endregion

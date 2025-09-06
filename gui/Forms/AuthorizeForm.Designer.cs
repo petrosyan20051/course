@@ -35,6 +35,7 @@
             secCheckBox = new ComboBox();
             dbNameBox = new ComboBox();
             enterBtn = new gui.controllers.RoundedButton();
+            progressBar = new ProgressBar();
             SuspendLayout();
             // 
             // mainLbl
@@ -51,7 +52,7 @@
             // 
             servNameLbl.AutoSize = true;
             servNameLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            servNameLbl.Location = new Point(20, 107);
+            servNameLbl.Location = new Point(25, 107);
             servNameLbl.Name = "servNameLbl";
             servNameLbl.Size = new Size(129, 25);
             servNameLbl.TabIndex = 1;
@@ -70,7 +71,7 @@
             // 
             userNameLbl.AutoSize = true;
             userNameLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            userNameLbl.Location = new Point(20, 208);
+            userNameLbl.Location = new Point(25, 208);
             userNameLbl.Name = "userNameLbl";
             userNameLbl.Size = new Size(69, 25);
             userNameLbl.TabIndex = 3;
@@ -89,7 +90,7 @@
             // 
             passwordLbl.AutoSize = true;
             passwordLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            passwordLbl.Location = new Point(20, 261);
+            passwordLbl.Location = new Point(25, 261);
             passwordLbl.Name = "passwordLbl";
             passwordLbl.Size = new Size(82, 25);
             passwordLbl.TabIndex = 5;
@@ -113,12 +114,13 @@
             servNameBox.Name = "servNameBox";
             servNameBox.Size = new Size(340, 33);
             servNameBox.TabIndex = 1;
+            servNameBox.Text = "localhost";
             // 
             // secCheckLbl
             // 
             secCheckLbl.AutoSize = true;
             secCheckLbl.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            secCheckLbl.Location = new Point(20, 157);
+            secCheckLbl.Location = new Point(25, 157);
             secCheckLbl.Name = "secCheckLbl";
             secCheckLbl.Size = new Size(221, 25);
             secCheckLbl.TabIndex = 10;
@@ -152,7 +154,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 14F);
-            enterBtn.Location = new Point(239, 376);
+            enterBtn.Location = new Point(239, 363);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 6;
@@ -160,11 +162,22 @@
             enterBtn.UseVisualStyleBackColor = false;
             enterBtn.Click += enterBtn_Click;
             // 
+            // progressBar
+            // 
+            progressBar.Dock = DockStyle.Bottom;
+            progressBar.Location = new Point(0, 419);
+            progressBar.MarqueeAnimationSpeed = 30;
+            progressBar.Name = "progressBar";
+            progressBar.Size = new Size(618, 22);
+            progressBar.Style = ProgressBarStyle.Marquee;
+            progressBar.TabIndex = 11;
+            progressBar.Visible = false;
+            // 
             // AuthorizeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(618, 458);
+            ClientSize = new Size(618, 441);
             Controls.Add(enterBtn);
             Controls.Add(dbNameBox);
             Controls.Add(secCheckBox);
@@ -177,6 +190,7 @@
             Controls.Add(userNameLbl);
             Controls.Add(servNameLbl);
             Controls.Add(mainLbl);
+            Controls.Add(progressBar);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -205,5 +219,6 @@
         private ComboBox secCheckBox;
         private ComboBox dbNameBox;
         private controllers.RoundedButton enterBtn;
+        private ProgressBar progressBar;
     }
 }
