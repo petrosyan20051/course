@@ -25,9 +25,9 @@
         private void InitializeComponent() {
             passwordTxtBox = new TextBox();
             passwordLbl = new Label();
-            userNameTxtBox = new TextBox();
+            loginTxtBox = new TextBox();
             userNameLbl = new Label();
-            secCheckBox = new ComboBox();
+            roleComboBox = new ComboBox();
             secCheckLbl = new Label();
             enterBtn = new gui.controllers.RoundedButton();
             SuspendLayout();
@@ -52,14 +52,14 @@
             passwordLbl.TabIndex = 22;
             passwordLbl.Text = "Пароль:";
             // 
-            // userNameTxtBox
+            // loginTxtBox
             // 
-            userNameTxtBox.Font = new Font("Microsoft Sans Serif", 11.25F);
-            userNameTxtBox.Location = new Point(103, 60);
-            userNameTxtBox.Margin = new Padding(4);
-            userNameTxtBox.Name = "userNameTxtBox";
-            userNameTxtBox.Size = new Size(389, 24);
-            userNameTxtBox.TabIndex = 19;
+            loginTxtBox.Font = new Font("Microsoft Sans Serif", 11.25F);
+            loginTxtBox.Location = new Point(103, 60);
+            loginTxtBox.Margin = new Padding(4);
+            loginTxtBox.Name = "loginTxtBox";
+            loginTxtBox.Size = new Size(389, 24);
+            loginTxtBox.TabIndex = 19;
             // 
             // userNameLbl
             // 
@@ -72,17 +72,17 @@
             userNameLbl.TabIndex = 20;
             userNameLbl.Text = "Логин:";
             // 
-            // secCheckBox
+            // roleComboBox
             // 
-            secCheckBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            secCheckBox.Font = new Font("Microsoft Sans Serif", 11.25F);
-            secCheckBox.FormattingEnabled = true;
-            secCheckBox.Items.AddRange(new object[] { "Базовый пользователь", "Редактор", "Администратор" });
-            secCheckBox.Location = new Point(103, 168);
-            secCheckBox.Margin = new Padding(4);
-            secCheckBox.Name = "secCheckBox";
-            secCheckBox.Size = new Size(389, 26);
-            secCheckBox.TabIndex = 23;
+            roleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            roleComboBox.Font = new Font("Microsoft Sans Serif", 11.25F);
+            roleComboBox.FormattingEnabled = true;
+            roleComboBox.Items.AddRange(new object[] { "Базовый пользователь", "Редактор", "Администратор" });
+            roleComboBox.Location = new Point(103, 168);
+            roleComboBox.Margin = new Padding(4);
+            roleComboBox.Name = "roleComboBox";
+            roleComboBox.Size = new Size(389, 26);
+            roleComboBox.TabIndex = 23;
             // 
             // secCheckLbl
             // 
@@ -110,17 +110,18 @@
             enterBtn.TabIndex = 25;
             enterBtn.Text = "Зарегистрировать";
             enterBtn.UseVisualStyleBackColor = false;
+            enterBtn.Click += enterBtn_Click;
             // 
             // RegisterControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(enterBtn);
-            Controls.Add(secCheckBox);
+            Controls.Add(roleComboBox);
             Controls.Add(secCheckLbl);
             Controls.Add(passwordTxtBox);
             Controls.Add(passwordLbl);
-            Controls.Add(userNameTxtBox);
+            Controls.Add(loginTxtBox);
             Controls.Add(userNameLbl);
             Name = "RegisterControl";
             Size = new Size(499, 315);
@@ -132,9 +133,9 @@
 
         private TextBox passwordTxtBox;
         private Label passwordLbl;
-        private TextBox userNameTxtBox;
+        private TextBox loginTxtBox;
         private Label userNameLbl;
-        private ComboBox secCheckBox;
+        private ComboBox roleComboBox;
         private Label secCheckLbl;
         private controllers.RoundedButton enterBtn;
     }
