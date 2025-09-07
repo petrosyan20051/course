@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gui.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,6 +13,15 @@ namespace gui.Controllers {
     public partial class RegisterControl : UserControl {
         public RegisterControl() {
             InitializeComponent();
+            InitVariables();
         }
+
+        #region Пользовательские методы
+
+        private void InitVariables() {
+            this.Tag = Login.ActionType.Register;
+        }
+
+        #endregion
     }
 }

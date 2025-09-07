@@ -35,7 +35,7 @@
             // 
             passwordTxtBox.Enabled = false;
             passwordTxtBox.Font = new Font("Microsoft Sans Serif", 11.25F);
-            passwordTxtBox.Location = new Point(132, 219);
+            passwordTxtBox.Location = new Point(125, 121);
             passwordTxtBox.Margin = new Padding(4);
             passwordTxtBox.Name = "passwordTxtBox";
             passwordTxtBox.Size = new Size(157, 24);
@@ -45,7 +45,7 @@
             // 
             passwordLbl.AutoSize = true;
             passwordLbl.Font = new Font("Microsoft Sans Serif", 11.25F);
-            passwordLbl.Location = new Point(54, 223);
+            passwordLbl.Location = new Point(47, 125);
             passwordLbl.Margin = new Padding(4, 0, 4, 0);
             passwordLbl.Name = "passwordLbl";
             passwordLbl.Size = new Size(65, 18);
@@ -56,7 +56,7 @@
             // 
             userNameTxtBox.Enabled = false;
             userNameTxtBox.Font = new Font("Microsoft Sans Serif", 11.25F);
-            userNameTxtBox.Location = new Point(132, 158);
+            userNameTxtBox.Location = new Point(125, 60);
             userNameTxtBox.Margin = new Padding(4);
             userNameTxtBox.Name = "userNameTxtBox";
             userNameTxtBox.Size = new Size(157, 24);
@@ -66,7 +66,7 @@
             // 
             userNameLbl.AutoSize = true;
             userNameLbl.Font = new Font("Microsoft Sans Serif", 11.25F);
-            userNameLbl.Location = new Point(54, 161);
+            userNameLbl.Location = new Point(47, 63);
             userNameLbl.Margin = new Padding(4, 0, 4, 0);
             userNameLbl.Name = "userNameLbl";
             userNameLbl.Size = new Size(54, 18);
@@ -79,7 +79,7 @@
             secCheckBox.Font = new Font("Microsoft Sans Serif", 11.25F);
             secCheckBox.FormattingEnabled = true;
             secCheckBox.Items.AddRange(new object[] { "Базовый пользователь", "Редактор", "Администратор" });
-            secCheckBox.Location = new Point(132, 266);
+            secCheckBox.Location = new Point(125, 168);
             secCheckBox.Margin = new Padding(4);
             secCheckBox.Name = "secCheckBox";
             secCheckBox.Size = new Size(157, 26);
@@ -89,7 +89,7 @@
             // 
             secCheckLbl.AutoSize = true;
             secCheckLbl.Font = new Font("Microsoft Sans Serif", 11.25F);
-            secCheckLbl.Location = new Point(54, 269);
+            secCheckLbl.Location = new Point(47, 171);
             secCheckLbl.Margin = new Padding(4, 0, 4, 0);
             secCheckLbl.Name = "secCheckLbl";
             secCheckLbl.Size = new Size(44, 18);
