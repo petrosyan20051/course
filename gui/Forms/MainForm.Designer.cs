@@ -287,7 +287,7 @@
             // 
             // userTip
             // 
-            userTip.ToolTipTitle = "Авторизация";
+            userTip.ToolTipTitle = "Вход в систему";
             // 
             // MainForm
             // 

@@ -3,14 +3,14 @@ using gui.Classes;
 using Microsoft.EntityFrameworkCore;
 using static db.Custom_Classes.SqlConnect;
 
-namespace gui.Forms {
-    public partial class AuthorizeForm : Form {
+namespace gui.Controllers {
+    public partial class AuthorizeControl : UserControl {
         private TextBox? _loginBox, _passwordBox;
         private ComboBox _serverNameBox, _dbNameBox, _secBox;
 
         const string defaultDbName = "KR";
 
-        public AuthorizeForm() {
+        public AuthorizeControl() {
             InitializeComponent();
             InitVariables();
 
@@ -58,13 +58,23 @@ namespace gui.Forms {
             //  1. OrderDbContext
             //  2. Whether user is admin (bool)
             //  3. User's name (returns "Локальная БД" if local db)
-            this.Tag = new object[] { dbContext,
+            this.Parent.Tag = new object[] { dbContext,
                 EFCoreConnect.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text),
                 (_loginBox.Enabled ? _loginBox.Text : "Локальная БД")};
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Parent.Dispose();
+        }
 
-            this.Dispose();
+        private void secCheckBox_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox box = sender as ComboBox;
+            if (box?.Text == "Проверка подлинности Windows") {
+                _loginBox.Enabled = false;
+                _passwordBox.Enabled = false;
+            } else {
+                _loginBox.Enabled = true;
+                _passwordBox.Enabled = true;
+            }
         }
 
         #region Пользовательские методы
@@ -81,15 +91,6 @@ namespace gui.Forms {
 
         #endregion
 
-        private void secCheckBox_SelectedIndexChanged(object sender, EventArgs e) {
-            ComboBox box = sender as ComboBox;
-            if (box?.Text == "Проверка подлинности Windows") {
-                _loginBox.Enabled = false;
-                _passwordBox.Enabled = false;
-            } else {
-                _loginBox.Enabled = true;
-                _passwordBox.Enabled = true;
-            }
-        }
+
     }
 }

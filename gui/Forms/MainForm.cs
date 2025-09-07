@@ -338,7 +338,7 @@ namespace gui.Forms {
         }
 
         private void userBtn_Click(object sender, EventArgs e) {
-            var authorizeForm = new AuthorizeForm();
+            var authorizeForm = new Login();
             authorizeForm.ShowDialog();
             object[] args = authorizeForm.Tag as object[];
             if (args == null) { // user denied to authorize
