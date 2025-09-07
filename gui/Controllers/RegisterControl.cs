@@ -1,18 +1,27 @@
-﻿using gui.Forms;
+﻿using db.Contexts;
+using db.Factories;
+using db.Models;
+using db.Repositories;
 using gui.Classes;
+using gui.Forms;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
+using static db.Interfaces.IInformation;
 
 namespace gui.Controllers {
     public partial class RegisterControl : UserControl {
         TextBox _loginBox, _passwordBox;
         ComboBox _roleBox;
 
+        private static readonly string[] ROLES = ["Базовый", "Редактор", "Администратор" ];
+
         public RegisterControl() {
             InitializeComponent();
             InitVariables();
         }
 
-        private void enterBtn_Click(object sender, EventArgs e) {
+        private async void enterBtn_Click(object sender, EventArgs e) {
             if (_loginBox.Text.IsNullOrEmpty()) {
                 MessageBox.Show("Введите логин", IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -31,6 +40,39 @@ namespace gui.Controllers {
                     IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            // Create DbContext
+            OrderDbContext context = new OrderDbContextFactory().CreateDbContext([]);
+            if (context.Credentials.Any(c => c.Username == _loginBox.Text)) {
+                MessageBox.Show($"Пользователь с логином \"{_loginBox.Text}\" уже существует. Введите другой логин.",
+                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                context.Database.CloseConnection();
+                context.Dispose();
+                return;
+            }
+
+            // Make repository to work with db
+            CredentialRepository repository = new CredentialRepository(context);
+            Credential entity = new Credential {
+                Username = _loginBox.Text,
+                Password = PasswordHasher.HashPassword(_passwordBox.Text),
+                Rights = _roleBox.Text == ROLES[0] ? UserRights.Basic :
+                    _roleBox.Text == ROLES[1] ? UserRights.Editor : UserRights.Admin,
+                WhoAdded = IInformation.DefaultDbSetMaker,
+                WhenAdded = DateTime.Now,
+                Note = null,
+                WhoChanged = null,
+                WhenChanged = null,
+                isDeleted = null
+            };
+            
+            // Add entity into db
+            await repository.AddAsync(entity);
+            MessageBox.Show("Регистрация прошла успешно. Можете войти в профиль.",
+                IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+            context.Database.CloseConnection();
+            context.Dispose();
         }
 
         #region Пользовательские методы

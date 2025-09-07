@@ -9,10 +9,10 @@ namespace gui.Forms {
         private const string REGISTER_NAME = "Регистрация";
 
         public enum ActionType { Authorize, Register }
-        
+
         public Login() {
             InitializeComponent();
-            InitVariables(); 
+            InitVariables();
 
             this.SuspendLayout();
             this.Size = new Size(this.Size.Width, actionStrip.Height + actionControl.Height);
