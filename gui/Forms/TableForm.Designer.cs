@@ -55,6 +55,7 @@
             dbGrid.Size = new Size(900, 361);
             dbGrid.TabIndex = 0;
             dbGrid.CellEndEdit += dbGrid_CellEndEdit;
+            dbGrid.CellEnter += dbGrid_CellEnter;
             dbGrid.CellPainting += dbGrid_CellPainting;
             dbGrid.CellParsing += dbGrid_CellParsing;
             dbGrid.DataError += dbGrid_DataError;

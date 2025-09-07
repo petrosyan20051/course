@@ -1,48 +1,26 @@
-﻿using db.Models;
-using db.Repositories;
-using db.Tools;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Reflection;
-using static gui.Classes.IInformation;
-
-namespace gui.Classes {
+﻿namespace gui.Classes {
 
     public class Tools {
-        // Reoder columns data of datagridview using type of entity
-        public static void ReorderColumnsAccordingToDbContextByType(DataGridView grid, Type entityType) {
-            if (grid is null || entityType is null) {
-                return;
-            }
 
-            // Make genetic type for ReorderColumnsAccordingToDbContext<entityType>
-            var reorderGenericMethod = typeof(Tools)
-                .GetMethod("ReorderColumnsAccordingToDbContext", BindingFlags.Static | BindingFlags.Public)?
-                .MakeGenericMethod(entityType);
-            reorderGenericMethod?.Invoke(null, new object[] { grid });
-        }
-
-        // Reorder columns names in order of declarinhg (see OrderDbContext)
-        public static void ReorderColumnsAccordingToDbContext<TEntity>(DataGridView grid) where TEntity : class {
-            var properties = typeof(TEntity).GetProperties()
-                .OrderByDescending(p => p.GetCustomAttribute<DisplayPriorityAttribute>()?.IsHighPriority ?? true)
-                .ThenBy(p => p.MetadataToken)
-                .ToList();
-
-            // Sort Columns in DataGridView
-            foreach (var prop in properties) {
-                if (grid.Columns.Contains(prop.Name)) {
-                    grid.Columns[prop.Name].DisplayIndex = properties.IndexOf(prop);
-                }
+        public static void ReorderGridColumns(DataGridView grid, string typeName) {
+            switch (typeName) {
+                case "Driver":
+                    grid.Columns["DriverLicenceNumber"].DisplayIndex = 5; break;
+                case "Rate":
+                    grid.Columns["IdlePrice"].DisplayIndex = 5; break;
+                case "TransportVehicle":
+                    grid.Columns["Series"].DisplayIndex = 3;
+                    grid.Columns["RegistrationCode"].DisplayIndex = 4;
+                    grid.Columns["Model"].DisplayIndex = 5;
+                    grid.Columns["Color"].DisplayIndex = 6;
+                    grid.Columns["ReleaseYear"].DisplayIndex = 7;
+                    break;
             }
         }
 
         #region Deprecated
 
-        // Method to convert "input" to type "targetType"
+        /*// Method to convert "input" to type "targetType"
         public static object? TryConvert(object input, Type targetType) {
             var converter = TypeDescriptor.GetConverter(targetType);
             try {
@@ -52,9 +30,9 @@ namespace gui.Classes {
                     $"to type \"{targetType.Name}\"");
             }
 
-        }
+        }*/
 
-        public static dynamic? GetRepositoryByName<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+        /*public static dynamic? GetRepositoryByName<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
             // Finding Id property to determine TKey
             var keyType = entityType?.GetProperty("Id")?.PropertyType;
 
@@ -70,9 +48,9 @@ namespace gui.Classes {
             var repositoryInstance = constructor?.Invoke(new object[] { context }); // make repository
 
             return repositoryInstance;
-        }
+        }*/
 
-        public static IList? DbSetFilterByRole(IList db, UserRights newRights, Type entityType) {
+        /*public static IList? DbSetFilterByRole(IList db, UserRights newRights, Type entityType) {
             if (db is null || entityType is null) {
                 return null;
             }
@@ -85,17 +63,17 @@ namespace gui.Classes {
             var castedDb = castGenericMathod?.Invoke(null, new object[] { db }); // casted: IList db -> List<entityType>
             var castedDbToList = toListGenericMethod?.Invoke(null, new object[] { castedDb }); // db.ToList()
             return (IList)filterGenericMethod?.Invoke(null, new object[] { castedDbToList, newRights }); // FilterByRoles using    
-        }
+        }*/
 
-        private static IList? Filter<TEntity>(List<TEntity> db, UserRights newRights) where TEntity : BaseModel {
-            if (newRights != UserRights.Admin) {
-                return db?.Where(o => o.isDeleted == null).ToList();
-            } else {
-                return db?.ToList();
-            }
-        }
+        /*private static IList? Filter<TEntity>(List<TEntity> db, UserRights newRights) where TEntity : BaseModel {
+             if (newRights != UserRights.Admin) {
+                 return db?.Where(o => o.isDeleted == null).ToList();
+             } else {
+                 return db?.ToList();
+             }
+         }*/
 
-        public static void HideColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
+        /*public static void HideColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
             if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
                 return;
             }
@@ -105,9 +83,9 @@ namespace gui.Classes {
                     grid.Columns[columnName].Visible = false;
                 }
             }
-        }
+        }*/
 
-        public static void ShowUpColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
+        /*public static void ShowUpColumnsFromDataGridView(DataGridView grid, string[] columnNames) {
             if (grid is null || columnNames is null || columnNames.IsNullOrEmpty()) {
                 return;
             }
@@ -117,7 +95,35 @@ namespace gui.Classes {
                     grid.Columns[columnName].Visible = true;
                 }
             }
-        }
+        }*/
+
+        /*// Reoder columns data of datagridview using type of entity
+        public static void ReorderColumnsAccordingToDbContextByType(DataGridView grid, Type entityType) {
+            if (grid is null || entityType is null) {
+                return;
+            }
+
+            // Make genetic type for ReorderColumnsAccordingToDbContext<entityType>
+            var reorderGenericMethod = typeof(Tools)
+                .GetMethod("ReorderColumnsAccordingToDbContext", BindingFlags.Static | BindingFlags.Public)?
+                .MakeGenericMethod(entityType);
+            reorderGenericMethod?.Invoke(null, new object[] { grid });
+        }*/
+
+        /*// Reorder columns names in order of declarinhg (see OrderDbContext)
+        public static void ReorderColumnsAccordingToDbContext<TEntity>(DataGridView grid) where TEntity : class {
+            var properties = typeof(TEntity).GetProperties()
+                .OrderByDescending(p => p.GetCustomAttribute<DisplayPriorityAttribute>()?.IsHighPriority ?? true)
+                .ThenBy(p => p.MetadataToken)
+                .ToList();
+
+            Sort Columns in DataGridView
+             foreach (var prop in properties) {
+                if (grid.Columns.Contains(prop.Name)) {
+                    grid.Columns[prop.Name].DisplayIndex = properties.IndexOf(prop);
+                }
+            }
+        }*/
 
         #endregion
     }

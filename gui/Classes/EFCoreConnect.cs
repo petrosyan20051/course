@@ -1,11 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using db.Contexts;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
-using System.Reflection;
 using static gui.Classes.IInformation;
 
 namespace gui.Classes {
     public static class EFCoreConnect {
+        private static readonly string[] typeName = new string[] { "Customers", "Drivers", "Orders", "Rates", "Routes", "TransportVehicles" };
+
         public static List<string>? GetTableNames<TContext>(TContext context) where TContext : DbContext {
             return context.Model.GetEntityTypes()
                 .Select(e => e.GetTableName())
@@ -15,75 +17,36 @@ namespace gui.Classes {
         }
 
         /// <summary>
-        /// Получает IBindingList для указанной сущности по имени типа.
+        /// Получает IBindingList для указанной сущности по текстовому представлению типа.
         /// </summary>
         /// <param name="context">Контекст базы данных.</param>
         /// <param name="entityTypeName">Имя типа сущности (например, "Order").</param>
         /// <returns>IBindingList для указанной сущности.</returns>
-        public static IBindingList? GetBindingListByEntityName(DbContext context, string entityTypeName) {
-            // Find entity type using typeName
-            var entityType = context.Model.FindEntityType(entityTypeName);
-
-            // Get ClrType of entity
-            var clrType = entityType?.ClrType;
-
-            if (clrType == null) {
+        public static IBindingList? GetBindingListByEntityName(OrderDbContext context, string entityTypeName) {
+            if (!typeName.Contains(entityTypeName))
                 return null;
+            switch (entityTypeName) {
+                case "Customers":
+                    context.Customers.OrderBy(c => c.Id).Load();
+                    return context.Customers.Local.ToBindingList();
+                case "Drivers":
+                    context.Drivers.OrderBy(d => d.Id).Load();
+                    return context.Drivers.Local.ToBindingList();
+                case "Orders":
+                    context.Orders.OrderBy(o => o.Id).Load();
+                    return context.Orders.Local.ToBindingList();
+                case "Rates":
+                    context.Rates.OrderBy(r => r.Id).Load();
+                    return context.Rates.Local.ToBindingList();
+                case "Routes":
+                    context.Routes.OrderBy(r => r.Id).Load();
+                    return context.Routes.Local.ToBindingList();
+                case "TransportVehicles":
+                    context.TransportVehicles.OrderBy(r => r.Id).Load();
+                    return context.TransportVehicles.Local.ToBindingList();
             }
-            // Get DbSet<entityType>
-            var dbSet = typeof(DbContext).GetMethod("Set")?
-                .MakeGenericMethod(clrType)?
-                .Invoke(context, null);
-
-            // Get local implementation of DbSet<T> and convert it into IBindingList
-            var localProperty = dbSet?.GetType().GetProperty("Local");
-
-            var localValue = localProperty?.GetValue(dbSet);
-
-            var toBindingListMethod = localValue.GetType().GetMethod("ToBindingList");
-
-            return (IBindingList)toBindingListMethod?.Invoke(localValue, null);
+            return null;
         }
-
-        public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
-            if (context is null || entityType is null) {
-                return null;
-            }
-
-            // Get DbSet<entityType> 
-            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
-            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
-
-            // Make request and get List<entityType>
-            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
-            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
-
-            // Make BindingList<User>
-            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
-            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
-
-            return bindingList;
-        }
-
-        /*public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
-            if (context is null || entityType is null) {
-                return null;
-            }
-
-            // Get DbSet<entityType> 
-            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
-            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
-
-            // Make request and get List<entityType>
-            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
-            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
-
-            // Make BindingList<User>
-            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
-            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
-
-            return bindingList;
-        }*/
 
         public static bool CheckSqlServerPermissionsForAdmin<TDbContext>(TDbContext context, string userName) where TDbContext : DbContext {
             if (userName == string.Empty) {
@@ -129,5 +92,49 @@ namespace gui.Classes {
                 MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        #region Deprecated
+
+        /*public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+            if (context is null || entityType is null) {
+                return null;
+            }
+
+            // Get DbSet<entityType> 
+            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
+            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
+
+            // Make request and get List<entityType>
+            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
+
+            // Make BindingList<User>
+            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
+            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
+
+            return bindingList;
+        }*/
+
+        /*public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
+            if (context is null || entityType is null) {
+                return null;
+            }
+
+            // Get DbSet<entityType> 
+            var dbSetMethod = typeof(TDbContext)?.GetMethod("Set", Type.EmptyTypes)?.MakeGenericMethod(entityType);
+            dynamic? dbSet = dbSetMethod?.Invoke(context, null); // DbSet<>
+
+            // Make request and get List<entityType>
+            var toListGenericMethod = typeof(Enumerable).GetMethod("ToList", BindingFlags.Static | BindingFlags.Public)?.MakeGenericMethod(entityType);
+            dynamic? list = toListGenericMethod?.Invoke(null, new object[] { dbSet });
+
+            // Make BindingList<User>
+            var bindingListType = typeof(BindingList<>).MakeGenericType(entityType);
+            var bindingList = (IBindingList)Activator.CreateInstance(bindingListType, new object[] { list });
+
+            return bindingList;
+        }*/
+
+        #endregion
     }
 }
