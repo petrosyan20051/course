@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\db\db\db.csproj" />
+    <ProjectReference Include="..\db\db.csproj" />
   </ItemGroup>
 
   <ItemGroup>
