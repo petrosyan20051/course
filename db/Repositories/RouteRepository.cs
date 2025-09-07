@@ -1,4 +1,5 @@
 ﻿using db.Contexts;
+using db.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 using TypeId = int;
@@ -65,7 +66,7 @@ namespace db.Repositories {
                 return false;
             }
 
-            public async Task<TypeId> NewIdToAdd() {
+            public async Task<TypeId> NewIdToAddAsync() {
                 var entities = await GetAllAsync();
                 if (entities == null)
                     return 0; // entities are not found so can use id = 0

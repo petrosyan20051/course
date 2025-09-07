@@ -6,9 +6,28 @@
 
 namespace db.Migrations {
     /// <inheritdoc />
-    public partial class InitMigr : Migration {
+    public partial class InitialMigration : Migration {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder) {
+            migrationBuilder.CreateTable(
+                name: "Credentials",
+                columns: table => new {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rights = table.Column<int>(type: "int", nullable: false),
+                    WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table => {
+                    table.PrimaryKey("PK_Credentials", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Customers",
                 columns: table => new {
@@ -20,9 +39,9 @@ namespace db.Migrations {
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table => {
@@ -41,9 +60,9 @@ namespace db.Migrations {
                     DriverLicenceNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table => {
@@ -61,9 +80,9 @@ namespace db.Migrations {
                     Distance = table.Column<int>(type: "int", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table => {
@@ -82,9 +101,9 @@ namespace db.Migrations {
                     IdlePrice = table.Column<int>(type: "int", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table => {
@@ -100,9 +119,9 @@ namespace db.Migrations {
                     DropAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table => {
@@ -123,9 +142,9 @@ namespace db.Migrations {
                     ReleaseYear = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhoAdded = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WhenAdded = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhoChanged = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WhenChanged = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isDeleted = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table => {
@@ -2917,6 +2936,9 @@ namespace db.Migrations {
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder) {
+            migrationBuilder.DropTable(
+                name: "Credentials");
+
             migrationBuilder.DropTable(
                 name: "Customers");
 

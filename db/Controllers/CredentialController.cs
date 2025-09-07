@@ -5,38 +5,39 @@ using Microsoft.AspNetCore.Mvc;
 using TypeId = int;
 
 namespace db.Controllers {
+
     [ApiController]
     [Route("api/[controller]")]
-    public class RouteController : BaseCrudController<Models.Route, TypeId> {
-        public RouteController(IRepository<Models.Route, int> repository) : base(repository) { }
+    public class CustomerController : BaseCrudController<Customer, TypeId> {
+        public CustomerController(IRepository<Customer, TypeId> repository) : base(repository) { }
 
-        protected override int GetEntityId(Models.Route entity) {
+        protected override int GetEntityId(Customer entity) {
             return entity.Id;
         }
 
         // GET: api/{entity}/GetAll
         [HttpGet("GetAll")]
-        public override async Task<ActionResult<IEnumerable<Models.Route>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Customer>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
         }
 
         // GET: api/{entity}/GetById
         [HttpGet("GetById")]
-        public override async Task<ActionResult<Models.Route>> Get(TypeId id) {
+        public override async Task<ActionResult<Customer>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             return entity is null ? NotFound() : Ok(entity);
         }
 
         // POST: api/{entity}/Post
         [HttpPost("Post")]
-        public override async Task<ActionResult<Models.Route>> Create([FromBody] Models.Route entity) {
+        public override async Task<ActionResult<Customer>> Create([FromBody] Customer entity) {
             await _repository.AddAsync(entity);
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/UpdateById
         [HttpPut("UpdateById")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Models.Route entity) {
+        public override async Task<IActionResult> Update(TypeId id, [FromBody] Customer entity) {
             if (!id.Equals(GetEntityId(entity))) {
                 return BadRequest();
             }

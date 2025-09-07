@@ -1,4 +1,5 @@
 ﻿using db.Contexts;
+using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,8 +33,6 @@ namespace db.Repositories {
         }
 
         public async Task UpdateAsync(Order entity) {
-            //_context.Orders.Attach(entity);
-            //_context.Entry(entity).Property(o => o.CustomerId).IsModified = true;
             _context.Orders.Update(entity);
             await _context.SaveChangesAsync();
         }
@@ -59,7 +58,7 @@ namespace db.Repositories {
             return false;
         }
 
-        public async Task<TypeId> NewIdToAdd() {
+        public async Task<TypeId> NewIdToAddAsync() {
             var entities = await GetAllAsync();
             if (entities == null)
                 return 0; // entities are not found so can use id = 0
