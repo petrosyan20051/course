@@ -115,7 +115,7 @@ namespace gui.Forms {
             } catch (Exception ex) {
                 cellBeforeEdit = string.Empty;
             }
-            
+
         }
 
         private void dbGrid_CellPainting(object sender, DataGridViewCellPaintingEventArgs e) {
