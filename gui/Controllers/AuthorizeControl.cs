@@ -84,7 +84,7 @@ namespace gui.Controllers {
             _loginBox = this.userNameTxtBox;
             _passwordBox = this.passwordTxtBox;
 
-            _secBox = this.secCheckBox;
+            _secBox = this.secComboBox;
             _secBox.Text = _secBox.Items[0]?.ToString();
 
             _dbNameBox.Text = defaultDbName;

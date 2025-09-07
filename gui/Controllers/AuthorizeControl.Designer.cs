@@ -25,7 +25,7 @@
         private void InitializeComponent() {
             enterBtn = new gui.controllers.RoundedButton();
             dbNameBox = new ComboBox();
-            secCheckBox = new ComboBox();
+            secComboBox = new ComboBox();
             secCheckLbl = new Label();
             servNameBox = new ComboBox();
             dbNameLbl = new Label();
@@ -64,18 +64,18 @@
             dbNameBox.Size = new Size(283, 26);
             dbNameBox.TabIndex = 17;
             // 
-            // secCheckBox
+            // secComboBox
             // 
-            secCheckBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            secCheckBox.Font = new Font("Microsoft Sans Serif", 11.25F);
-            secCheckBox.FormattingEnabled = true;
-            secCheckBox.Items.AddRange(new object[] { "Проверка подлинности Windows", "Проверка подлинности SQL Server" });
-            secCheckBox.Location = new Point(209, 110);
-            secCheckBox.Margin = new Padding(4);
-            secCheckBox.Name = "secCheckBox";
-            secCheckBox.Size = new Size(283, 26);
-            secCheckBox.TabIndex = 13;
-            secCheckBox.SelectedIndexChanged += secCheckBox_SelectedIndexChanged;
+            secComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            secComboBox.Font = new Font("Microsoft Sans Serif", 11.25F);
+            secComboBox.FormattingEnabled = true;
+            secComboBox.Items.AddRange(new object[] { "Проверка подлинности Windows", "Проверка подлинности SQL Server" });
+            secComboBox.Location = new Point(209, 110);
+            secComboBox.Margin = new Padding(4);
+            secComboBox.Name = "secComboBox";
+            secComboBox.Size = new Size(283, 26);
+            secComboBox.TabIndex = 13;
+            secComboBox.SelectedIndexChanged += secCheckBox_SelectedIndexChanged;
             // 
             // secCheckLbl
             // 
@@ -182,7 +182,7 @@
             Controls.Add(progressBar);
             Controls.Add(enterBtn);
             Controls.Add(dbNameBox);
-            Controls.Add(secCheckBox);
+            Controls.Add(secComboBox);
             Controls.Add(secCheckLbl);
             Controls.Add(servNameBox);
             Controls.Add(dbNameLbl);
@@ -203,7 +203,7 @@
 
         private controllers.RoundedButton enterBtn;
         private ComboBox dbNameBox;
-        private ComboBox secCheckBox;
+        private ComboBox secComboBox;
         private Label secCheckLbl;
         private ComboBox servNameBox;
         private Label dbNameLbl;
