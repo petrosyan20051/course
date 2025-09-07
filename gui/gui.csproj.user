@@ -19,6 +19,9 @@
     <Compile Update="Controllers\RateCreate.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Controllers\RegisterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Controllers\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>

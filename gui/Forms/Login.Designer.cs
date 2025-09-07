@@ -40,6 +40,7 @@
             actionStrip.Size = new Size(499, 33);
             actionStrip.TabIndex = 13;
             actionStrip.Text = "actionsStrip";
+            actionStrip.ItemClicked += actionStrip_ItemClicked;
             // 
             // authorizeItem
             // 

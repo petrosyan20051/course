@@ -1,5 +1,6 @@
 ﻿using db.Factories;
 using gui.Classes;
+using gui.Forms;
 using Microsoft.EntityFrameworkCore;
 using static db.Custom_Classes.SqlConnect;
 
@@ -13,8 +14,6 @@ namespace gui.Controllers {
         public AuthorizeControl() {
             InitializeComponent();
             InitVariables();
-
-            _secBox.Text = _secBox.Items[0]?.ToString();
         }
 
         private async void enterBtn_Click(object sender, EventArgs e) {
@@ -84,9 +83,13 @@ namespace gui.Controllers {
             _serverNameBox = this.servNameBox;
             _loginBox = this.userNameTxtBox;
             _passwordBox = this.passwordTxtBox;
+
             _secBox = this.secCheckBox;
+            _secBox.Text = _secBox.Items[0]?.ToString();
 
             _dbNameBox.Text = defaultDbName;
+
+            this.Tag = Login.ActionType.Authorize;
         }
 
         #endregion
