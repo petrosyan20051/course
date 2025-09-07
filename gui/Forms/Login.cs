@@ -31,6 +31,8 @@ namespace gui.Forms {
                 actionControl = MakeActionControl(ActionType.Authorize);
             } else if (e.ClickedItem.Text == REGISTER_NAME && (ActionType)actionControl.Tag != ActionType.Register) {
                 actionControl = MakeActionControl(ActionType.Register);
+            } else {
+                return;
             }
 
             if (actionControl == null) {
