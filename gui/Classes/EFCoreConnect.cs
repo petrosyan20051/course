@@ -48,7 +48,27 @@ namespace gui.Classes {
             return null;
         }
 
-        public static bool CheckSqlServerPermissionsForAdmin<TDbContext>(TDbContext context, string userName) where TDbContext : DbContext {
+        public static void ApplyChangesToDatabase(DbContext _context) {
+            try {
+                _context.SaveChanges();
+            } catch (DbUpdateException ex) {
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (InvalidDataException ex) {
+                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Microsoft.Data.SqlClient.SqlException ex) {
+                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (ArgumentNullException ex) {
+                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (InvalidOperationException ex) {
+                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            } catch (Exception ex) {
+                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        #region Deprecated
+
+        /*public static bool CheckSqlServerPermissionsForAdmin<TDbContext>(TDbContext context, string userName) where TDbContext : DbContext {
             if (userName == string.Empty) {
                 return true;
             }
@@ -73,27 +93,7 @@ namespace gui.Classes {
             connection.Close();
 
             return result;
-        }
-
-        public static void ApplyChangesToDatabase(DbContext _context) {
-            try {
-                _context.SaveChanges();
-            } catch (DbUpdateException ex) {
-                MessageBox.Show($"Ошибка при сохранении данных: {ex.InnerException?.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (InvalidDataException ex) {
-                MessageBox.Show($"Некорректные данные: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Microsoft.Data.SqlClient.SqlException ex) {
-                MessageBox.Show($"Ошибка SQL: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (ArgumentNullException ex) {
-                MessageBox.Show($"Аргумент не может быть null: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (InvalidOperationException ex) {
-                MessageBox.Show($"Операция недопустима: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } catch (Exception ex) {
-                MessageBox.Show($"Неизвестная ошибка: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        #region Deprecated
+        }*/
 
         /*public static IBindingList? GetBindingListByEntityType<TDbContext>(TDbContext context, Type entityType) where TDbContext : DbContext {
             if (context is null || entityType is null) {
