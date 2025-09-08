@@ -161,7 +161,7 @@
             menuPnl.Dock = DockStyle.Left;
             menuPnl.Location = new Point(0, 32);
             menuPnl.Name = "menuPnl";
-            menuPnl.Size = new Size(174, 634);
+            menuPnl.Size = new Size(174, 656);
             menuPnl.TabIndex = 1;
             // 
             // gridPnl
@@ -247,7 +247,7 @@
             menuSpl.Enabled = false;
             menuSpl.Location = new Point(174, 32);
             menuSpl.Name = "menuSpl";
-            menuSpl.Size = new Size(2, 634);
+            menuSpl.Size = new Size(2, 656);
             menuSpl.TabIndex = 2;
             menuSpl.TabStop = false;
             // 
@@ -266,7 +266,7 @@
             mainPnlGrid.Dock = DockStyle.Fill;
             mainPnlGrid.Location = new Point(176, 34);
             mainPnlGrid.Name = "mainPnlGrid";
-            mainPnlGrid.Size = new Size(898, 632);
+            mainPnlGrid.Size = new Size(898, 654);
             mainPnlGrid.TabIndex = 4;
             // 
             // styleTip
@@ -294,7 +294,7 @@
             AutoScaleDimensions = new SizeF(9F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(26, 26, 26);
-            ClientSize = new Size(1074, 666);
+            ClientSize = new Size(1074, 688);
             Controls.Add(mainPnlGrid);
             Controls.Add(controlSpl);
             Controls.Add(menuSpl);

@@ -37,6 +37,7 @@
             headerLbl = new Label();
             licenceNumberTxtBox = new TextBox();
             licenceNumberLbl = new Label();
+            cancelBtn = new gui.controllers.RoundedButton();
             SuspendLayout();
             // 
             // enterBtn
@@ -46,7 +47,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F);
-            enterBtn.Location = new Point(126, 477);
+            enterBtn.Location = new Point(44, 477);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 35;
@@ -172,10 +173,28 @@
             licenceNumberLbl.TabIndex = 36;
             licenceNumberLbl.Text = "Номер водительских прав";
             // 
+            // cancelBtn
+            // 
+            cancelBtn.BackColor = SystemColors.AppWorkspace;
+            cancelBtn.BorderRadius = 5;
+            cancelBtn.FlatAppearance.BorderSize = 0;
+            cancelBtn.FlatStyle = FlatStyle.Flat;
+            cancelBtn.Font = new Font("Segoe UI", 16F);
+            cancelBtn.Location = new Point(204, 477);
+            cancelBtn.Name = "cancelBtn";
+            cancelBtn.Size = new Size(141, 44);
+            cancelBtn.TabIndex = 37;
+            cancelBtn.Text = "Отмена";
+            cancelBtn.UseVisualStyleBackColor = false;
+            cancelBtn.Click += cancelBtn_Click;
+            // 
             // DriverCreate
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMargin = new Size(0, 10);
+            Controls.Add(cancelBtn);
             Controls.Add(licenceNumberTxtBox);
             Controls.Add(licenceNumberLbl);
             Controls.Add(enterBtn);
@@ -212,5 +231,6 @@
         private Label headerLbl;
         private TextBox licenceNumberTxtBox;
         private Label licenceNumberLbl;
+        private controllers.RoundedButton cancelBtn;
     }
 }

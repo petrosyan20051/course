@@ -31,6 +31,7 @@
             boardingAddressTxtBox = new TextBox();
             boardingAddressLbl = new Label();
             headerLbl = new Label();
+            roundedButton1 = new gui.controllers.RoundedButton();
             SuspendLayout();
             // 
             // enterBtn
@@ -40,7 +41,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F);
-            enterBtn.Location = new Point(126, 281);
+            enterBtn.Location = new Point(47, 281);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 4;
@@ -112,10 +113,28 @@
             headerLbl.TabIndex = 24;
             headerLbl.Text = "Добавить маршрут";
             // 
+            // roundedButton1
+            // 
+            roundedButton1.BackColor = SystemColors.AppWorkspace;
+            roundedButton1.BorderRadius = 5;
+            roundedButton1.FlatAppearance.BorderSize = 0;
+            roundedButton1.FlatStyle = FlatStyle.Flat;
+            roundedButton1.Font = new Font("Segoe UI", 16F);
+            roundedButton1.Location = new Point(206, 281);
+            roundedButton1.Name = "roundedButton1";
+            roundedButton1.Size = new Size(141, 44);
+            roundedButton1.TabIndex = 34;
+            roundedButton1.Text = "Отмена";
+            roundedButton1.UseVisualStyleBackColor = false;
+            roundedButton1.Click += roundedButton1_Click;
+            // 
             // RouteCreate
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMargin = new Size(0, 10);
+            Controls.Add(roundedButton1);
             Controls.Add(enterBtn);
             Controls.Add(noteTxtBox);
             Controls.Add(noteLbl);
@@ -140,5 +159,6 @@
         private TextBox boardingAddressTxtBox;
         private Label boardingAddressLbl;
         private Label headerLbl;
+        private controllers.RoundedButton roundedButton1;
     }
 }

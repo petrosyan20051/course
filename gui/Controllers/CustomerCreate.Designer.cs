@@ -35,6 +35,7 @@
             surnameTxtBox = new TextBox();
             surnameLbl = new Label();
             headerLbl = new Label();
+            cancelButton = new gui.controllers.RoundedButton();
             SuspendLayout();
             // 
             // enterBtn
@@ -44,7 +45,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F);
-            enterBtn.Location = new Point(124, 391);
+            enterBtn.Location = new Point(51, 391);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 35;
@@ -152,10 +153,28 @@
             headerLbl.TabIndex = 24;
             headerLbl.Text = "Добавить заказчика";
             // 
+            // cancelButton
+            // 
+            cancelButton.BackColor = SystemColors.AppWorkspace;
+            cancelButton.BorderRadius = 5;
+            cancelButton.FlatAppearance.BorderSize = 0;
+            cancelButton.FlatStyle = FlatStyle.Flat;
+            cancelButton.Font = new Font("Segoe UI", 16F);
+            cancelButton.Location = new Point(207, 391);
+            cancelButton.Name = "cancelButton";
+            cancelButton.Size = new Size(141, 44);
+            cancelButton.TabIndex = 36;
+            cancelButton.Text = "Отмена";
+            cancelButton.UseVisualStyleBackColor = false;
+            cancelButton.Click += cancelButton_Click;
+            // 
             // CustomerCreate
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMargin = new Size(0, 10);
+            Controls.Add(cancelButton);
             Controls.Add(enterBtn);
             Controls.Add(noteTxtBox);
             Controls.Add(noteLbl);
@@ -188,5 +207,6 @@
         private TextBox surnameTxtBox;
         private Label surnameLbl;
         private Label headerLbl;
+        private controllers.RoundedButton cancelButton;
     }
 }

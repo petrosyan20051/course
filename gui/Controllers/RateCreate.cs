@@ -52,6 +52,10 @@ namespace gui.Controllers {
             _grid?.CurrentCell = _grid.Rows[_grid.Rows.Count - 1].Cells[0];
         }
 
+        private void roundedButton1_Click(object sender, EventArgs e) {
+            this.Dispose();
+        }
+
         #region Пользовательские функции
 
         void InitVariables() {

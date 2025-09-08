@@ -41,6 +41,7 @@
             colorLbl = new Label();
             releaseYearTxtBox = new TextBox();
             releaseYearLbl = new Label();
+            cancelBtn = new gui.controllers.RoundedButton();
             SuspendLayout();
             // 
             // enterBtn
@@ -50,7 +51,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F);
-            enterBtn.Location = new Point(221, 611);
+            enterBtn.Location = new Point(132, 600);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 35;
@@ -212,10 +213,28 @@
             releaseYearLbl.TabIndex = 40;
             releaseYearLbl.Text = "Год выпуска";
             // 
+            // cancelBtn
+            // 
+            cancelBtn.BackColor = SystemColors.AppWorkspace;
+            cancelBtn.BorderRadius = 5;
+            cancelBtn.FlatAppearance.BorderSize = 0;
+            cancelBtn.FlatStyle = FlatStyle.Flat;
+            cancelBtn.Font = new Font("Segoe UI", 16F);
+            cancelBtn.Location = new Point(306, 600);
+            cancelBtn.Name = "cancelBtn";
+            cancelBtn.Size = new Size(141, 44);
+            cancelBtn.TabIndex = 41;
+            cancelBtn.Text = "Отмена";
+            cancelBtn.UseVisualStyleBackColor = false;
+            cancelBtn.Click += cancelBtn_Click;
+            // 
             // TransportVehicleCreate
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMargin = new Size(0, 10);
+            Controls.Add(cancelBtn);
             Controls.Add(releaseYearTxtBox);
             Controls.Add(releaseYearLbl);
             Controls.Add(colorTxtBox);
@@ -260,5 +279,6 @@
         private Label colorLbl;
         private TextBox releaseYearTxtBox;
         private Label releaseYearLbl;
+        private controllers.RoundedButton cancelBtn;
     }
 }

@@ -37,6 +37,7 @@
             headerLbl = new Label();
             idlePriceTxtBox = new TextBox();
             idlePriceLbl = new Label();
+            roundedButton1 = new gui.controllers.RoundedButton();
             SuspendLayout();
             // 
             // enterBtn
@@ -46,7 +47,7 @@
             enterBtn.FlatAppearance.BorderSize = 0;
             enterBtn.FlatStyle = FlatStyle.Flat;
             enterBtn.Font = new Font("Segoe UI", 16F);
-            enterBtn.Location = new Point(126, 473);
+            enterBtn.Location = new Point(56, 473);
             enterBtn.Name = "enterBtn";
             enterBtn.Size = new Size(141, 44);
             enterBtn.TabIndex = 35;
@@ -171,10 +172,28 @@
             idlePriceLbl.TabIndex = 36;
             idlePriceLbl.Text = "Цена ожидания подачи (руб./мин.)";
             // 
+            // roundedButton1
+            // 
+            roundedButton1.BackColor = SystemColors.AppWorkspace;
+            roundedButton1.BorderRadius = 5;
+            roundedButton1.FlatAppearance.BorderSize = 0;
+            roundedButton1.FlatStyle = FlatStyle.Flat;
+            roundedButton1.Font = new Font("Segoe UI", 16F);
+            roundedButton1.Location = new Point(212, 473);
+            roundedButton1.Name = "roundedButton1";
+            roundedButton1.Size = new Size(141, 44);
+            roundedButton1.TabIndex = 38;
+            roundedButton1.Text = "Отмена";
+            roundedButton1.UseVisualStyleBackColor = false;
+            roundedButton1.Click += roundedButton1_Click;
+            // 
             // RateCreate
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
+            AutoScrollMargin = new Size(0, 10);
+            Controls.Add(roundedButton1);
             Controls.Add(idlePriceTxtBox);
             Controls.Add(idlePriceLbl);
             Controls.Add(enterBtn);
@@ -211,5 +230,6 @@
         private Label headerLbl;
         private TextBox idlePriceTxtBox;
         private Label idlePriceLbl;
+        private controllers.RoundedButton roundedButton1;
     }
 }
