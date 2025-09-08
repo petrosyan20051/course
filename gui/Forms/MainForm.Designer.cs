@@ -295,7 +295,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(26, 26, 26);
             ClientSize = new Size(1074, 666);
-            ControlBox = false;
             Controls.Add(mainPnlGrid);
             Controls.Add(controlSpl);
             Controls.Add(menuSpl);
@@ -303,10 +302,10 @@
             Controls.Add(controlPnl);
             Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5, 4, 5, 4);
             MinimumSize = new Size(400, 300);
             Name = "MainForm";
-            ShowIcon = false;
             Text = "Курсовая работа";
             Load += MainForm_Load;
             MouseDown += MainForm_MouseDown;
