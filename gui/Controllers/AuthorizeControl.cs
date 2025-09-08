@@ -10,7 +10,8 @@ namespace gui.Controllers {
         private TextBox? _loginBox, _passwordBox;
         private ComboBox _serverNameBox, _dbNameBox, _secBox;
 
-        const string defaultDbName = "KR";
+        const string DEFAULTDBNAME = "KR";
+        private readonly string[] SECURITY = { "Проверка подлинности Windows", "Проверка подлинности SQL Server" };
 
         public AuthorizeControl() {
             InitializeComponent();
@@ -38,10 +39,14 @@ namespace gui.Controllers {
             progressBar.Visible = true;
 
             // Create OrderDbContext 
-            OrderDbContext context = new OrderDbContextFactory().CreateCustomDbContext(new string[]{
-                _loginBox.Enabled ? ((int)ConnectMode.SqlServerSecure).ToString() : ((int)ConnectMode.WindowsSecure).ToString(),
-                    _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text
-            });
+            OrderDbContext context = null;
+            if (_secBox.Text == SECURITY[0]) {
+                context = new OrderDbContextFactory().CreateDbContext([]);
+            } else if (_secBox.Text == SECURITY[1]) {
+                string connectMode = _loginBox.Enabled ? ((int)ConnectMode.SqlServerSecure).ToString() : ((int)ConnectMode.WindowsSecure).ToString();
+                context = new OrderDbContextFactory().CreateCustomDbContext(
+                    new string[] { connectMode, _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text });
+            }
 
             // Try to connect to db
             bool connect = false;
@@ -57,8 +62,8 @@ namespace gui.Controllers {
 
             // Check whether user exists
             var user = context.Credentials.FirstOrDefault(c => c.Username == _loginBox.Text);
-            if (user == null) {
-                MessageBox.Show($"Пользователь с именем {_loginBox.Text} не существует.{Environment.NewLine}" +
+            if (user == null && _secBox.Text == SECURITY[1]) {
+                MessageBox.Show($"Пользователь с именем \"{_loginBox.Text}\" не существует.{Environment.NewLine}" +
                     $"Проверьте настройки подключения.",
                     IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 context.Database.CloseConnection();
@@ -67,7 +72,7 @@ namespace gui.Controllers {
             }
 
             // Check whether user's password is correct
-            if (!PasswordHasher.VerifyPassword(_passwordBox.Text, user.Password)) {
+            if (!PasswordHasher.VerifyPassword(_passwordBox.Text, user?.Password) && _secBox.Text == SECURITY[1]) {
                 MessageBox.Show($"Введён неверный пароль.{Environment.NewLine}" +
                     $"Проверьте настройки подключения.",
                     IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -78,9 +83,13 @@ namespace gui.Controllers {
 
             // Tag:
             //  1. OrderDbContext
-            //  2. Whether user is admin (IInformation.UserRights)
+            //  2. User rights (IInformation.UserRights)
             //  3. User's name (returns "Локальная БД" if local db)
-            this.Parent.Tag = new object[] { context, user.Rights, (_loginBox.Enabled ? _loginBox.Text : "Локальная БД")};
+            this.Parent.Tag = new object[] { 
+                context,
+                _secBox.Text == SECURITY[1] ? user.Rights : IInformation.UserRights.Admin, 
+                _loginBox.Enabled ? _loginBox.Text : "Локальная БД"
+            };
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Parent.Dispose();
@@ -108,7 +117,7 @@ namespace gui.Controllers {
             _secBox = this.secComboBox;
             _secBox.Text = _secBox.Items[0]?.ToString();
 
-            _dbNameBox.Text = defaultDbName;
+            _dbNameBox.Text = DEFAULTDBNAME;
 
             this.Tag = Login.ActionType.Authorize;
         }
