@@ -97,7 +97,6 @@
             servNameBox.Name = "servNameBox";
             servNameBox.Size = new Size(283, 26);
             servNameBox.TabIndex = 11;
-            servNameBox.Text = "localhost";
             // 
             // dbNameLbl
             // 

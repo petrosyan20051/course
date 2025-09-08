@@ -117,7 +117,13 @@ namespace gui.Controllers {
             _secBox = this.secComboBox;
             _secBox.Text = _secBox.Items[0]?.ToString();
 
+
+            #if DEBUG
+
             _dbNameBox.Text = DEFAULTDBNAME;
+            _serverNameBox.Text = "localhost";
+
+            #endif
 
             this.Tag = Login.ActionType.Authorize;
         }
