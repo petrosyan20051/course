@@ -345,8 +345,8 @@ namespace gui.Forms {
                 return;
             }
 
-            _currentForm.Rights = (bool)args[1] ? UserRights.Admin : UserRights.Basic;
-            _currentForm.UpdateForm(args[0] as DbContext);
+            _currentForm.Rights = (UserRights)args[1];
+            _currentForm.UpdateForm(args[0] as DbContext, _currentForm.Rights);
 
             userTip.SetToolTip(_userBtn, $"Имя пользователя: {args[2]}");
             _currentForm.Tag = args[2]; // form contains name of user

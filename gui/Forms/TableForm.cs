@@ -300,29 +300,19 @@ namespace gui.Forms {
             MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public void UpdateForm(DbContext context, UserRights? userRights = null) {
+        public void UpdateForm(DbContext context, UserRights userRights) {
             _context = context as OrderDbContext;
             if (_context == null) {
                 return;
             }
 
-            // Update user rights
-            if (userRights != null) {
-                Rights = (UserRights)userRights;
-            }
-
-            // Combobox source: OrderDbContext table names
+           // Combobox source: OrderDbContext table names
             _tblCmBox.DataSource = EFCoreConnect.GetTableNames(_context)
                 .Where(n => n != "Credentials")
                 .ToList();
 
             // Get source for datagridview
-            try {
-                _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, _tblCmBox.Text);
-            } catch (Exception ex) {
-                MessageBox.Show($"Произошла ошибка загрузки данных: {ex.Message}", AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, _tblCmBox.Text);
 
             FilterColumnsByRights();
 
@@ -338,11 +328,29 @@ namespace gui.Forms {
 
             // Install enability for controllers
 
-            _grid.ReadOnly = Rights == UserRights.Admin ? false : true; // install right to edit db
-            _setAdd.Enabled = Rights == UserRights.Admin ? true : false; // install right to add sets to db
-            _setDelete.Enabled = Rights == UserRights.Admin ? true : false; // install right to remove sets from db
-            _setRecover.Enabled = Rights == UserRights.Admin ? true : false; // install right to recover sets from db
+            _grid.ReadOnly = Rights switch {
+                UserRights.Basic => true,
+                UserRights.Editor => false,
+                UserRights.Admin => false
+            }; // install rights to edit db
 
+            _setAdd.Enabled = Rights switch {
+                UserRights.Basic => false,
+                UserRights.Editor => true,
+                UserRights.Admin => true
+            }; // install rights to add sets to db
+ 
+            _setDelete.Enabled = Rights switch {
+                UserRights.Basic => false,
+                UserRights.Editor => false,
+                UserRights.Admin => true
+            }; // install rights to remove sets from db
+
+            _setRecover.Enabled = Rights switch {
+                UserRights.Basic => false,
+                UserRights.Editor => false,
+                UserRights.Admin => true
+            };  // install rights to recover sets from db
         }
 
         private void FilterColumnsByRights() {

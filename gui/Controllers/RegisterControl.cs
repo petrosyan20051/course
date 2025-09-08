@@ -14,7 +14,7 @@ namespace gui.Controllers {
         TextBox _loginBox, _passwordBox;
         ComboBox _roleBox;
 
-        private static readonly string[] ROLES = ["Базовый", "Редактор", "Администратор" ];
+        private static readonly string[] ROLES = ["Базовый пользователь", "Редактор", "Администратор" ];
 
         public RegisterControl() {
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace gui.Controllers {
                     $"1. Одну латинскую букву нижнего и верхнего регистра.{Environment.NewLine}" +
                     $"2. Одну цифру.{Environment.NewLine}" +
                     $"3. Один спецсимвол.{Environment.NewLine}" +
-                    $"Длина пароль должен быть не менее 8 символов.",
+                    $"Длина пароля должен быть не менее 8 символов.",
                     IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
