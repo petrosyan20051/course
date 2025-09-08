@@ -1,4 +1,5 @@
-﻿using db.Factories;
+﻿using db.Contexts;
+using db.Factories;
 using gui.Classes;
 using gui.Forms;
 using Microsoft.EntityFrameworkCore;
@@ -37,13 +38,14 @@ namespace gui.Controllers {
             progressBar.Visible = true;
 
             // Create OrderDbContext 
-            var dbContext = new OrderDbContextFactory().CreateCustomDbContext(
-                new string[] { _loginBox.Enabled ? ((int)ConnectMode.SqlServerSecure).ToString() : ((int)ConnectMode.WindowsSecure).ToString(),
-                    _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text });
+            OrderDbContext context = new OrderDbContextFactory().CreateCustomDbContext(new string[]{
+                _loginBox.Enabled ? ((int)ConnectMode.SqlServerSecure).ToString() : ((int)ConnectMode.WindowsSecure).ToString(),
+                    _serverNameBox.Text, _dbNameBox.Text, _loginBox.Text, _passwordBox.Text
+            });
 
             // Try to connect to db
             bool connect = false;
-            await Task.Run(() => connect = dbContext.Database.CanConnect());
+            await Task.Run(() => connect = context.Database.CanConnect());
             progressBar.Visible = false;
             if (!connect) {
                 MessageBox.Show(
@@ -53,13 +55,32 @@ namespace gui.Controllers {
                 return;
             }
 
+            // Check whether user exists
+            var user = context.Credentials.FirstOrDefault(c => c.Username == _loginBox.Text);
+            if (user == null) {
+                MessageBox.Show($"Пользователь с именем {_loginBox.Text} не существует.{Environment.NewLine}" +
+                    $"Проверьте настройки подключения.",
+                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                context.Database.CloseConnection();
+                context.Dispose();
+                return;
+            }
+
+            // Check whether user's password is correct
+            if (!PasswordHasher.VerifyPassword(_passwordBox.Text, user.Password)) {
+                MessageBox.Show($"Введён неверный пароль.{Environment.NewLine}" +
+                    $"Проверьте настройки подключения.",
+                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                context.Database.CloseConnection();
+                context.Dispose();
+                return;
+            }
+
             // Tag:
             //  1. OrderDbContext
-            //  2. Whether user is admin (bool)
+            //  2. Whether user is admin (IInformation.UserRights)
             //  3. User's name (returns "Локальная БД" if local db)
-            this.Parent.Tag = new object[] { dbContext,
-                EFCoreConnect.CheckSqlServerPermissionsForAdmin(dbContext as DbContext, _loginBox.Text),
-                (_loginBox.Enabled ? _loginBox.Text : "Локальная БД")};
+            this.Parent.Tag = new object[] { context, user.Rights, (_loginBox.Enabled ? _loginBox.Text : "Локальная БД")};
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Parent.Dispose();
