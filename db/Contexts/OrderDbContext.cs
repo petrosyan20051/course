@@ -33,7 +33,7 @@ namespace db.Contexts {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Customer>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd().HasColumnOrder(1);
                 entity.Property(e => e.Forename).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.Surname).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.PhoneNumber).IsRequired().HasColumnOrder(4);
@@ -52,7 +52,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Driver>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd().HasColumnOrder(1);
                 entity.Property(e => e.Forename).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.Surname).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.PhoneNumber).IsRequired().HasColumnOrder(4);
@@ -72,7 +72,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Models.Route>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd().HasColumnOrder(1);
                 entity.Property(e => e.BoardingAddress).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.DropAddress).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(4);
@@ -89,7 +89,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<TransportVehicle>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
                 entity.Property(e => e.DriverId).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.Number).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.Series).IsRequired().HasColumnOrder(4);
@@ -111,7 +111,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Rate>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
                 entity.Property(e => e.Forename).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.DriverId).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.VehicleId).IsRequired().HasColumnOrder(4);
@@ -131,7 +131,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Order>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
                 entity.Property(e => e.CustomerId).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.RouteId).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.RateId).IsRequired().HasColumnOrder(4);
@@ -150,7 +150,7 @@ namespace db.Contexts {
             ///////////////////////////
 
             modelBuilder.Entity<Credential>(entity => {
-                entity.Property(e => e.Id).IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
                 entity.Property(e => e.Username).IsRequired().HasColumnOrder(2);
                 entity.Property(e => e.Password).IsRequired().HasColumnOrder(3);
                 entity.Property(e => e.Rights).IsRequired().HasColumnOrder(4);

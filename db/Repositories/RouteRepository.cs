@@ -49,7 +49,6 @@ namespace db.Repositories {
                 if (id == -1)
                     throw new DbUpdateException("Database has no available id for new entity");
                 var entity = new Models.Route {
-                    Id = id,
                     BoardingAddress = boardingAddress,
                     DropAddress = dropAddress,
                     WhoAdded = whoAdded,

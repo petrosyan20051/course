@@ -54,7 +54,6 @@ namespace db.Repositories {
             if (id == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
             var entity = new Credential {
-                Id = id,
                 Username = username,
                 Password = password,
                 Rights = Rights,
@@ -92,11 +91,33 @@ namespace db.Repositories {
         }
 
         public async Task<TypeId> NewIdToAddAsync() {
-            throw new NotImplementedException();
+            var entities = await GetAllAsync();
+            if (entities == null)
+                return 0; // entities are not found so can use id = 0
+
+            // Get All deleted Ids in ascending order
+            var Ids = entities
+                .Where(e => e.isDeleted != null || e.isDeleted is null)
+                .Select(e => e.Id)
+                .OrderBy(id => id)
+                .ToList();
+            if (Ids.Last() == TypeId.MaxValue) {
+                return -1; // all seats are reserved
+            }
+
+            return Ids.Last() + 1; // maybe all seats are reserved
         }
 
         public async Task<bool> RecoverAsync(TypeId id) {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+            if (entity != null) {
+                entity.isDeleted = null;
+                entity.WhenChanged = DateTime.Now;
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            return false;
         }
     }
 }

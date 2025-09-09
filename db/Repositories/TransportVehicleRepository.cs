@@ -56,7 +56,6 @@ namespace db.Repositories {
             if (id == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
             var entity = new TransportVehicle {
-                Id = id,
                 DriverId = driverId,
                 Number = number,
                 Series = series,
