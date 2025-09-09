@@ -2,7 +2,7 @@
 using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
@@ -13,11 +13,11 @@ namespace db.Repositories {
             _context = context;
         }
 
-        public async Task<Order> GetByIdAsync(TypeId id) {
+        public async Task<Order?> GetByIdAsync(TypeId id) {
             return await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync() {
+        public async Task<IEnumerable<Order>?> GetAllAsync() {
             return await _context.Orders.ToListAsync();
         }
 
@@ -30,6 +30,37 @@ namespace db.Repositories {
             }
             await _context.Orders.AddAsync(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddAsync(TypeId customerId, TypeId routeId, TypeId rateId, int distance, 
+            string whoAdded, DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, 
+            string? note = null, DateTime? isDeleted = null) {
+
+            if (whoAdded.IsNullOrEmpty()) {
+                throw new ArgumentNullException("\"Who added\" must be no empty string");
+            }
+
+            if (distance <= 0)
+                throw new ArgumentException("Distance must be positive integer");
+            
+            TypeId id = await NewIdToAddAsync();
+            if (id == -1)
+                throw new DbUpdateException("Database has no available id for new entity");
+            var entity = new Order {
+                Id = id,
+                CustomerId = customerId,
+                RouteId = routeId,  
+                RateId = rateId,
+                Distance = distance,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(Order entity) {

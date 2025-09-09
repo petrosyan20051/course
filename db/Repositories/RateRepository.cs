@@ -2,7 +2,7 @@
 using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
@@ -14,11 +14,11 @@ namespace db.Repositories {
                 _context = context;
             }
 
-            public async Task<Rate> GetByIdAsync(TypeId id) {
+            public async Task<Rate?> GetByIdAsync(TypeId id) {
                 return await _context.Rates.FirstOrDefaultAsync(o => o.Id == id);
             }
 
-            public async Task<IEnumerable<Rate>> GetAllAsync() {
+            public async Task<IEnumerable<Rate>?> GetAllAsync() {
                 return await _context.Rates.ToListAsync();
             }
 
@@ -31,6 +31,44 @@ namespace db.Repositories {
                 }
                 await _context.Rates.AddAsync(entity);
                 await _context.SaveChangesAsync();
+            }
+
+            public async Task AddAsync(string forename, TypeId driverId, TypeId vehicleId, int movePrice,
+            int idlePrice, string model, string whoAdded, DateTime whenAdded, string? whoChanged = null, 
+            DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
+
+                if (forename.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("Forename must be no empty string");
+                } else if (model.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("Model must be no empty string");
+                } else if (whoAdded.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("\"Who added\" must be no empty string");
+                }
+
+                if (movePrice <= 0)
+                    throw new ArgumentException("Move price must be positive integer");
+                else if (idlePrice <= 0)
+                    throw new ArgumentException("Idle price must be positive integer");
+
+                TypeId id = await NewIdToAddAsync();
+                if (id == -1)
+                    throw new DbUpdateException("Database has no available id for new entity");
+                var entity = new Rate {
+                    Id = id,
+                    Forename = forename,
+                    DriverId = driverId,    
+                    VehicleId = vehicleId,
+                    MovePrice = movePrice,
+                    IdlePrice = idlePrice,
+                    WhoAdded = whoAdded,
+                    WhenAdded = whenAdded,
+                    WhoChanged = whoChanged,
+                    WhenChanged = whenChanged,
+                    Note = note,
+                    isDeleted = isDeleted
+                };
+
+                await AddAsync(entity);
             }
 
             public async Task UpdateAsync(Rate entity) {

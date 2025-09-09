@@ -2,7 +2,7 @@
 using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
@@ -14,11 +14,11 @@ namespace db.Repositories {
         }
 
         // Async versions
-        public async Task<IEnumerable<TransportVehicle>> GetAllAsync() {
+        public async Task<IEnumerable<TransportVehicle>?> GetAllAsync() {
             return await _context.TransportVehicles.ToListAsync();
         }
 
-        public async Task<TransportVehicle> GetByIdAsync(TypeId id) {
+        public async Task<TransportVehicle?> GetByIdAsync(TypeId id) {
             return await _context.TransportVehicles.FirstOrDefaultAsync(o => o.Id == id);
         }
 
@@ -26,11 +26,53 @@ namespace db.Repositories {
             var transportVehicle = await _context.TransportVehicles
                 .Where(o => o.Id == entity.Id)
                 .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (transportVehicle != null && transportVehicle.isDeleted is null) {
+            if (transportVehicle != null) {
                 throw new InvalidDataException("New entity must have original id");
             }
             await _context.TransportVehicles.AddAsync(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddAsync(TypeId driverId, string number, string series, 
+            int registrationCode, string model, string color, string releaseYear, string whoAdded,
+            DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
+            DateTime? isDeleted = null) {
+
+            if (number.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Number must be no empty string");
+            } else if (series.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Series must be no empty string");
+            } else if (model.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Model must be no empty string");
+            } else if (color.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Color must be no empty string");
+            } else if (releaseYear.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Release year must be no empty string");
+            } else if (whoAdded.IsNullOrEmpty()) {
+                throw new ArgumentNullException("\"Who added\" must be no empty string");
+            }
+
+            TypeId id = await NewIdToAddAsync();
+            if (id == -1)
+                throw new DbUpdateException("Database has no available id for new entity");
+            var entity = new TransportVehicle {
+                Id = id,
+                DriverId = driverId,
+                Number = number,
+                Series = series,
+                RegistrationCode = registrationCode,
+                Model = model,
+                Color = color,
+                ReleaseYear = releaseYear,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(TransportVehicle entity) {

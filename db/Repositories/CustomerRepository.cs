@@ -2,7 +2,7 @@
 using db.Interfaces;
 using db.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
@@ -13,11 +13,11 @@ namespace db.Repositories {
             _context = context;
         }
 
-        public async Task<Customer> GetByIdAsync(TypeId id) {
+        public async Task<Customer?> GetByIdAsync(TypeId id) {
             return await _context.Customers.FirstOrDefaultAsync(o => o.Id == id);
         }
 
-        public async Task<IEnumerable<Customer>> GetAllAsync() {
+        public async Task<IEnumerable<Customer>?> GetAllAsync() {
             return await _context.Customers.ToListAsync();
         }
 
@@ -30,6 +30,48 @@ namespace db.Repositories {
             }
             await _context.Customers.AddAsync(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task AddAsync(string forename, string surname, string phoneNumber, string email, 
+            string whoAdded, DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, 
+            string? note = null, DateTime? isDeleted = null) {
+
+            if (forename.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Forename must be no empty string");
+            } else if (surname.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Surname must be no empty string");
+            } else if (phoneNumber.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Phone number must be no empty string");
+            } else if (email.IsNullOrEmpty()) {
+                throw new ArgumentNullException("Email must be no empty string");
+            } else if (whoAdded.IsNullOrEmpty()) {
+                throw new ArgumentNullException("\"Who added\" must be no empty string");
+            }
+
+            if (!Customer.PhoneNumberValidate(phoneNumber)) {
+                throw new InvalidDataException("Ivalid phone number");
+            } else if (!Customer.EmailValidate(email)) {
+                throw new InvalidDataException("Ivalid phone email");
+            }
+
+            TypeId id = await NewIdToAddAsync();
+            if (id == -1)
+                throw new DbUpdateException("Database has no available id for new entity");
+            var entity = new Customer {
+                Id = id,
+                Forename = forename,
+                Surname = surname,
+                PhoneNumber = phoneNumber,
+                Email = email,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(Customer entity) {
