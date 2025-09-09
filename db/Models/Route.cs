@@ -11,12 +11,12 @@ namespace db.Models {
         public TypeId Id { get; set; }
 
         [Display(Order = 2)]
-        public string BoardingAddress { get; set; } = string.Empty;
+        public required string BoardingAddress { get; set; }
         [Display(Order = 3)]
-        public string DropAddress { get; set; } = string.Empty;
+        public required string DropAddress { get; set; }
 
         [Display(Order = 4)]
-        public string WhoAdded { get; set; } = string.Empty;
+        public required string WhoAdded { get; set; }
         [Display(Order = 5)]
         public DateTime WhenAdded { get; set; }
         [Display(Order = 6)]

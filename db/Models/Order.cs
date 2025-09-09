@@ -27,7 +27,7 @@ namespace db.Models {
         public int Distance { get; set; }
 
         [Display(Order = 6)]
-        public string WhoAdded { get; set; } = string.Empty;
+        public required string WhoAdded { get; set; }
         [Display(Order = 7)]
         public DateTime WhenAdded { get; set; }
         [Display(Order = 8)]

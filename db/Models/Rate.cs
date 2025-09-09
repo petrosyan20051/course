@@ -12,7 +12,7 @@ namespace db.Models {
         public TypeId Id { get; set; }
 
         [Display(Order = 2)]
-        public string Forename { get; set; } = string.Empty;
+        public required string Forename { get; set; }
 
         [ForeignKey("Driver")]
         [Display(Order = 3)]
@@ -28,7 +28,7 @@ namespace db.Models {
         public int IdlePrice { set; get; }
 
         [Display(Order = 7)]
-        public string WhoAdded { get; set; } = string.Empty;
+        public required string WhoAdded { get; set; }
         [Display(Order = 8)]
         public DateTime WhenAdded { get; set; }
         [Display(Order = 9)]

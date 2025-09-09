@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using TypeId = int;
 
 namespace db.Models {
@@ -11,16 +12,16 @@ namespace db.Models {
         public TypeId Id { get; set; }
 
         [Display(Order = 2)]
-        public string Forename { get; set; } = string.Empty;
+        public required string Forename { get; set; }
         [Display(Order = 3)]
-        public string Surname { get; set; } = string.Empty;
+        public required string Surname { get; set; }
         [Display(Order = 4)]
-        public string PhoneNumber { get; set; } = string.Empty;
+        public required string PhoneNumber { get; set; }
         [Display(Order = 5)]
-        public string Email { get; set; } = string.Empty;
+        public required string Email { get; set; }
 
         [Display(Order = 6)]
-        public string WhoAdded { get; set; } = string.Empty;
+        public required string WhoAdded { get; set; }
         [Display(Order = 7)]
         public DateTime WhenAdded { get; set; }
         [Display(Order = 8)]
@@ -33,5 +34,43 @@ namespace db.Models {
         public DateTime? isDeleted { get; set; } = null;
 
         //public ICollection<Order> orders { get; set; } = new List<Order>();
+
+        public static bool PhoneNumberValidate(string phoneNumber) {
+            if (phoneNumber.IsNullOrEmpty() || phoneNumber.Length <= 7) {
+                return false;
+            } else if (phoneNumber.StartsWith("+7") && phoneNumber.Length != 9 &&
+                phoneNumber.Any(c => !char.IsDigit(c))) {
+                return false;
+            } else if (!phoneNumber.StartsWith("+7") && phoneNumber.Length != 8 &&
+                phoneNumber.Any(c => !char.IsDigit(c))) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool EmailValidate(string email) {
+            if (string.IsNullOrWhiteSpace(email) || email.Length > 254)
+                return false;
+
+            // Checking whether '@' exists
+            int atIndex = email.IndexOf('@');
+            if (atIndex <= 0 || atIndex == email.Length - 1)
+                return false;
+
+            // Check substring before '@'
+            string localPart = email.Substring(0, atIndex);
+            if (localPart.Length > 64)
+                return false;
+
+            // Check domen substring
+            string domainPart = email.Substring(atIndex + 1);
+            if (domainPart.Length < 2 || !domainPart.Contains('.'))
+                return false;
+
+            // Regular expression for base validation
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            return Regex.IsMatch(email, pattern);
+        }
     }
 }

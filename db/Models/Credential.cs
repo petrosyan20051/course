@@ -11,14 +11,14 @@ namespace db.Models {
         public TypeId Id { get; set; }
 
         [Display(Order = 2)]
-        public string Username { get; set; }
+        public required string Username { get; set; }
         [Display(Order = 3)]
-        public string Password { get; set; }
+        public required string Password { get; set; }
         [Display(Order = 4)]
         public UserRights Rights { get; set; }
 
         [Display(Order = 5)]
-        public string WhoAdded { get; set; } = string.Empty;
+        public required string WhoAdded { get; set; }
         [Display(Order = 6)]
         public DateTime WhenAdded { get; set; }
         [Display(Order = 7)]

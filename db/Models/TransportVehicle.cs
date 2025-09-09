@@ -16,20 +16,20 @@ namespace db.Models {
         public TypeId DriverId { get; set; }
 
         [Display(Order = 2)]
-        public string Number { get; set; } = string.Empty;
+        public required string Number { get; set; }
         [Display(Order = 3)]
-        public string Series { get; set; } = string.Empty;
+        public required string Series { get; set; }
         [Display(Order = 4)]
         public int RegistrationCode { get; set; }
         [Display(Order = 5)]
-        public string Model { get; set; } = string.Empty;
+        public required string Model { get; set; }
         [Display(Order = 6)]
-        public string Color { get; set; } = string.Empty;
+        public required string Color { get; set; }
         [Display(Order = 7)]
-        public string ReleaseYear { get; set; } = string.Empty;
+        public required string ReleaseYear { get; set; }
 
         [Display(Order = 8)]
-        public string WhoAdded { get; set; } = string.Empty;
+        public required string WhoAdded { get; set; }
         [Display(Order = 9)]
         public DateTime WhenAdded { get; set; }
         [Display(Order = 10)]
