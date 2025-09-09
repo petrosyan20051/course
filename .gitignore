@@ -2,3 +2,4 @@
 .vs/
 db/bin
 db/obj
+db/Migrations/
