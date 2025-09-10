@@ -42,5 +42,9 @@ namespace db.Models {
         //public ICollection<Customer> Customers { get; set; } = new List<Customer>();
         //public ICollection<Route> Routes { get; set; } = new List<Route>();
         //public ICollection<Rate> Rates { get; set; } = new List<Rate>();
+
+        public static bool DistanceValidate(int distance) {
+            return distance > 0;
+        }
     }
 }

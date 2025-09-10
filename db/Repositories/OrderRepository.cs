@@ -40,9 +40,17 @@ namespace db.Repositories {
                 throw new ArgumentNullException("\"Who added\" must be no empty string");
             }
 
-            if (distance <= 0)
+            if (!Order.DistanceValidate(distance))
                 throw new ArgumentException("Distance must be positive integer");
-            
+
+            if (await _context.Customers.AnyAsync(c => c.Id == customerId) == false) {
+                throw new InvalidDataException($"Customer with id = {customerId} does not exist");
+            } else if (await _context.Routes.AnyAsync(r => r.Id == routeId) == false) {
+                throw new InvalidDataException($"Route with id = {routeId} does not exist");
+            } else if (await _context.Rates.AnyAsync(r => r.Id == rateId) == false) {
+                throw new InvalidDataException($"Rate with id = {rateId} does not exist");
+            }
+
             TypeId id = await NewIdToAddAsync();
             if (id == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
