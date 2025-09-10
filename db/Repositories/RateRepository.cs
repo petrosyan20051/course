@@ -45,12 +45,18 @@ namespace db.Repositories {
                     throw new ArgumentNullException("\"Who added\" must be no empty string");
                 }
 
-                if (movePrice <= 0)
+                if (!Rate.MovePriceValidate(movePrice))
                     throw new ArgumentException("Move price must be positive integer");
-                else if (idlePrice <= 0)
+                else if (!Rate.IdlePriceValidate(idlePrice))
                     throw new ArgumentException("Idle price must be positive integer");
 
-                TypeId id = await NewIdToAddAsync();
+                if (await _context.Drivers.AnyAsync(d => d.Id == driverId) == false) {
+                    throw new InvalidDataException($"Driver with id = {driverId} does not exist");
+                } else if (await _context.TransportVehicles.AnyAsync(t => t.Id == vehicleId) == false) {
+                    throw new InvalidDataException($"Transport vehicle with id = {vehicleId} does not exist");
+                }
+
+                    TypeId id = await NewIdToAddAsync();
                 if (id == -1)
                     throw new DbUpdateException("Database has no available id for new entity");
                 var entity = new Rate {
