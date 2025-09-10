@@ -47,7 +47,7 @@ namespace db.Models {
         }
 
         public static bool IdlePriceValidate(int idlePrice) {
-            return movePrice >= 0;
+            return idlePrice >= 0;
         }
     }
 }
