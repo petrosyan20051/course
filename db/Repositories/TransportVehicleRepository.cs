@@ -6,7 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
-    public class TransportVehicleRepository : IRepository<TransportVehicle, TypeId> {
+    public class TransportVehicleRepository : IRepository<TransportVehicle, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
+        
         private readonly OrderDbContext _context;
 
         public TransportVehicleRepository(OrderDbContext context) {
@@ -23,12 +25,10 @@ namespace db.Repositories {
         }
 
         public async Task AddAsync(TransportVehicle entity) {
-            var transportVehicle = await _context.TransportVehicles
-                .Where(o => o.Id == entity.Id)
-                .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (transportVehicle != null) {
-                throw new InvalidDataException("New entity must have original id");
-            }
+            await EntityValidate(entity.DriverId, entity.Number, entity.Series, entity.RegistrationCode,
+                entity.Model, entity.Color, entity.ReleaseYear, entity.WhoAdded, entity.WhenAdded,
+                entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note, entity.isDeleted);
+
             await _context.TransportVehicles.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
@@ -37,6 +37,34 @@ namespace db.Repositories {
             int registrationCode, string model, string color, int releaseYear, string whoAdded,
             DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
             DateTime? isDeleted = null) {
+
+            await EntityValidate(driverId, number, series, registrationCode, model, color, releaseYear, whoAdded,
+                whenAdded, 0, whoChanged, whenChanged, note, isDeleted);
+
+            var entity = new TransportVehicle {
+                DriverId = driverId,
+                Number = number,
+                Series = series,
+                RegistrationCode = registrationCode,
+                Model = model,
+                Color = color,
+                ReleaseYear = releaseYear,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await _context.TransportVehicles.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task EntityValidate(TypeId driverId, string number, string series,
+            int registrationCode, string model, string color, int releaseYear, string whoAdded,
+            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
+            string? note = null, DateTime? isDeleted = null) {
 
             if (number.IsNullOrEmpty()) {
                 throw new ArgumentNullException("Number must be no empty string");
@@ -60,26 +88,10 @@ namespace db.Repositories {
                 throw new InvalidDataException("Release year is invalid");
             }
 
-                TypeId id = await NewIdToAddAsync();
-            if (id == -1)
+            if (id != 0) {
+                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+            } else if (id == null && await NewIdToAddAsync() == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
-            var entity = new TransportVehicle {
-                DriverId = driverId,
-                Number = number,
-                Series = series,
-                RegistrationCode = registrationCode,
-                Model = model,
-                Color = color,
-                ReleaseYear = releaseYear,
-                WhoAdded = whoAdded,
-                WhenAdded = whenAdded,
-                WhoChanged = whoChanged,
-                WhenChanged = whenChanged,
-                Note = note,
-                isDeleted = isDeleted
-            };
-
-            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(TransportVehicle entity) {

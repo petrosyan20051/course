@@ -23,24 +23,46 @@ namespace db.Repositories {
             }
 
             public async Task AddAsync(Rate entity) {
-                var rate = await _context.Rates
-                    .Where(o => o.Id == entity.Id)
-                    .FirstOrDefaultAsync(o => o.Id == entity.Id);
-                if (rate != null && rate.isDeleted is null) {
-                    throw new InvalidDataException("New entity must have original id");
-                }
+
+                await EntityValidate(entity.Forename, entity.DriverId, entity.VehicleId, entity.MovePrice,
+                    entity.IdlePrice, entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged,
+                    entity.WhenChanged, entity.Note, entity.isDeleted);
+
                 await _context.Rates.AddAsync(entity);
                 await _context.SaveChangesAsync();
             }
 
             public async Task AddAsync(string forename, TypeId driverId, TypeId vehicleId, int movePrice,
-            int idlePrice, string model, string whoAdded, DateTime whenAdded, string? whoChanged = null, 
+            int idlePrice, string whoAdded, DateTime whenAdded, string? whoChanged = null,
+            TypeId? id = null, DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
+
+                await EntityValidate(forename, driverId, vehicleId, movePrice, idlePrice, whoAdded, whenAdded,
+                    id, whoChanged, whenChanged, note, isDeleted);
+
+                var entity = new Rate {
+                    Forename = forename,
+                    DriverId = driverId,    
+                    VehicleId = vehicleId,
+                    MovePrice = movePrice,
+                    IdlePrice = idlePrice,
+                    WhoAdded = whoAdded,
+                    WhenAdded = whenAdded,
+                    WhoChanged = whoChanged,
+                    WhenChanged = whenChanged,
+                    Note = note,
+                    isDeleted = isDeleted
+                };
+
+                await _context.Rates.AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+
+            private async Task EntityValidate(string forename, TypeId driverId, TypeId vehicleId, int movePrice,
+            int idlePrice, string whoAdded, DateTime whenAdded, TypeId? id, string? whoChanged = null,
             DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
 
                 if (forename.IsNullOrEmpty()) {
                     throw new ArgumentNullException("Forename must be no empty string");
-                } else if (model.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Model must be no empty string");
                 } else if (whoAdded.IsNullOrEmpty()) {
                     throw new ArgumentNullException("\"Who added\" must be no empty string");
                 }
@@ -56,24 +78,10 @@ namespace db.Repositories {
                     throw new InvalidDataException($"Transport vehicle with id = {vehicleId} does not exist");
                 }
 
-                    TypeId id = await NewIdToAddAsync();
-                if (id == -1)
+                if (id != 0) {
+                    throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                } else if (id == null && await NewIdToAddAsync() == -1)
                     throw new DbUpdateException("Database has no available id for new entity");
-                var entity = new Rate {
-                    Forename = forename,
-                    DriverId = driverId,    
-                    VehicleId = vehicleId,
-                    MovePrice = movePrice,
-                    IdlePrice = idlePrice,
-                    WhoAdded = whoAdded,
-                    WhenAdded = whenAdded,
-                    WhoChanged = whoChanged,
-                    WhenChanged = whenChanged,
-                    Note = note,
-                    isDeleted = isDeleted
-                };
-
-                await AddAsync(entity);
             }
 
             public async Task UpdateAsync(Rate entity) {

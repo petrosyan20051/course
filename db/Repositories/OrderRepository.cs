@@ -22,18 +22,41 @@ namespace db.Repositories {
         }
 
         public async Task AddAsync(Order entity) {
-            var order = await _context.Orders
-                .Where(o => o.Id == entity.Id)
-                .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (order != null && order.isDeleted is null) {
-                throw new InvalidDataException("New entity must have original id");
-            }
+
+            await EntityValidate(entity.CustomerId, entity.RouteId, entity.RateId, entity.Distance,
+                entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged,
+                entity.Note, entity.isDeleted);
+
             await _context.Orders.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task AddAsync(TypeId customerId, TypeId routeId, TypeId rateId, int distance, 
-            string whoAdded, DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, 
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
+            string? note = null, DateTime? isDeleted = null) {
+
+            await EntityValidate(customerId, routeId, rateId, distance, whoAdded, whenAdded, id,
+                whoChanged, whenChanged, note, isDeleted);
+
+            var entity = new Order {
+                CustomerId = customerId,
+                RouteId = routeId,  
+                RateId = rateId,
+                Distance = distance,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await _context.Orders.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task EntityValidate(TypeId customerId, TypeId routeId, TypeId rateId, int distance,
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
             string? note = null, DateTime? isDeleted = null) {
 
             if (whoAdded.IsNullOrEmpty()) {
@@ -51,23 +74,10 @@ namespace db.Repositories {
                 throw new InvalidDataException($"Rate with id = {rateId} does not exist");
             }
 
-            TypeId id = await NewIdToAddAsync();
-            if (id == -1)
+            if (id != 0) {
+                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+            } else if (id == null && await NewIdToAddAsync() == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
-            var entity = new Order {
-                CustomerId = customerId,
-                RouteId = routeId,  
-                RateId = rateId,
-                Distance = distance,
-                WhoAdded = whoAdded,
-                WhenAdded = whenAdded,
-                WhoChanged = whoChanged,
-                WhenChanged = whenChanged,
-                Note = note,
-                isDeleted = isDeleted
-            };
-
-            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(Order entity) {

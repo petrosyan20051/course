@@ -23,20 +23,45 @@ namespace db.Repositories {
         }
 
         public async Task AddAsync(Driver entity) {
-            var driver = await _context.Drivers
-                .Where(o => o.Id == entity.Id)
-                .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (driver != null && driver.isDeleted is null) {
-                throw new InvalidDataException("New entity must have original id");
-            }
+
+            await EntityValidate(entity.Forename, entity.Surname, entity.PhoneNumber, entity.DriverLicenceSeries,
+                entity.DriverLicenceNumber, entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged,
+                entity.WhenChanged, entity.Note, entity.isDeleted);
+
             await _context.Drivers.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task AddAsync(string forename, string surname, string phoneNumber,
             string driverLicenceSeries, string driverLicenceNumber, string whoAdded,
-            DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
-            DateTime? isDeleted = null) {
+            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
+            string? note = null, DateTime? isDeleted = null) {
+
+            await EntityValidate(forename, surname, phoneNumber, driverLicenceSeries, driverLicenceNumber,
+                whoAdded, whenAdded, id, whoChanged, whenChanged, note, isDeleted);
+
+            var entity = new Driver {
+                Forename = forename,
+                Surname = surname,
+                PhoneNumber = phoneNumber,
+                DriverLicenceSeries = driverLicenceSeries,
+                DriverLicenceNumber = driverLicenceNumber,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await _context.Drivers.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task EntityValidate(string forename, string surname, string phoneNumber,
+            string driverLicenceSeries, string driverLicenceNumber, string whoAdded,
+            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
+            string? note = null, DateTime? isDeleted = null) {
 
             if (forename.IsNullOrEmpty()) {
                 throw new ArgumentNullException("Forename must be no empty string");
@@ -60,24 +85,10 @@ namespace db.Repositories {
                 throw new ArgumentException("Invalid driver licence number");
             }
 
-            TypeId id = await NewIdToAddAsync();
-            if (id == -1)
+            if (id != 0) {
+                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+            } else if (id == null && await NewIdToAddAsync() == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
-            var entity = new Driver {
-                Forename = forename,
-                Surname = surname,
-                PhoneNumber = phoneNumber,
-                DriverLicenceSeries = driverLicenceSeries,
-                DriverLicenceNumber = driverLicenceNumber,
-                WhoAdded = whoAdded,
-                WhenAdded = whenAdded,
-                WhoChanged = whoChanged,
-                WhenChanged = whenChanged,
-                Note = note,
-                isDeleted = isDeleted
-            };
-
-            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(Driver entity) {
