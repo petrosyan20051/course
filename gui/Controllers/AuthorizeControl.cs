@@ -1,4 +1,5 @@
-﻿using db.Contexts;
+﻿using db.Classes;
+using db.Contexts;
 using db.Factories;
 using gui.Classes;
 using gui.Forms;
@@ -85,9 +86,9 @@ namespace gui.Controllers {
             //  1. OrderDbContext
             //  2. User rights (IInformation.UserRights)
             //  3. User's name (returns "Локальная БД" if local db)
-            this.Parent.Tag = new object[] { 
+            this.Parent.Tag = new object[] {
                 context,
-                _secBox.Text == SECURITY[1] ? user.Rights : IInformation.UserRights.Admin, 
+                _secBox.Text == SECURITY[1] ? user.Rights : IInformation.UserRights.Admin,
                 _loginBox.Enabled ? _loginBox.Text : "Локальная БД"
             };
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",
@@ -118,12 +119,12 @@ namespace gui.Controllers {
             _secBox.Text = _secBox.Items[0]?.ToString();
 
 
-            #if DEBUG
+#if DEBUG
 
             _dbNameBox.Text = DEFAULTDBNAME;
             _serverNameBox.Text = "localhost";
 
-            #endif
+#endif
 
             this.Tag = Login.ActionType.Authorize;
         }

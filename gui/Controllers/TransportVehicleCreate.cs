@@ -31,7 +31,7 @@ namespace gui.Controllers {
                 RegistrationCode = TypeId.TryParse(_registrationCodeBox.Text, out var registrationCode) ? registrationCode : -1,
                 Model = _modelBox.Text,
                 Color = _colorBox.Text,
-                ReleaseYear = _releaseYearBox.Text,
+                ReleaseYear = int.TryParse(_releaseYearBox.Text, out var releaseYear) ? releaseYear : -1,
                 WhoAdded = User,
                 WhenAdded = DateTime.Now,
                 Note = _noteBox.Text
@@ -95,8 +95,8 @@ namespace gui.Controllers {
                 errors.Add("Введите модель транспортного средства");
             } else if (string.IsNullOrEmpty(vehicle.Color)) {
                 errors.Add("Введите цвет транспортного средства");
-            } else if (!TypeId.TryParse(vehicle.ReleaseYear, out var year) || year < 1800 || year >= 2025) {
-                errors.Add("Код выпуска должен быть натуральным числом в диапазоне [1800; 2025]");
+            } else if (vehicle.ReleaseYear < 1800 || vehicle.ReleaseYear >= DateTime.Now.Year) {
+                errors.Add($"Код выпуска должен быть натуральным числом в диапазоне [1800; {DateTime.Now.Year}]");
             }
 
             return new Classes.ValidationResult(errors.Count == 0, errors);

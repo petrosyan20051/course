@@ -1,5 +1,4 @@
 ﻿using db.Contexts;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using static gui.Classes.IInformation;

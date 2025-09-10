@@ -50,11 +50,12 @@ namespace gui.Forms {
             _grid.BackgroundColor = Design.DataGridViewDarkThemeColor;
         }
 
-        private void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
+        private async void tableLst_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox? cmbBox = sender as ComboBox;
 
             // Update grid + filter
             _grid.DataSource = EFCoreConnect.GetBindingListByEntityName(_context, cmbBox.Text);
+
             FilterColumnsByRights(); // hide "isDeleted" in case user is not admin
 
             // Reorder columns
@@ -300,13 +301,16 @@ namespace gui.Forms {
             MessageBox.Show("Восстановление прошло успешно.", AppName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public void UpdateForm(DbContext context, UserRights userRights) {
+        public async void UpdateForm(DbContext context, UserRights userRights) {
             _context = context as OrderDbContext;
             if (_context == null) {
                 return;
             }
 
-           // Combobox source: OrderDbContext table names
+            // Close previous connection to DB
+            _context?.Database.CloseConnection();
+
+            // Combobox source: OrderDbContext table names
             _tblCmBox.DataSource = EFCoreConnect.GetTableNames(_context)
                 .Where(n => n != "Credentials")
                 .ToList();
@@ -339,7 +343,7 @@ namespace gui.Forms {
                 UserRights.Editor => true,
                 UserRights.Admin => true
             }; // install rights to add sets to db
- 
+
             _setDelete.Enabled = Rights switch {
                 UserRights.Basic => false,
                 UserRights.Editor => false,

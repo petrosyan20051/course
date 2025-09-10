@@ -1,4 +1,5 @@
-﻿using db.Contexts;
+﻿using db.Classes;
+using db.Contexts;
 using db.Factories;
 using db.Models;
 using db.Repositories;
@@ -6,7 +7,6 @@ using gui.Classes;
 using gui.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Data;
 using static db.Interfaces.IInformation;
 
 namespace gui.Controllers {
@@ -14,7 +14,7 @@ namespace gui.Controllers {
         TextBox _loginBox, _passwordBox;
         ComboBox _roleBox;
 
-        private static readonly string[] ROLES = ["Базовый пользователь", "Редактор", "Администратор" ];
+        private static readonly string[] ROLES = ["Базовый пользователь", "Редактор", "Администратор"];
 
         public RegisterControl() {
             InitializeComponent();
@@ -65,7 +65,7 @@ namespace gui.Controllers {
                 WhenChanged = null,
                 isDeleted = null
             };
-            
+
             // Add entity into db
             await repository.AddAsync(entity);
             MessageBox.Show("Регистрация прошла успешно. Можете войти в профиль.",
