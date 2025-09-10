@@ -34,7 +34,7 @@ namespace db.Repositories {
         }
 
         public async Task AddAsync(TypeId driverId, string number, string series, 
-            int registrationCode, string model, string color, string releaseYear, string whoAdded,
+            int registrationCode, string model, string color, int releaseYear, string whoAdded,
             DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
             DateTime? isDeleted = null) {
 
@@ -46,13 +46,21 @@ namespace db.Repositories {
                 throw new ArgumentNullException("Model must be no empty string");
             } else if (color.IsNullOrEmpty()) {
                 throw new ArgumentNullException("Color must be no empty string");
-            } else if (releaseYear.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Release year must be no empty string");
             } else if (whoAdded.IsNullOrEmpty()) {
                 throw new ArgumentNullException("\"Who added\" must be no empty string");
             }
 
-            TypeId id = await NewIdToAddAsync();
+            if (!TransportVehicle.NumberValidate(number)) {
+                throw new InvalidDataException("Number is invalid");
+            } else if (!TransportVehicle.SeriesValidate(series)) {
+                throw new InvalidDataException("Series is invalid");
+            } else if (!TransportVehicle.RegistrationCodeValidate(registrationCode)) {
+                throw new InvalidDataException("Registration code is invalid");
+            } else if (!TransportVehicle.ReleaseYearValidate(releaseYear)) {
+                throw new InvalidDataException("Release year is invalid");
+            }
+
+                TypeId id = await NewIdToAddAsync();
             if (id == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
             var entity = new TransportVehicle {
