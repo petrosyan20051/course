@@ -7,7 +7,8 @@ using TypeId = int;
 
 namespace db.Repositories {
     namespace db.Repositories {
-        public class RouteRepository : IRepository<Models.Route, TypeId> {
+        public class RouteRepository : IRepository<Models.Route, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
             private readonly OrderDbContext _context;
 
             public RouteRepository(OrderDbContext context) {

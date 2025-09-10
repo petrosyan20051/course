@@ -6,7 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
-    public class CustomerRepository : IRepository<Customer, TypeId> {
+    public class CustomerRepository : IRepository<Customer, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
         private readonly OrderDbContext _context;
 
         public CustomerRepository(OrderDbContext context) {

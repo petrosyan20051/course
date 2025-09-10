@@ -8,7 +8,8 @@ using TypeId = int;
 using Microsoft.IdentityModel.Tokens;
 
 namespace db.Repositories {
-    public class CredentialRepository : IRepository<Credential, TypeId> {
+    public class CredentialRepository : IRepository<Credential, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
         private readonly OrderDbContext _context;
 
         public CredentialRepository(OrderDbContext context) {
