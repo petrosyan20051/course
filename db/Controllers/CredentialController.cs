@@ -1,5 +1,6 @@
 ﻿using db.Interfaces;
 using db.Models;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 using TypeId = int;
@@ -9,7 +10,11 @@ namespace db.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class CredentialController : BaseCrudController<Credential, TypeId> {
-        public CredentialController(IRepository<Credential, TypeId> repository) : base(repository) { }
+        private readonly ILogger<CredentialController> _logger;
+        
+        public CredentialController(IRepository<Credential, TypeId> repository, ILogger<CredentialController> logger) : base(repository) { 
+            _logger = logger;
+        }
 
         protected override int GetEntityId(Credential entity) {
             return entity.Id;
@@ -90,19 +95,10 @@ namespace db.Controllers {
             return NotFound("Сущность не найдено или уже существует");
         }
 
-
-
-        /*[HttpPost("RecoverById")]
-        public virtual async Task<IActionResult> RecoverAsync(TypeId id) {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity != null) {
-                entity.isDeleted = null;
-                entity.WhenChanged = DateTime.Now;
-                await _repository.UpdateAsync(entity);
-                return Ok(new string("Восстановление прошло успешно"));
-            }
-
-            return NotFound(new string("Сущность не удалена или не найдена"));
-        }*/
+        // TODO: make registration
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request) {
+            
+        }
     }
 }
