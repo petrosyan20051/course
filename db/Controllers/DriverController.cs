@@ -48,7 +48,7 @@ namespace db.Controllers {
         // DELETE: api/{entity}/DeleteById
         [HttpDelete("DeleteById")]
         public override async Task<IActionResult> Delete(TypeId id) {
-            await _repository.DeleteAsync(id);
+            await _repository.SoftDeleteAsync(id);
             return NoContent();
         }
 
