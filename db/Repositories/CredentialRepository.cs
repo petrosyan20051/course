@@ -26,7 +26,7 @@ namespace db.Repositories {
 
         public async Task AddAsync(Credential entity) {
 
-            await EntityValidate(entity.Username, entity.Password, entity.Rights, entity.WhoAdded,
+            await EntityValidate(entity.RoleId, entity.Username, entity.Password, entity.Rights, entity.WhoAdded,
                 entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note,
                 entity.isDeleted);
 
@@ -34,14 +34,15 @@ namespace db.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddAsync(string username, string password, UserRights Rights, string whoAdded,
+        public async Task AddAsync(TypeId roleId, string username, string password, UserRights Rights, string whoAdded,
             DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
             string? note = null, DateTime? isDeleted = null) {
 
-            await EntityValidate(username, password, Rights, whoAdded, whenAdded, id, whoChanged, 
+            await EntityValidate(roleId, username, password, Rights, whoAdded, whenAdded, id, whoChanged, 
                 whenChanged, note, isDeleted);
 
             var entity = new Credential {
+                RoleId = roleId,
                 Username = username,
                 Password = password,
                 Rights = Rights,
@@ -57,7 +58,7 @@ namespace db.Repositories {
             await _context.SaveChangesAsync();
         }
 
-        private async Task EntityValidate(string username, string password, UserRights Rights, string whoAdded,
+        private async Task EntityValidate(TypeId roleId, string username, string password, UserRights Rights, string whoAdded,
             DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
             string? note = null, DateTime? isDeleted = null) {
 
@@ -71,7 +72,9 @@ namespace db.Repositories {
 
             if (!PasswordHasher.IsPasswordStrong(password))
                 throw new ArgumentException("Password is not strong. See db.Classes.PasswordHasher.IsPasswordStrong");
-
+            else if (await _context.Roles.AnyAsync(r => r.Id == roleId) == false) {
+                throw new ArgumentException($"Role with ID = {roleId} does not exist");
+            }
 
             if (id != 0) {
                 throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
