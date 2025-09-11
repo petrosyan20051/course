@@ -12,6 +12,7 @@ namespace db.Contexts {
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Credential> Credentials { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) {
             //Database.EnsureCreated();
@@ -151,18 +152,37 @@ namespace db.Contexts {
 
             modelBuilder.Entity<Credential>(entity => {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
-                entity.Property(e => e.Username).IsRequired().HasColumnOrder(2);
-                entity.Property(e => e.Password).IsRequired().HasColumnOrder(3);
-                entity.Property(e => e.Rights).IsRequired().HasColumnOrder(4);
-                entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(5);
-                entity.Property(e => e.WhenAdded).IsRequired().HasColumnOrder(6);
-                entity.Property(e => e.Note).HasColumnOrder(7);
-                entity.Property(e => e.WhoChanged).HasColumnOrder(8);
-                entity.Property(e => e.WhenChanged).HasColumnOrder(9);
-                entity.Property(e => e.isDeleted).HasColumnName("isDeleted").HasColumnOrder(10);
+                entity.Property(e => e.RoleId).IsRequired().HasColumnOrder(2);
+                entity.Property(e => e.Username).IsRequired().HasColumnOrder(3);
+                entity.Property(e => e.Password).IsRequired().HasColumnOrder(4);
+                entity.Property(e => e.Rights).IsRequired().HasColumnOrder(5);
+                entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(6);
+                entity.Property(e => e.WhenAdded).IsRequired().HasColumnOrder(7);
+                entity.Property(e => e.Note).HasColumnOrder(8);
+                entity.Property(e => e.WhoChanged).HasColumnOrder(9);
+                entity.Property(e => e.WhenChanged).HasColumnOrder(10);
+                entity.Property(e => e.isDeleted).HasColumnName("isDeleted").HasColumnOrder(11);
             });
 
             modelBuilder.Entity<Credential>().HasData();
+
+            ///////////////////////////
+
+            modelBuilder.Entity<Role>(entity => {
+                entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
+                entity.Property(e => e.Rights).IsRequired().HasColumnOrder(2);
+                entity.Property(e => e.Get).IsRequired().HasColumnOrder(3);
+                entity.Property(e => e.Post).IsRequired().HasColumnOrder(4);
+                entity.Property(e => e.Update).IsRequired().HasColumnOrder(5);
+                entity.Property(e => e.Delete).IsRequired().HasColumnOrder(6);
+                entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(7);
+                entity.Property(e => e.WhenAdded).IsRequired().HasColumnOrder(8);
+                entity.Property(e => e.WhoChanged).HasColumnOrder(9);
+                entity.Property(e => e.WhenChanged).HasColumnOrder(10);
+                entity.Property(e => e.isDeleted).HasColumnName("isDeleted").HasColumnOrder(11);
+            });
+
+            modelBuilder.Entity<Role>().HasData();
         }
     }
 }

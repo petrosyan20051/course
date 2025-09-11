@@ -1,36 +1,37 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using static db.Interfaces.IInformation;
-
 using TypeId = int;
 
 namespace db.Models {
-    public class Credential {
-
+    public class Role {
         [Key]
         [Display(Order = 1)]
         public TypeId Id { get; set; }
 
         [Display(Order = 2)]
-        public TypeId RoleId { get; set; }
+        public required string Forename { get; set; }
 
         [Display(Order = 3)]
-        public required string Username { get; set; }
-        [Display(Order = 4)]
-        public required string Password { get; set; }
-        [Display(Order = 5)]
         public UserRights Rights { get; set; }
 
+        [Display(Order = 4)]
+        public bool Get { get; set; }
+        [Display(Order = 5)]
+        public bool Post { get; set; }
         [Display(Order = 6)]
-        public required string WhoAdded { get; set; }
+        public bool Update { get; set; }
         [Display(Order = 7)]
-        public DateTime WhenAdded { get; set; }
+        public bool Delete { get; set; }
+
         [Display(Order = 8)]
-        public string? WhoChanged { get; set; } = null;
+        public required string WhoAdded { get; set; }
         [Display(Order = 9)]
-        public DateTime? WhenChanged { get; set; } = null;
+        public DateTime WhenAdded { get; set; }
         [Display(Order = 10)]
-        public string? Note { get; set; } = null;
+        public string? WhoChanged { get; set; } = null;
         [Display(Order = 11)]
+        public DateTime? WhenChanged { get; set; } = null;
+        [Display(Order = 12)]
         public DateTime? isDeleted { get; set; } = null;
     }
 }
