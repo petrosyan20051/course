@@ -8,36 +8,37 @@ namespace db.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
-    public class CredentialController : BaseCrudController<Credential, TypeId> {
-        public CredentialController(IRepository<Credential, TypeId> repository) : base(repository) { }
+    public class CustomerController : BaseCrudController<Customer, TypeId> {
+      
+        public CustomerController(IRepository<Customer, TypeId> repository) : base(repository) { }
 
-        protected override int GetEntityId(Credential entity) {
+        protected override int GetEntityId(Customer entity) {
             return entity.Id;
         }
 
         // GET: api/{entity}/GetAll
         [HttpGet("GetAll")]
-        public override async Task<ActionResult<IEnumerable<Credential>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Customer>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
         }
 
         // GET: api/{entity}/GetById
         [HttpGet("GetById")]
-        public override async Task<ActionResult<Credential>> Get(TypeId id) {
+        public override async Task<ActionResult<Customer>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             return entity is null ? NotFound() : Ok(entity);
         }
 
         // POST: api/{entity}/Post
         [HttpPost("Post")]
-        public override async Task<ActionResult<Credential>> Create([FromBody] Credential entity) {
+        public override async Task<ActionResult<Customer>> Create([FromBody] Customer entity) {
             await _repository.AddAsync(entity);
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/UpdateById
         [HttpPut("UpdateById")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Credential entity) {
+        public override async Task<IActionResult> Update(TypeId id, [FromBody] Customer entity) {
             if (!id.Equals(GetEntityId(entity))) {
                 return BadRequest();
             }
@@ -76,24 +77,8 @@ namespace db.Controllers {
             return TypeId.MaxValue; // maybe all seats are reserved
         }
 
-        // Update: api/{entity}/RecoverById
-        [HttpGet("RecoverById")]
+        [HttpPost("RecoverById")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity != null) {
-                entity.isDeleted = null;
-                entity.WhenChanged = DateTime.Now;
-
-                return Ok("Восстановление прошло успешно");
-            }
-
-            return NotFound("Сущность не найдено или уже существует");
-        }
-
-
-
-        /*[HttpPost("RecoverById")]
-        public virtual async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {
                 entity.isDeleted = null;
@@ -103,6 +88,6 @@ namespace db.Controllers {
             }
 
             return NotFound(new string("Сущность не удалена или не найдена"));
-        }*/
+        }
     }
 }

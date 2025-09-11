@@ -45,8 +45,6 @@ namespace db.Factories {
             return null;
         }
 
-
-
         #region Deprecated
 
         /*public TRepository? CreateRepository() {

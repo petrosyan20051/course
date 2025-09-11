@@ -15,7 +15,7 @@ namespace db.Contexts {
         public DbSet<Role> Roles { get; set; }
 
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
