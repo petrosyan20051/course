@@ -6,7 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
-    public class OrderRepository : IRepository<Order, TypeId> {
+    public class OrderRepository : IRepository<Order, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
         private readonly OrderDbContext _context;
 
         public OrderRepository(OrderDbContext context) {
@@ -22,30 +23,22 @@ namespace db.Repositories {
         }
 
         public async Task AddAsync(Order entity) {
-            var order = await _context.Orders
-                .Where(o => o.Id == entity.Id)
-                .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (order != null && order.isDeleted is null) {
-                throw new InvalidDataException("New entity must have original id");
-            }
+
+            await EntityValidate(entity.CustomerId, entity.RouteId, entity.RateId, entity.Distance,
+                entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged,
+                entity.Note, entity.isDeleted);
+
             await _context.Orders.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task AddAsync(TypeId customerId, TypeId routeId, TypeId rateId, int distance, 
-            string whoAdded, DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, 
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
             string? note = null, DateTime? isDeleted = null) {
 
-            if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" must be no empty string");
-            }
+            await EntityValidate(customerId, routeId, rateId, distance, whoAdded, whenAdded, id,
+                whoChanged, whenChanged, note, isDeleted);
 
-            if (distance <= 0)
-                throw new ArgumentException("Distance must be positive integer");
-            
-            TypeId id = await NewIdToAddAsync();
-            if (id == -1)
-                throw new DbUpdateException("Database has no available id for new entity");
             var entity = new Order {
                 CustomerId = customerId,
                 RouteId = routeId,  
@@ -59,7 +52,33 @@ namespace db.Repositories {
                 isDeleted = isDeleted
             };
 
-            await AddAsync(entity);
+            await _context.Orders.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task EntityValidate(TypeId customerId, TypeId routeId, TypeId rateId, int distance,
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
+            string? note = null, DateTime? isDeleted = null) {
+
+            if (whoAdded.IsNullOrEmpty()) {
+                throw new ArgumentNullException("\"Who added\" must be no empty string");
+            }
+
+            if (!Order.DistanceValidate(distance))
+                throw new ArgumentException("Distance must be positive integer");
+
+            if (await _context.Customers.AnyAsync(c => c.Id == customerId) == false) {
+                throw new InvalidDataException($"Customer with id = {customerId} does not exist");
+            } else if (await _context.Routes.AnyAsync(r => r.Id == routeId) == false) {
+                throw new InvalidDataException($"Route with id = {routeId} does not exist");
+            } else if (await _context.Rates.AnyAsync(r => r.Id == rateId) == false) {
+                throw new InvalidDataException($"Rate with id = {rateId} does not exist");
+            }
+
+            if (id != 0) {
+                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+            } else if (id == null && await NewIdToAddAsync() == -1)
+                throw new DbUpdateException("Database has no available id for new entity");
         }
 
         public async Task UpdateAsync(Order entity) {

@@ -7,7 +7,8 @@ using TypeId = int;
 
 namespace db.Repositories {
     namespace db.Repositories {
-        public class RouteRepository : IRepository<Models.Route, TypeId> {
+        public class RouteRepository : IRepository<Models.Route, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
             private readonly OrderDbContext _context;
 
             public RouteRepository(OrderDbContext context) {
@@ -23,31 +24,21 @@ namespace db.Repositories {
             }
 
             public async Task AddAsync(Models.Route entity) {
-                var route = await _context.Routes
-                    .Where(o => o.Id == entity.Id)
-                    .FirstOrDefaultAsync(o => o.Id == entity.Id);
-                if (route != null && route.isDeleted is null) {
-                    throw new InvalidDataException("New entity must have original id");
-                }
+                await EntityValidate(entity.BoardingAddress, entity.DropAddress, entity.WhoAdded,
+                    entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note,
+                    entity.isDeleted);
+
                 await _context.Routes.AddAsync(entity);
                 await _context.SaveChangesAsync();
             }
 
             public async Task AddAsync(string boardingAddress, string dropAddress, string whoAdded,
-            DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
-            DateTime? isDeleted = null) {
+                DateTime whenAdded, TypeId? id, string? whoChanged = null, DateTime? whenChanged = null, 
+                string? note = null, DateTime? isDeleted = null) {
 
-                if (boardingAddress.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Boarding address must be no empty string");
-                } else if (dropAddress.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Drop address must be no empty string");
-                } else if (whoAdded.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("\"Who added\" must be no empty string");
-                }
+                await EntityValidate(boardingAddress, dropAddress, whoAdded, whenAdded, id, whoChanged,
+                    whenChanged, note, isDeleted);
 
-                TypeId id = await NewIdToAddAsync();
-                if (id == -1)
-                    throw new DbUpdateException("Database has no available id for new entity");
                 var entity = new Models.Route {
                     BoardingAddress = boardingAddress,
                     DropAddress = dropAddress,
@@ -59,7 +50,26 @@ namespace db.Repositories {
                     isDeleted = isDeleted
                 };
 
-                await AddAsync(entity);
+                await _context.Routes.AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+
+            private async Task EntityValidate(string boardingAddress, string dropAddress, string whoAdded,
+            DateTime whenAdded, TypeId? id, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
+            DateTime? isDeleted = null) {
+
+                if (boardingAddress.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("Boarding address must be no empty string");
+                } else if (dropAddress.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("Drop address must be no empty string");
+                } else if (whoAdded.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("\"Who added\" must be no empty string");
+                }
+
+                if (id != 0) {
+                    throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                } else if (id == null && await NewIdToAddAsync() == -1)
+                    throw new DbUpdateException("Database has no available id for new entity");
             }
 
             public async Task UpdateAsync(Models.Route entity) {

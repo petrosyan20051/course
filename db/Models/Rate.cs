@@ -41,5 +41,13 @@ namespace db.Models {
         public DateTime? isDeleted { get; set; } = null;
 
         //public ICollection<Order> Orders { get; set; } = new List<Order>();
+
+        public static bool MovePriceValidate(int movePrice) {
+            return movePrice >= 0;
+        }
+
+        public static bool IdlePriceValidate(int idlePrice) {
+            return idlePrice >= 0;
+        }
     }
 }

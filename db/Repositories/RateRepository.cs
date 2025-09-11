@@ -7,7 +7,8 @@ using TypeId = int;
 
 namespace db.Repositories {
     namespace db.Repositories {
-        public class RateRepository : IRepository<Rate, TypeId> {
+        public class RateRepository : IRepository<Rate, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
             private readonly OrderDbContext _context;
 
             public RateRepository(OrderDbContext context) {
@@ -23,36 +24,22 @@ namespace db.Repositories {
             }
 
             public async Task AddAsync(Rate entity) {
-                var rate = await _context.Rates
-                    .Where(o => o.Id == entity.Id)
-                    .FirstOrDefaultAsync(o => o.Id == entity.Id);
-                if (rate != null && rate.isDeleted is null) {
-                    throw new InvalidDataException("New entity must have original id");
-                }
+
+                await EntityValidate(entity.Forename, entity.DriverId, entity.VehicleId, entity.MovePrice,
+                    entity.IdlePrice, entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged,
+                    entity.WhenChanged, entity.Note, entity.isDeleted);
+
                 await _context.Rates.AddAsync(entity);
                 await _context.SaveChangesAsync();
             }
 
             public async Task AddAsync(string forename, TypeId driverId, TypeId vehicleId, int movePrice,
-            int idlePrice, string model, string whoAdded, DateTime whenAdded, string? whoChanged = null, 
-            DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
+            int idlePrice, string whoAdded, DateTime whenAdded, string? whoChanged = null,
+            TypeId? id = null, DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
 
-                if (forename.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Forename must be no empty string");
-                } else if (model.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Model must be no empty string");
-                } else if (whoAdded.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("\"Who added\" must be no empty string");
-                }
+                await EntityValidate(forename, driverId, vehicleId, movePrice, idlePrice, whoAdded, whenAdded,
+                    id, whoChanged, whenChanged, note, isDeleted);
 
-                if (movePrice <= 0)
-                    throw new ArgumentException("Move price must be positive integer");
-                else if (idlePrice <= 0)
-                    throw new ArgumentException("Idle price must be positive integer");
-
-                TypeId id = await NewIdToAddAsync();
-                if (id == -1)
-                    throw new DbUpdateException("Database has no available id for new entity");
                 var entity = new Rate {
                     Forename = forename,
                     DriverId = driverId,    
@@ -67,7 +54,35 @@ namespace db.Repositories {
                     isDeleted = isDeleted
                 };
 
-                await AddAsync(entity);
+                await _context.Rates.AddAsync(entity);
+                await _context.SaveChangesAsync();
+            }
+
+            private async Task EntityValidate(string forename, TypeId driverId, TypeId vehicleId, int movePrice,
+            int idlePrice, string whoAdded, DateTime whenAdded, TypeId? id, string? whoChanged = null,
+            DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
+
+                if (forename.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("Forename must be no empty string");
+                } else if (whoAdded.IsNullOrEmpty()) {
+                    throw new ArgumentNullException("\"Who added\" must be no empty string");
+                }
+
+                if (!Rate.MovePriceValidate(movePrice))
+                    throw new ArgumentException("Move price must be positive integer");
+                else if (!Rate.IdlePriceValidate(idlePrice))
+                    throw new ArgumentException("Idle price must be positive integer");
+
+                if (await _context.Drivers.AnyAsync(d => d.Id == driverId) == false) {
+                    throw new InvalidDataException($"Driver with id = {driverId} does not exist");
+                } else if (await _context.TransportVehicles.AnyAsync(t => t.Id == vehicleId) == false) {
+                    throw new InvalidDataException($"Transport vehicle with id = {vehicleId} does not exist");
+                }
+
+                if (id != 0) {
+                    throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                } else if (id == null && await NewIdToAddAsync() == -1)
+                    throw new DbUpdateException("Database has no available id for new entity");
             }
 
             public async Task UpdateAsync(Rate entity) {

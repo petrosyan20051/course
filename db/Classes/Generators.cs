@@ -124,7 +124,7 @@ namespace db.Tools {
                     RegistrationCode = regions[_random.Next(regions.Length)],
                     Model = models[_random.Next(models.Length)],
                     Color = colors[_random.Next(colors.Length)],
-                    ReleaseYear = _random.Next(2010, 2024).ToString(),
+                    ReleaseYear = _random.Next(2000, 2024),
                     WhenAdded = new DateTime(2023, 1, 1).AddDays(i),
                     WhoAdded = "system",
                     WhenChanged = new DateTime(2023, 1, 1).AddDays(i + _random.Next(1, 30)),

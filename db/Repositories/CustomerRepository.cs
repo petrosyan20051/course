@@ -6,7 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
 namespace db.Repositories {
-    public class CustomerRepository : IRepository<Customer, TypeId> {
+    public class CustomerRepository : IRepository<Customer, TypeId>,
+        IDeletable<TypeId>, IRecovarable<TypeId> {
         private readonly OrderDbContext _context;
 
         public CustomerRepository(OrderDbContext context) {
@@ -22,19 +23,42 @@ namespace db.Repositories {
         }
 
         public async Task AddAsync(Customer entity) {
-            var customer = await _context.Customers
-                .Where(o => o.Id == entity.Id)
-                .FirstOrDefaultAsync(o => o.Id == entity.Id);
-            if (customer != null && customer.isDeleted is null) {
-                throw new InvalidDataException("New entity must have original id");
-            }
+
+            await EntityValidate(entity.Forename, entity.Surname, entity.PhoneNumber, entity.Email,
+                entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged,
+                entity.Note, entity.isDeleted);
+
             await _context.Customers.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task AddAsync(string forename, string surname, string phoneNumber, string email, 
-            string whoAdded, DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, 
-            string? note = null, DateTime? isDeleted = null) {
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, 
+            DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
+
+            await EntityValidate(forename, surname, phoneNumber, email, whoAdded, whenAdded, id,
+                whoChanged, whenChanged, note, isDeleted);
+
+            var entity = new Customer {
+                Forename = forename,
+                Surname = surname,
+                PhoneNumber = phoneNumber,
+                Email = email,
+                WhoAdded = whoAdded,
+                WhenAdded = whenAdded,
+                WhoChanged = whoChanged,
+                WhenChanged = whenChanged,
+                Note = note,
+                isDeleted = isDeleted
+            };
+
+            await _context.Customers.AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task EntityValidate(string forename, string surname, string phoneNumber, string email,
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null,
+            DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
 
             if (forename.IsNullOrEmpty()) {
                 throw new ArgumentNullException("Forename must be no empty string");
@@ -54,23 +78,10 @@ namespace db.Repositories {
                 throw new InvalidDataException("Ivalid phone email");
             }
 
-            TypeId id = await NewIdToAddAsync();
-            if (id == -1)
+            if (id != 0) {
+                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+            } else if (id == null && await NewIdToAddAsync() == -1)
                 throw new DbUpdateException("Database has no available id for new entity");
-            var entity = new Customer {
-                Forename = forename,
-                Surname = surname,
-                PhoneNumber = phoneNumber,
-                Email = email,
-                WhoAdded = whoAdded,
-                WhenAdded = whenAdded,
-                WhoChanged = whoChanged,
-                WhenChanged = whenChanged,
-                Note = note,
-                isDeleted = isDeleted
-            };
-
-            await AddAsync(entity);
         }
 
         public async Task UpdateAsync(Customer entity) {
