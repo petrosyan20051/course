@@ -1,5 +1,6 @@
 ﻿using db.Interfaces;
 using db.Models;
+using db.Repositories;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,8 @@ namespace db.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class CredentialController : BaseCrudController<Credential, TypeId> {
-        private readonly ILogger<CredentialController> _logger;
         
-        public CredentialController(IRepository<Credential, TypeId> repository, ILogger<CredentialController> logger) : base(repository) { 
-            _logger = logger;
+        public CredentialController(IRepository<Credential, TypeId> repository) : base(repository) { 
         }
 
         protected override int GetEntityId(Credential entity) {
@@ -95,6 +94,17 @@ namespace db.Controllers {
             return NotFound("Сущность не найдено или уже существует");
         }
 
+        // TODO: make Login
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request) {
+            CredentialRepository? repository = (CredentialRepository)_repository;
+            if (repository == null)
+                return StatusCode(500, new { message = "Внутренняя ошибка" });
+
+            // TODO: ask AI about this error
+            var credential = await repository.GetByUserNameAsync(request.Username);
+        }
+        
         // TODO: make registration
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request) {
