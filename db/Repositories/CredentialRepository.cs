@@ -133,5 +133,10 @@ namespace db.Repositories {
             }
             return false;
         }
+
+        public async Task<Credential?> GetByUserNameAsync(string username) {
+            return await _context.Credentials
+                .FirstOrDefaultAsync(c => c.Username == username);
+        }
     }
 }
