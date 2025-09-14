@@ -13,10 +13,12 @@ namespace db.Controllers {
     [Route("api/[controller]")]
     public class CredentialController : ControllerBase {
 
-        CredentialRepository _repository;
+        CredentialRepository _credentialRepository;
+        RoleRepository _roleRepository;
         
-        public CredentialController(CredentialRepository credentialRepository) {
-            _repository = credentialRepository;
+        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) {
+            _credentialRepository = credentialRepository;
+            _roleRepository = roleRepository;
         }
 
         protected int GetEntityId(Credential entity) {
@@ -26,17 +28,31 @@ namespace db.Controllers {
         // TODO: make Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginPrompt request) {
-            CredentialRepository? repository = (CredentialRepository)_repository;
-            if (repository == null)
+            if (_credentialRepository == null || _roleRepository == null)
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
-            // TODO: ask AI about this error
-            var credential = await repository.GetByUserNameAsync(request.Login);
-            if (credential == null)
+            var credential = await _credentialRepository.GetByUserNameAsync(request.Login);
+            if (credential == null || credential.isDeleted != null)
                 return Unauthorized(new {message = $"Пользователем с именем \"{request.Login}\" не существует"});
 
             if (!PasswordHasher.VerifyPassword(request.Password, request.Password))
                 return Unauthorized(new { messsage = "Введен неверный пароль" });
+
+            var role = await _roleRepository.GetByIdAsync(credential.RoleId);
+            if (role == null || role.isDeleted != null)
+                return BadRequest(new { message = "Внутренняя ошибка" });
+
+            var response = new LoginResponse {
+                UserId = credential.Id,
+                Username = credential.Username,
+                CanGet = role.CanGet,
+                CanPost = role.CanPost,
+                CanUpdate = role.CanUpdate,
+                CanDelete = role.CanDelete,
+                Rights = credential.Rights,
+            };
+
+            return Ok(response);
 
         }
         
