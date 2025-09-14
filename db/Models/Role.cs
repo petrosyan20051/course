@@ -15,13 +15,13 @@ namespace db.Models {
         public UserRights Rights { get; set; }
 
         [Display(Order = 4)]
-        public bool Get { get; set; }
+        public bool CanGet { get; set; }
         [Display(Order = 5)]
-        public bool Post { get; set; }
+        public bool CanPost { get; set; }
         [Display(Order = 6)]
-        public bool Update { get; set; }
+        public bool CanUpdate { get; set; }
         [Display(Order = 7)]
-        public bool Delete { get; set; }
+        public bool CanDelete { get; set; }
 
         [Display(Order = 8)]
         public required string WhoAdded { get; set; }
