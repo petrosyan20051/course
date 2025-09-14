@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static db.Interfaces.IInformation;
 
 using TypeId = int;
 

@@ -2,8 +2,6 @@
 using db.Models;
 using Microsoft.AspNetCore.Mvc;
 
-using TypeId = int;
-
 [ApiController]
 [Route("api/[controller]")]
 public abstract class BaseCrudController<TEntity, TKey> : ControllerBase {

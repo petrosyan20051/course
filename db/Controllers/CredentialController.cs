@@ -23,7 +23,7 @@ namespace db.Controllers {
         }
 
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginPrompt request) {
+        public async Task<IActionResult> LoginAsync([FromBody] LoginPrompt request) {
             // Standart checks
             CredentialRepository _credentialRepository = (CredentialRepository)_repository;
             if (_credentialRepository == null || _roleRepository == null)
@@ -61,7 +61,7 @@ namespace db.Controllers {
 
         // TODO: make registration
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterPrompt request) {
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterPrompt request) {
             // Standart checks
             CredentialRepository _credentialRepository = (CredentialRepository)_repository;
             if (_credentialRepository == null || _roleRepository == null)
@@ -70,8 +70,10 @@ namespace db.Controllers {
             // Check whether person who registrates current one exists
             if (request.RegisterType == RegisterType.Admin)
                 if (await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)
-                    return BadRequest(new { message = $"Пользователем с именем \"{request.WhoRegister}\", " +
-                        $"который регистрирует нового пользователя не существует" });
+                    return BadRequest(new {
+                        message = $"Пользователем с именем \"{request.WhoRegister}\", " +
+                        $"который регистрирует нового пользователя не существует"
+                    });
 
             // Whether user with such name exists
             var credential = await _credentialRepository.GetByUserNameAsync(request.UserName);

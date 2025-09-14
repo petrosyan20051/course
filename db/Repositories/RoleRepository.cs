@@ -18,7 +18,7 @@ namespace db.Repositories {
             return await _context.Roles
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
-      
+
         public async Task<Role?> GetByUserRights(UserRights rights) {
             return await _context.Roles
                 .FirstOrDefaultAsync(r => r.Rights == rights);
