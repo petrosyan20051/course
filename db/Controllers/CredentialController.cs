@@ -1,4 +1,5 @@
-﻿using db.Interfaces;
+﻿using db.Classes;
+using db.Interfaces;
 using db.Models;
 using db.Repositories;
 using Microsoft.AspNetCore.Identity.Data;
@@ -10,16 +11,44 @@ namespace db.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
-    public class CredentialController : BaseCrudController<Credential, TypeId> {
+    public class CredentialController : ControllerBase {
+
+        CredentialRepository _repository;
         
-        public CredentialController(IRepository<Credential, TypeId> repository) : base(repository) { 
+        public CredentialController(CredentialRepository credentialRepository) {
+            _repository = credentialRepository;
         }
 
-        protected override int GetEntityId(Credential entity) {
+        protected int GetEntityId(Credential entity) {
             return entity.Id;
         }
 
-        // GET: api/{entity}/GetAll
+        // TODO: make Login
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginPrompt request) {
+            CredentialRepository? repository = (CredentialRepository)_repository;
+            if (repository == null)
+                return StatusCode(500, new { message = "Внутренняя ошибка" });
+
+            // TODO: ask AI about this error
+            var credential = await repository.GetByUserNameAsync(request.Login);
+            if (credential == null)
+                return Unauthorized(new {message = $"Пользователем с именем \"{request.Login}\" не существует"});
+
+            if (!PasswordHasher.VerifyPassword(request.Password, request.Password))
+                return Unauthorized(new { messsage = "Введен неверный пароль" });
+
+        }
+        
+        // TODO: make registration
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request) {
+            
+        }
+
+        #region Deprecated 
+
+        /*// GET: api/{entity}/GetAll
         [HttpGet("GetAll")]
         public override async Task<ActionResult<IEnumerable<Credential>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
@@ -92,23 +121,8 @@ namespace db.Controllers {
             }
 
             return NotFound("Сущность не найдено или уже существует");
-        }
+        }*/
 
-        // TODO: make Login
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request) {
-            CredentialRepository? repository = (CredentialRepository)_repository;
-            if (repository == null)
-                return StatusCode(500, new { message = "Внутренняя ошибка" });
-
-            // TODO: ask AI about this error
-            var credential = await repository.GetByUserNameAsync(request.Username);
-        }
-        
-        // TODO: make registration
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request) {
-            
-        }
+        #endregion
     }
 }
