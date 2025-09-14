@@ -27,7 +27,7 @@ namespace db.Repositories {
 
                 await EntityValidate(entity.Forename, entity.DriverId, entity.VehicleId, entity.MovePrice,
                     entity.IdlePrice, entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged,
-                    entity.WhenChanged, entity.Note, entity.isDeleted);
+                    entity.WhenChanged, entity.Note, entity.IsDeleted);
 
                 await _context.Rates.AddAsync(entity);
                 await _context.SaveChangesAsync();
@@ -42,7 +42,7 @@ namespace db.Repositories {
 
                 var entity = new Rate {
                     Forename = forename,
-                    DriverId = driverId,    
+                    DriverId = driverId,
                     VehicleId = vehicleId,
                     MovePrice = movePrice,
                     IdlePrice = idlePrice,
@@ -51,7 +51,7 @@ namespace db.Repositories {
                     WhoChanged = whoChanged,
                     WhenChanged = whenChanged,
                     Note = note,
-                    isDeleted = isDeleted
+                    IsDeleted = isDeleted
                 };
 
                 await _context.Rates.AddAsync(entity);
@@ -93,7 +93,7 @@ namespace db.Repositories {
             public async Task SoftDeleteAsync(TypeId id) {
                 var entity = await GetByIdAsync(id);
                 if (entity != null) {
-                    entity.isDeleted = DateTime.Now; // soft delete
+                    entity.IsDeleted = DateTime.Now; // soft delete
                     entity.WhenChanged = DateTime.Now;
                     await _context.SaveChangesAsync();
                 }
@@ -110,7 +110,7 @@ namespace db.Repositories {
             public async Task<bool> RecoverAsync(TypeId id) {
                 var entity = await GetByIdAsync(id);
                 if (entity?.Id != null) {
-                    entity.isDeleted = null;
+                    entity.IsDeleted = null;
                     entity.WhenChanged = DateTime.Now;
                     await _context.SaveChangesAsync();
 
@@ -126,7 +126,7 @@ namespace db.Repositories {
 
                 // Get All deleted Ids in ascending order
                 var Ids = entities
-                    .Where(e => e.isDeleted != null || e.isDeleted is null)
+                    .Where(e => e.IsDeleted != null || e.IsDeleted is null)
                     .Select(e => e.Id)
                     .OrderBy(id => id)
                     .ToList();

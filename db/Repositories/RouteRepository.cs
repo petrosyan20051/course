@@ -1,6 +1,5 @@
 ﻿using db.Contexts;
 using db.Interfaces;
-using db.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
@@ -26,14 +25,14 @@ namespace db.Repositories {
             public async Task AddAsync(Models.Route entity) {
                 await EntityValidate(entity.BoardingAddress, entity.DropAddress, entity.WhoAdded,
                     entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note,
-                    entity.isDeleted);
+                    entity.IsDeleted);
 
                 await _context.Routes.AddAsync(entity);
                 await _context.SaveChangesAsync();
             }
 
             public async Task AddAsync(string boardingAddress, string dropAddress, string whoAdded,
-                DateTime whenAdded, TypeId? id, string? whoChanged = null, DateTime? whenChanged = null, 
+                DateTime whenAdded, TypeId? id, string? whoChanged = null, DateTime? whenChanged = null,
                 string? note = null, DateTime? isDeleted = null) {
 
                 await EntityValidate(boardingAddress, dropAddress, whoAdded, whenAdded, id, whoChanged,
@@ -47,7 +46,7 @@ namespace db.Repositories {
                     WhoChanged = whoChanged,
                     WhenChanged = whenChanged,
                     Note = note,
-                    isDeleted = isDeleted
+                    IsDeleted = isDeleted
                 };
 
                 await _context.Routes.AddAsync(entity);
@@ -80,7 +79,7 @@ namespace db.Repositories {
             public async Task SoftDeleteAsync(TypeId id) {
                 var entity = await GetByIdAsync(id);
                 if (entity != null) {
-                    entity.isDeleted = DateTime.Now; // soft delete
+                    entity.IsDeleted = DateTime.Now; // soft delete
                     entity.WhenChanged = DateTime.Now;
                     await _context.SaveChangesAsync();
                 }
@@ -97,7 +96,7 @@ namespace db.Repositories {
             public async Task<bool> RecoverAsync(TypeId id) {
                 var entity = await GetByIdAsync(id);
                 if (entity?.Id != null) {
-                    entity.isDeleted = null;
+                    entity.IsDeleted = null;
                     entity.WhenChanged = DateTime.Now;
                     await _context.SaveChangesAsync();
 
@@ -113,7 +112,7 @@ namespace db.Repositories {
 
                 // Get All deleted Ids in ascending order
                 var Ids = entities
-                    .Where(e => e.isDeleted != null || e.isDeleted is null)
+                    .Where(e => e.IsDeleted != null || e.IsDeleted is null)
                     .Select(e => e.Id)
                     .OrderBy(id => id)
                     .ToList();

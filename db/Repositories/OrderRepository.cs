@@ -26,14 +26,14 @@ namespace db.Repositories {
 
             await EntityValidate(entity.CustomerId, entity.RouteId, entity.RateId, entity.Distance,
                 entity.WhoAdded, entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged,
-                entity.Note, entity.isDeleted);
+                entity.Note, entity.IsDeleted);
 
             await _context.Orders.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddAsync(TypeId customerId, TypeId routeId, TypeId rateId, int distance, 
-            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
+        public async Task AddAsync(TypeId customerId, TypeId routeId, TypeId rateId, int distance,
+            string whoAdded, DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
             string? note = null, DateTime? isDeleted = null) {
 
             await EntityValidate(customerId, routeId, rateId, distance, whoAdded, whenAdded, id,
@@ -41,7 +41,7 @@ namespace db.Repositories {
 
             var entity = new Order {
                 CustomerId = customerId,
-                RouteId = routeId,  
+                RouteId = routeId,
                 RateId = rateId,
                 Distance = distance,
                 WhoAdded = whoAdded,
@@ -49,7 +49,7 @@ namespace db.Repositories {
                 WhoChanged = whoChanged,
                 WhenChanged = whenChanged,
                 Note = note,
-                isDeleted = isDeleted
+                IsDeleted = isDeleted
             };
 
             await _context.Orders.AddAsync(entity);
@@ -89,7 +89,7 @@ namespace db.Repositories {
         public async Task SoftDeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
-                entity.isDeleted = DateTime.Now; // soft delete
+                entity.IsDeleted = DateTime.Now; // soft delete
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
@@ -98,7 +98,7 @@ namespace db.Repositories {
         public async Task<bool> RecoverAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity?.Id != null) {
-                entity.isDeleted = null;
+                entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
 

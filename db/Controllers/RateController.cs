@@ -61,7 +61,7 @@ namespace db.Controllers {
 
             // Get All deleted Ids in ascending order
             var deletedIds = entities
-                .Where(e => e.isDeleted != null)
+                .Where(e => e.IsDeleted != null)
                 .Select(e => e.Id)
                 .OrderBy(id => id)
                 .ToList();
@@ -79,7 +79,7 @@ namespace db.Controllers {
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {
-                entity.isDeleted = null;
+                entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _repository.UpdateAsync(entity);
                 return Ok(new string("Восстановление прошло успешно"));

@@ -1,11 +1,11 @@
-﻿using db.Contexts;
+﻿using db.Classes;
+using db.Contexts;
 using db.Interfaces;
 using db.Models;
-using db.Classes;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using static db.Interfaces.IInformation;
 using TypeId = int;
-using Microsoft.IdentityModel.Tokens;
 
 namespace db.Repositories {
     public class CredentialRepository : IRepository<Credential, TypeId>,
@@ -26,39 +26,38 @@ namespace db.Repositories {
 
         public async Task AddAsync(Credential entity) {
 
-            await EntityValidate(entity.RoleId, entity.Username, entity.Password, entity.Rights, entity.WhoAdded,
+            await EntityValidate(entity.RoleId, entity.Username, entity.Password, entity.WhoAdded,
                 entity.WhenAdded, entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note,
-                entity.isDeleted);
+                entity.IsDeleted);
 
             await _context.Credentials.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
         public async Task AddAsync(TypeId roleId, string username, string password, UserRights Rights, string whoAdded,
-            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
+            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
             string? note = null, DateTime? isDeleted = null) {
 
-            await EntityValidate(roleId, username, password, Rights, whoAdded, whenAdded, id, whoChanged, 
+            await EntityValidate(roleId, username, password, whoAdded, whenAdded, id, whoChanged,
                 whenChanged, note, isDeleted);
 
             var entity = new Credential {
                 RoleId = roleId,
                 Username = username,
                 Password = password,
-                Rights = Rights,
                 WhoAdded = whoAdded,
                 WhenAdded = whenAdded,
                 WhoChanged = whoChanged,
                 WhenChanged = whenChanged,
                 Note = note,
-                isDeleted = isDeleted
+                IsDeleted = isDeleted
             };
 
             await _context.Credentials.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        private async Task EntityValidate(TypeId roleId, string username, string password, UserRights Rights, string whoAdded,
+        private async Task EntityValidate(TypeId roleId, string username, string password, string whoAdded,
             DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
             string? note = null, DateTime? isDeleted = null) {
 
@@ -90,7 +89,7 @@ namespace db.Repositories {
         public async Task SoftDeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
-                entity.isDeleted = DateTime.Now; // soft delete
+                entity.IsDeleted = DateTime.Now; // soft delete
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
@@ -111,7 +110,7 @@ namespace db.Repositories {
 
             // Get All deleted Ids in ascending order
             var Ids = entities
-                .Where(e => e.isDeleted != null || e.isDeleted is null)
+                .Where(e => e.IsDeleted != null || e.IsDeleted is null)
                 .Select(e => e.Id)
                 .OrderBy(id => id)
                 .ToList();
@@ -125,7 +124,7 @@ namespace db.Repositories {
         public async Task<bool> RecoverAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
-                entity.isDeleted = null;
+                entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
 
@@ -136,7 +135,7 @@ namespace db.Repositories {
 
         public async Task<Credential?> GetByUserNameAsync(string username) {
             return await _context.Credentials
-                .FirstOrDefaultAsync(c => c.Username == username);
+                .FirstOrDefaultAsync(c => c.Username == username && c.IsDeleted == null);
         }
     }
 }

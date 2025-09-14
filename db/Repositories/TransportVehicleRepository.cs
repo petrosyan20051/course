@@ -8,7 +8,7 @@ using TypeId = int;
 namespace db.Repositories {
     public class TransportVehicleRepository : IRepository<TransportVehicle, TypeId>,
         IDeletable<TypeId>, IRecovarable<TypeId> {
-        
+
         private readonly OrderDbContext _context;
 
         public TransportVehicleRepository(OrderDbContext context) {
@@ -27,13 +27,13 @@ namespace db.Repositories {
         public async Task AddAsync(TransportVehicle entity) {
             await EntityValidate(entity.DriverId, entity.Number, entity.Series, entity.RegistrationCode,
                 entity.Model, entity.Color, entity.ReleaseYear, entity.WhoAdded, entity.WhenAdded,
-                entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note, entity.isDeleted);
+                entity.Id, entity.WhoChanged, entity.WhenChanged, entity.Note, entity.IsDeleted);
 
             await _context.TransportVehicles.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddAsync(TypeId driverId, string number, string series, 
+        public async Task AddAsync(TypeId driverId, string number, string series,
             int registrationCode, string model, string color, int releaseYear, string whoAdded,
             DateTime whenAdded, string? whoChanged = null, DateTime? whenChanged = null, string? note = null,
             DateTime? isDeleted = null) {
@@ -54,7 +54,7 @@ namespace db.Repositories {
                 WhoChanged = whoChanged,
                 WhenChanged = whenChanged,
                 Note = note,
-                isDeleted = isDeleted
+                IsDeleted = isDeleted
             };
 
             await _context.TransportVehicles.AddAsync(entity);
@@ -63,7 +63,7 @@ namespace db.Repositories {
 
         private async Task EntityValidate(TypeId driverId, string number, string series,
             int registrationCode, string model, string color, int releaseYear, string whoAdded,
-            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null, 
+            DateTime whenAdded, TypeId? id = null, string? whoChanged = null, DateTime? whenChanged = null,
             string? note = null, DateTime? isDeleted = null) {
 
             if (number.IsNullOrEmpty()) {
@@ -114,7 +114,7 @@ namespace db.Repositories {
 
             // Get All deleted Ids in ascending order
             var Ids = entities
-                .Where(e => e.isDeleted != null || e.isDeleted is null)
+                .Where(e => e.IsDeleted != null || e.IsDeleted is null)
                 .Select(e => e.Id)
                 .OrderBy(id => id)
                 .ToList();
@@ -128,7 +128,7 @@ namespace db.Repositories {
         public async Task<bool> RecoverAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity?.Id != null) {
-                entity.isDeleted = null;
+                entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
 
@@ -140,7 +140,7 @@ namespace db.Repositories {
         public async Task SoftDeleteAsync(TypeId id) {
             var entity = await GetByIdAsync(id);
             if (entity != null) {
-                entity.isDeleted = DateTime.Now; // soft delete
+                entity.IsDeleted = DateTime.Now; // soft delete
                 entity.WhenChanged = DateTime.Now;
                 await _context.SaveChangesAsync();
             }

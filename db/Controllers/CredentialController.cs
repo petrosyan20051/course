@@ -1,11 +1,8 @@
 ﻿using db.Classes;
-using db.Interfaces;
 using db.Models;
 using db.Repositories;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-
-using TypeId = int;
+using static db.Interfaces.IInformation;
 
 namespace db.Controllers {
 
@@ -15,7 +12,7 @@ namespace db.Controllers {
 
         CredentialRepository _credentialRepository;
         RoleRepository _roleRepository;
-        
+
         public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) {
             _credentialRepository = credentialRepository;
             _roleRepository = roleRepository;
@@ -25,41 +22,91 @@ namespace db.Controllers {
             return entity.Id;
         }
 
-        // TODO: make Login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginPrompt request) {
+            // Standart checks
             if (_credentialRepository == null || _roleRepository == null)
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
-            var credential = await _credentialRepository.GetByUserNameAsync(request.Login);
-            if (credential == null || credential.isDeleted != null)
-                return Unauthorized(new {message = $"Пользователем с именем \"{request.Login}\" не существует"});
+            try {
+                // Whether credential with such username exists
+                var credential = await _credentialRepository.GetByUserNameAsync(request.Login);
+                if (credential == null || credential.IsDeleted != null)
+                    return Unauthorized(new { message = $"Пользователем с именем \"{request.Login}\" не существует" });
 
-            if (!PasswordHasher.VerifyPassword(request.Password, request.Password))
-                return Unauthorized(new { messsage = "Введен неверный пароль" });
+                // Password verification
+                if (!PasswordHasher.VerifyPassword(request.Password, credential.Password))
+                    return Unauthorized(new { messsage = "Введен неверный пароль" });
 
-            var role = await _roleRepository.GetByIdAsync(credential.RoleId);
-            if (role == null || role.isDeleted != null)
-                return BadRequest(new { message = "Внутренняя ошибка" });
+                // Whether such role exists 
+                var role = await _roleRepository.GetByIdAsync(credential.RoleId);
+                if (role == null || role.IsDeleted != null)
+                    return BadRequest(new { message = "Внутренняя ошибка" });
 
-            var response = new LoginResponse {
-                UserId = credential.Id,
-                Username = credential.Username,
-                CanGet = role.CanGet,
-                CanPost = role.CanPost,
-                CanUpdate = role.CanUpdate,
-                CanDelete = role.CanDelete,
-                Rights = credential.Rights,
-            };
+                var response = new LoginResponse {
+                    UserId = credential.Id,
+                    Username = credential.Username,
+                    CanGet = role.CanGet,
+                    CanPost = role.CanPost,
+                    CanUpdate = role.CanUpdate,
+                    CanDelete = role.CanDelete,
+                };
 
-            return Ok(response);
+                return Ok(response);
+            } catch (Exception ex) {
+                return StatusCode(500, new { message = "Внутренняя ошбика" });
+            }
+            
+            
 
         }
-        
+
         // TODO: make registration
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request) {
-            
+        public async Task<IActionResult> Register([FromBody] RegisterPrompt request) {
+            // Standart checks
+            if (_credentialRepository == null || _roleRepository == null)
+                return StatusCode(500, new { message = "Внутренняя ошибка" });
+
+            // Whether user with such name exists
+            var credential = await _credentialRepository.GetByUserNameAsync(request.UserName);
+            if (credential != null)
+                return BadRequest(new { message = $"Пользователь с именем \"{request.UserName}\" уже существует" });
+
+            // Check whether password is strong
+            if (!PasswordHasher.IsPasswordStrong(request.Password))
+                return BadRequest(new { message = "Введенный пароль ненадёжен" });
+
+            // Whether selected role exists
+            var role = await _roleRepository.GetByUserRights(request.RegisterRights);
+            if (role == null)
+                return BadRequest(new { message = "Введенные права пользователя не существуют" });
+
+            bool canUpdate, canDelete;
+            if (request.RegisterType != RegisterType.Anonymous) {
+                canUpdate = request.RegisterType != RegisterType.Anonymous;
+                canDelete = request.RegisterType != RegisterType.Anonymous;
+            } else {
+                canUpdate = false;
+                canDelete = false;
+            }
+
+            var response = new RegisterResponse {
+                UserName = request.UserName,
+                CanGet = true,
+                CanPost = request.RegisterType == RegisterType.Anonymous ? false : true,
+                CanUpdate = canUpdate,
+                CanDelete = canDelete
+            };
+
+            /*await _credentialRepository.AddAsync(new Credential {
+                RoleId = role.Id,
+                Username = request.UserName,
+                Password = PasswordHasher.HashPassword(request.Password),
+                Rights = 
+            })*/
+
+            return Ok(response);
         }
 
         #region Deprecated 
