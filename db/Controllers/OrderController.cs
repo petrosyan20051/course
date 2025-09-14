@@ -11,7 +11,7 @@ namespace db.Controllers {
     public class OrderController : BaseCrudController<Order, TypeId> {
         public OrderController(IRepository<Order, TypeId> repository) : base(repository) { }
 
-        protected override TypeId GetEntityId(Order entity) {
+        protected TypeId GetEntityId(Order entity) {
             return entity.Id;
         }
 
@@ -51,29 +51,6 @@ namespace db.Controllers {
         public override async Task<IActionResult> Delete(TypeId id) {
             await _repository.DeleteAsync(id);
             return NoContent();
-        }
-
-        // GET: api/{entity}/NewIdToAdd
-        [HttpGet("NewIdToAdd")]
-        public override async Task<TypeId> NewIdToAdd() {
-            var entities = await _repository.GetAllAsync();
-            if (entities == null)
-                return -1; // entities are not found
-
-            // Get All deleted Ids in ascending order
-            var deletedIds = entities
-                .Where(e => e.IsDeleted != null)
-                .Select(e => e.Id)
-                .OrderBy(id => id)
-                .ToList();
-            if (deletedIds.Any())
-                return deletedIds.First(); // return first free id
-            var usedIds = new HashSet<TypeId>(entities.Select(c => c.Id).Where(id => id > 0).OrderBy(id => id));
-            for (TypeId i = 1; i < TypeId.MaxValue; i++) {
-                if (!usedIds.Contains(i))
-                    return i;
-            }
-            return TypeId.MaxValue; // maybe all seats are reserved
         }
 
         [HttpPost("RecoverById")]

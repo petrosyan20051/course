@@ -33,25 +33,7 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase {
     [HttpDelete("DeleteById")]
     public abstract Task<IActionResult> Delete(TKey id);
 
-    // GET: api/{entity}/NewIdToAdd
-    [HttpGet("NewIdToAdd")]
-    public abstract Task<TypeId> NewIdToAdd();
-
     // Update: api/{entity}/RecoverById
     [HttpGet("RecoverById")]
     public abstract Task<IActionResult> RecoverAsync(TKey id);
-
-    /// ---------------
-
-    protected abstract TKey GetEntityId(TEntity entity);
-
-
-    /*// Class to validate creation of entity
-    protected class ValidationResult {
-        public bool IsValid { get; set; }
-        public List<string> Errors { get; set; } = new List<string>();
-    }*/
-
-
-
 }
