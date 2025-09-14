@@ -4,17 +4,17 @@ using db.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using static db.Interfaces.IInformation;
 
+using TypeId = int;
+
 namespace db.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
-    public class CredentialController : ControllerBase {
+    public class CredentialController : BaseCrudController<Credential, TypeId> {
 
-        CredentialRepository _credentialRepository;
         RoleRepository _roleRepository;
 
-        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) {
-            _credentialRepository = credentialRepository;
+        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) : base(credentialRepository) {
             _roleRepository = roleRepository;
         }
 
@@ -25,6 +25,7 @@ namespace db.Controllers {
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginPrompt request) {
             // Standart checks
+            CredentialRepository _credentialRepository = (CredentialRepository)_repository;
             if (_credentialRepository == null || _roleRepository == null)
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
@@ -62,6 +63,7 @@ namespace db.Controllers {
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterPrompt request) {
             // Standart checks
+            CredentialRepository _credentialRepository = (CredentialRepository)_repository;
             if (_credentialRepository == null || _roleRepository == null)
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
@@ -113,9 +115,8 @@ namespace db.Controllers {
             return Ok(response);
         }
 
-        #region Deprecated 
 
-        /*// GET: api/{entity}/GetAll
+        // GET: api/{entity}/GetAll
         [HttpGet("GetAll")]
         public override async Task<ActionResult<IEnumerable<Credential>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
@@ -153,43 +154,18 @@ namespace db.Controllers {
             return NoContent();
         }
 
-        // GET: api/{entity}/NewIdToAdd
-        [HttpGet("NewIdToAdd")]
-        public override async Task<TypeId> NewIdToAdd() {
-            var entities = await _repository.GetAllAsync();
-            if (entities == null)
-                return -1; // entities are not found
-
-            // Get All deleted Ids in ascending order
-            var deletedIds = entities
-                .Where(e => e.isDeleted != null)
-                .Select(e => e.Id)
-                .OrderBy(id => id)
-                .ToList();
-            if (deletedIds.Any())
-                return deletedIds.First(); // return first free id
-            var usedIds = new HashSet<TypeId>(entities.Select(c => c.Id).Where(id => id > 0).OrderBy(id => id));
-            for (TypeId i = 1; i < TypeId.MaxValue; i++) {
-                if (!usedIds.Contains(i))
-                    return i;
-            }
-            return TypeId.MaxValue; // maybe all seats are reserved
-        }
-
         // Update: api/{entity}/RecoverById
         [HttpGet("RecoverById")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {
-                entity.isDeleted = null;
+                entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
 
                 return Ok("Восстановление прошло успешно");
             }
 
             return NotFound("Сущность не найдено или уже существует");
-        }*/
-
-        #endregion
+        }
     }
 }
