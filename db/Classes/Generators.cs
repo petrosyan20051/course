@@ -204,46 +204,5 @@ namespace db.Tools {
                 };
             }).ToList();
         }
-
-        public static List<Role>? GenerateRoles() {
-            List<Role>? roles = new List<Role>();
-            roles.Add(new Role {
-                Id = 1,
-                Forename = "Базовый",
-                Rights = UserRights.Basic,
-                Get = true,
-                Post = false,
-                Update = false,
-                Delete = false,
-                WhoAdded = "System",
-                WhenAdded = DateTime.Now
-            });
-
-            roles.Add(new Role {
-                Id = 2,
-                Forename = "Редактор",
-                Rights = UserRights.Editor,
-                Get = true,
-                Post = false,
-                Update = true,
-                Delete = false,
-                WhoAdded = "System",
-                WhenAdded = DateTime.Now
-            });
-
-            roles.Add(new Role {
-                Id = 3,
-                Forename = "Администратор",
-                Rights = UserRights.Admin,
-                Get = true,
-                Post = true,
-                Update = true,
-                Delete = true,
-                WhoAdded = "System",
-                WhenAdded = DateTime.Now
-            });
-
-            return roles;
-        }
     }
 }

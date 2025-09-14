@@ -171,10 +171,10 @@ namespace db.Contexts {
             modelBuilder.Entity<Role>(entity => {
                 entity.Property(e => e.Id).ValueGeneratedOnAdd().IsRequired().HasColumnOrder(1);
                 entity.Property(e => e.Rights).IsRequired().HasColumnOrder(2);
-                entity.Property(e => e.Get).IsRequired().HasColumnOrder(3);
-                entity.Property(e => e.Post).IsRequired().HasColumnOrder(4);
-                entity.Property(e => e.Update).IsRequired().HasColumnOrder(5);
-                entity.Property(e => e.Delete).IsRequired().HasColumnOrder(6);
+                entity.Property(e => e.CanGet).IsRequired().HasColumnOrder(3);
+                entity.Property(e => e.CanPost).IsRequired().HasColumnOrder(4);
+                entity.Property(e => e.CanUpdate).IsRequired().HasColumnOrder(5);
+                entity.Property(e => e.CanDelete).IsRequired().HasColumnOrder(6);
                 entity.Property(e => e.WhoAdded).IsRequired().HasColumnOrder(7);
                 entity.Property(e => e.WhenAdded).IsRequired().HasColumnOrder(8);
                 entity.Property(e => e.WhoChanged).HasColumnOrder(9);
