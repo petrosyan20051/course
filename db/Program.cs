@@ -23,7 +23,8 @@ builder.Services.AddScoped<IRepository<Driver, TypeId>, DriverRepository>();
 builder.Services.AddScoped<IRepository<Rate, TypeId>, RateRepository>();
 builder.Services.AddScoped<IRepository<db.Models.Route, TypeId>, RouteRepository>();
 builder.Services.AddScoped<IRepository<TransportVehicle, TypeId>, TransportVehicleRepository>();
-builder.Services.AddScoped<IRepository<Credential, TypeId>, CredentialRepository>();
+builder.Services.AddScoped<CredentialRepository>();
+builder.Services.AddScoped<RoleRepository>();
 
 
 var app = builder.Build();

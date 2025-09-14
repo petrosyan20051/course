@@ -1,5 +1,4 @@
 ﻿using db.Models;
-using static db.Interfaces.IInformation;
 
 namespace db.Tools {
     public static class Generators {
