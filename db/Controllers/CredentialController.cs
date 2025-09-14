@@ -56,9 +56,6 @@ namespace db.Controllers {
             } catch (Exception ex) {
                 return StatusCode(500, new { message = "Внутренняя ошбика" });
             }
-            
-            
-
         }
 
         // TODO: make registration
@@ -67,6 +64,12 @@ namespace db.Controllers {
             // Standart checks
             if (_credentialRepository == null || _roleRepository == null)
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
+
+            // Check whether person who registrates current one exists
+            if (request.RegisterType == RegisterType.Admin)
+                if (await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)
+                    return BadRequest(new { message = $"Пользователем с именем \"{request.WhoRegister}\", " +
+                        $"который регистрирует нового пользователя не существует" });
 
             // Whether user with such name exists
             var credential = await _credentialRepository.GetByUserNameAsync(request.UserName);
@@ -99,12 +102,13 @@ namespace db.Controllers {
                 CanDelete = canDelete
             };
 
-            /*await _credentialRepository.AddAsync(new Credential {
+            await _credentialRepository.AddAsync(new Credential {
                 RoleId = role.Id,
                 Username = request.UserName,
                 Password = PasswordHasher.HashPassword(request.Password),
-                Rights = 
-            })*/
+                WhoAdded = request.RegisterType == RegisterType.Anonymous ? request.UserName : request.WhoRegister,
+                WhenAdded = DateTime.Now,
+            });
 
             return Ok(response);
         }
