@@ -26,7 +26,7 @@ namespace db.Models {
         [Display(Order = 8)]
         public string? Note { get; set; } = null;
         [Display(Order = 9)]
-        public DateTime? isDeleted { get; set; } = null;
+        public DateTime? IsDeleted { get; set; } = null;
 
         //public ICollection<Order> Orders { get; set; } = new List<Order>();
     }

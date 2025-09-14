@@ -39,7 +39,7 @@ namespace db.Models {
         [Display(Order = 13)]
         public string? Note { get; set; } = null;
         [Display(Order = 14)]
-        public DateTime? isDeleted { get; set; } = null;
+        public DateTime? IsDeleted { get; set; } = null;
 
         //public ICollection<Rate> Rates { get; set; } = new List<Rate>();
 

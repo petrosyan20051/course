@@ -32,6 +32,6 @@ namespace db.Models {
         [Display(Order = 11)]
         public DateTime? WhenChanged { get; set; } = null;
         [Display(Order = 12)]
-        public DateTime? isDeleted { get; set; } = null;
+        public DateTime? IsDeleted { get; set; } = null;
     }
 }

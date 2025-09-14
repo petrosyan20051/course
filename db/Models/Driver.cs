@@ -32,7 +32,7 @@ namespace db.Models {
         [Display(Order = 11)]
         public string? Note { get; set; } = null;
         [Display(Order = 12)]
-        public DateTime? isDeleted { get; set; } = null;
+        public DateTime? IsDeleted { get; set; } = null;
 
         //public ICollection<TransportVehicle> TransportVehicles { get; set; } = new List<TransportVehicle>();
         //public ICollection<Rate> Rates { get; set; } = new List<Rate>();
@@ -40,10 +40,10 @@ namespace db.Models {
         public static bool PhoneNumberValidate(string phoneNumber) {
             if (phoneNumber.IsNullOrEmpty() || phoneNumber.Length <= 7) {
                 return false;
-            } else if (phoneNumber.StartsWith("+7") && phoneNumber.Length != 9 && 
+            } else if (phoneNumber.StartsWith("+7") && phoneNumber.Length != 9 &&
                 phoneNumber.Any(c => !char.IsDigit(c))) {
                 return false;
-            } else if (!phoneNumber.StartsWith("+7") && phoneNumber.Length != 8 && 
+            } else if (!phoneNumber.StartsWith("+7") && phoneNumber.Length != 8 &&
                 phoneNumber.Any(c => !char.IsDigit(c))) {
                 return false;
             }
