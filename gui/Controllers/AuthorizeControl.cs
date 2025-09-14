@@ -1,9 +1,7 @@
-﻿using db.Classes;
-using db.Contexts;
+﻿using db.Contexts;
 using db.Factories;
 using gui.Classes;
 using gui.Forms;
-using Microsoft.EntityFrameworkCore;
 using static db.Custom_Classes.SqlConnect;
 
 namespace gui.Controllers {
@@ -61,7 +59,10 @@ namespace gui.Controllers {
                 return;
             }
 
-            // Check whether user exists
+            AuthService service = new AuthService();
+            var response = await service.LoginAsync(_loginBox.Text, _passwordBox.Text);
+
+            /*// Check whether user exists
             var user = context.Credentials.FirstOrDefault(c => c.Username == _loginBox.Text);
             if (user == null && _secBox.Text == SECURITY[1]) {
                 MessageBox.Show($"Пользователь с именем \"{_loginBox.Text}\" не существует.{Environment.NewLine}" +
@@ -80,7 +81,7 @@ namespace gui.Controllers {
                 context.Database.CloseConnection();
                 context.Dispose();
                 return;
-            }
+            }*/
 
             // Tag:
             //  1. OrderDbContext
@@ -88,7 +89,7 @@ namespace gui.Controllers {
             //  3. User's name (returns "Локальная БД" if local db)
             this.Parent.Tag = new object[] {
                 context,
-                _secBox.Text == SECURITY[1] ? user.Rights : IInformation.UserRights.Admin,
+                _secBox.Text == SECURITY[1],
                 _loginBox.Enabled ? _loginBox.Text : "Локальная БД"
             };
             MessageBox.Show($"Подключение к базе данных {_dbNameBox.Text} прошло успешно{Environment.NewLine}",

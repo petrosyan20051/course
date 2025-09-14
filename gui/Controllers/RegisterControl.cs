@@ -1,13 +1,6 @@
-﻿using db.Classes;
-using db.Contexts;
-using db.Factories;
-using db.Models;
-using db.Repositories;
-using gui.Classes;
+﻿using gui.Classes;
 using gui.Forms;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using static db.Interfaces.IInformation;
 
 namespace gui.Controllers {
     public partial class RegisterControl : UserControl {
@@ -30,7 +23,7 @@ namespace gui.Controllers {
                 return;
             }
 
-            if (!PasswordHasher.IsPasswordStrong(_passwordBox.Text)) {
+            /*if (!PasswordHasher.IsPasswordStrong(_passwordBox.Text)) {
                 MessageBox.Show($"Введенный пароль недопустим.{Environment.NewLine}" +
                     $"Пароль должен содержать как минимум:{Environment.NewLine}" +
                     $"1. Одну латинскую букву нижнего и верхнего регистра.{Environment.NewLine}" +
@@ -39,19 +32,13 @@ namespace gui.Controllers {
                     $"Длина пароля должен быть не менее 8 символов.",
                     IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
-            }
+            }*/
 
-            // Create DbContext
-            OrderDbContext context = new OrderDbContextFactory().CreateDbContext([]);
-            if (context.Credentials.Any(c => c.Username == _loginBox.Text)) {
-                MessageBox.Show($"Пользователь с логином \"{_loginBox.Text}\" уже существует. Введите другой логин.",
-                    IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                context.Database.CloseConnection();
-                context.Dispose();
-                return;
-            }
+            //AuthService service = new AuthService();
+            //var response = await service.LoginAsync(_)
 
-            // Make repository to work with db
+
+            /*// Make repository to work with db
             CredentialRepository repository = new CredentialRepository(context);
             Credential entity = new Credential {
                 Username = _loginBox.Text,
@@ -64,15 +51,13 @@ namespace gui.Controllers {
                 WhoChanged = null,
                 WhenChanged = null,
                 isDeleted = null
-            };
+            };*/
 
-            // Add entity into db
-            await repository.AddAsync(entity);
             MessageBox.Show("Регистрация прошла успешно. Можете войти в профиль.",
                 IInformation.AppName, MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
-            context.Database.CloseConnection();
-            context.Dispose();
+            //context.Database.CloseConnection();
+            //context.Dispose();
         }
 
         #region Пользовательские методы
