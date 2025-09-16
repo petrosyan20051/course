@@ -6,7 +6,5 @@
         Task<IEnumerable<TEntity>?> GetAllAsync();
         Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
-        // Some addictive async methods
-        Task<TKey> NewIdToAddAsync();
     }
 }
