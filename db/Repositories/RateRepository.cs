@@ -81,7 +81,7 @@ namespace db.Repositories {
 
                 if (id != 0) {
                     throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
-                } else if (id == null && await NewIdToAddAsync() == -1)
+                } else if (id == null)
                     throw new DbUpdateException("Database has no available id for new entity");
             }
 
@@ -119,7 +119,7 @@ namespace db.Repositories {
                 return false;
             }
 
-            public async Task<TypeId> NewIdToAddAsync() {
+            /*public async Task<TypeId> NewIdToAddAsync() {
                 var entities = await GetAllAsync();
                 if (entities == null)
                     return 0; // entities are not found so can use id = 0
@@ -135,7 +135,7 @@ namespace db.Repositories {
                 }
 
                 return Ids.Last() + 1; // maybe all seats are reserved
-            }
+            }*/
         }
     }
 }
