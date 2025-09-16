@@ -1,4 +1,5 @@
 ﻿using db.Classes;
+using db.Interfaces;
 using db.Models;
 using db.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,13 @@ namespace db.Controllers {
     [Route("api/[controller]")]
     public class CredentialController : BaseCrudController<Credential, TypeId> {
 
-        RoleRepository _roleRepository;
+        private readonly RoleRepository _roleRepository;
+        private readonly IJwtService _jwtService;
 
-        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) : base(credentialRepository) {
+        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository,
+            IJwtService jwtService) : base(credentialRepository) {
             _roleRepository = roleRepository;
+            _jwtService = jwtService;
         }
 
         protected int GetEntityId(Credential entity) {
@@ -44,9 +48,12 @@ namespace db.Controllers {
                 if (role == null || role.IsDeleted != null)
                     return BadRequest(new { message = "Внутренняя ошибка" });
 
+                var token = _jwtService.GenerateToken(credential, role);
+
                 var response = new LoginResponse {
                     UserId = credential.Id,
                     Username = credential.Username,
+                    Token = token,
                     CanGet = role.CanGet,
                     CanPost = role.CanPost,
                     CanUpdate = role.CanUpdate,
@@ -114,7 +121,11 @@ namespace db.Controllers {
                 WhenAdded = DateTime.Now,
             });
 
-            return Ok(response);
+            return Ok(new {
+                message = "Пользователь успешно зарегестрирован",
+                userName = request.UserName,
+                response
+            });
         }
 
 

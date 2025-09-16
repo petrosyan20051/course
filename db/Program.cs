@@ -54,7 +54,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Add authorization by Can{CRUD} rights
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("CanGet", policy =>
+        policy.RequireClaim("CanGet", "true"));
+    options.AddPolicy("CanPost", policy =>
+        policy.RequireClaim("CanPost", "true"));
+    options.AddPolicy("CanUpdate", policy =>
+        policy.RequireClaim("CanUpdate", "true"));
+    options.AddPolicy("CanDelete", policy =>
+        policy.RequireClaim("CanDelete", "true"));
+});
+
 var app = builder.Build();
+
+// Add autthentication + authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
