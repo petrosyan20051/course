@@ -1,12 +1,12 @@
-﻿using db.Interfaces;
-using TypeId = int;
+﻿using TypeId = int;
 
 namespace db.Models {
     public class LoginResponse {
         public TypeId UserId { get; set; }
         public string Username { get; set; } = string.Empty;
 
-        public IInformation.UserRights Rights { get; set; }
+        public string Token { get; set; }
+        public DateTime TokenExpiration { get; set; }
 
         public bool CanGet { get; set; }
         public bool CanPost { get; set; }
