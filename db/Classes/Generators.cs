@@ -1,4 +1,6 @@
-﻿using db.Models;
+﻿using db.Classes;
+using db.Models;
+using static db.Interfaces.IInformation;
 
 namespace db.Tools {
     public static class Generators {
@@ -200,6 +202,36 @@ namespace db.Tools {
                     WhenChanged = new DateTime(2023, 1, 1).AddDays(i + _random.Next(1, 30)),
                     WhoChanged = "system",
                     Note = $"Заказ #{i} от {customer.Surname} ({distance} км)"
+                };
+            }).ToList();
+        }
+
+        public static List<Role>? GenerateRoles() {
+
+            return Enumerable.Range(1, 1).Select(i => {
+                return new Role {
+                    Id = 1,
+                    Forename = "admin",
+                    Rights = UserRights.Admin,
+                    CanGet = true,
+                    CanPost = true,
+                    CanUpdate = true,
+                    CanDelete = true,
+                    WhoAdded = "system",
+                    WhenAdded = new DateTime(2023, 1, 1)
+                };
+            }).ToList();
+        }
+
+        public static List<Credential>? GenerateCredentials() {
+            return Enumerable.Range(1, 1).Select(i => {
+                return new Credential {
+                    Id = 1,
+                    Username = "admin",
+                    Password = PasswordHasher.HashPassword("JcGDN9ST5KEG!"),
+                    RoleId = 1,
+                    WhoAdded = "admin",
+                    WhenAdded = new DateTime(2023, 1, 1)
                 };
             }).ToList();
         }
