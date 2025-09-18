@@ -14,12 +14,12 @@ namespace db.Controllers {
     public class CredentialController : BaseCrudController<Credential, TypeId> {
 
         private readonly RoleRepository _roleRepository;
-        private readonly IJwtService _jwtService;
+        //private readonly IJwtService _jwtService;
 
-        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository,
-            IJwtService jwtService) : base(credentialRepository) {
+        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository
+            /*IJwtService jwtService*/) : base(credentialRepository) {
             _roleRepository = roleRepository;
-            _jwtService = jwtService;
+            //_jwtService = jwtService;
         }
 
         protected int GetEntityId(Credential entity) {
@@ -48,12 +48,12 @@ namespace db.Controllers {
                 if (role == null || role.IsDeleted != null)
                     return BadRequest(new { message = "Внутренняя ошибка" });
 
-                var token = _jwtService.GenerateToken(credential, role);
+                //var token = _jwtService.GenerateToken(credential, role);
 
                 var response = new LoginResponse {
                     UserId = credential.Id,
                     Username = credential.Username,
-                    Token = token,
+                    //Token = token,
                     CanGet = role.CanGet,
                     CanPost = role.CanPost,
                     CanUpdate = role.CanUpdate,

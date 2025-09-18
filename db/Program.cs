@@ -30,6 +30,7 @@ builder.Services.AddScoped<IRepository<TransportVehicle, TypeId>, TransportVehic
 builder.Services.AddScoped<CredentialRepository>();
 builder.Services.AddScoped<RoleRepository>();
 
+/*
 // Register JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
@@ -66,12 +67,15 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("CanDelete", policy =>
         policy.RequireClaim("CanDelete", "true"));
 });
+*/
 
 var app = builder.Build();
 
+/*
 // Add autthentication + authorization
 app.UseAuthentication();
 app.UseAuthorization();
+*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
