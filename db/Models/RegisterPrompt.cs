@@ -9,10 +9,8 @@ namespace db.Models {
         [Required(ErrorMessage = "Пароль пользователя обязателен")]
         public required string Password { get; set; }
 
-        public required string? WhoRegister { get; set; } = null;
-
-        [Required(ErrorMessage = "Тип регистрации обязателен")]
-        public IInformation.RegisterType RegisterType { get; set; }
+        [Required(ErrorMessage = "Требуется пользователь, который регистрирует нового")]
+        public required string WhoRegister { get; set; }
 
         [Required(ErrorMessage = "Тип регистрируемого пользователя обязателен")]
         public IInformation.UserRights RegisterRights { get; set; }

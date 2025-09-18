@@ -1,6 +1,8 @@
 ﻿using db.Classes;
+using db.Interfaces;
 using db.Models;
 using db.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static db.Interfaces.IInformation;
 
@@ -12,9 +14,12 @@ namespace db.Controllers {
     [Route("api/[controller]")]
     public class CredentialController : BaseCrudController<Credential, TypeId> {
         private readonly RoleRepository _roleRepository;
+        private readonly IJwtService _jwtService;
 
-        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) : base(credentialRepository) {
+        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository,
+            IJwtService jwtService) : base(credentialRepository) {
             _roleRepository = roleRepository;
+            _jwtService = jwtService;
         }
 
         protected int GetEntityId(Credential entity) {
@@ -22,10 +27,11 @@ namespace db.Controllers {
         }
 
         [HttpPost("Login")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginAsync([FromBody] LoginPrompt request) {
             // Standart checks
             CredentialRepository _credentialRepository = (CredentialRepository)_repository;
-            if (_credentialRepository == null || _roleRepository == null)
+            if (_credentialRepository == null || _roleRepository == null || _jwtService == null)
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
             try {
@@ -43,9 +49,15 @@ namespace db.Controllers {
                 if (role == null || role.IsDeleted != null)
                     return BadRequest(new { message = "Внутренняя ошибка" });
 
+                var token = _jwtService.GenerateToken(credential, role);
+
+                JwtSettings jwtSettings = 
+
                 var response = new LoginResponse {
                     UserId = credential.Id,
                     Username = credential.Username,
+                    Token = token,
+                    TokenLifeTime = DateTime.Now.AddMinutes(_jwtService.ExpiryInMinutes),
                     CanGet = role.CanGet,
                     CanPost = role.CanPost,
                     CanUpdate = role.CanUpdate,
@@ -67,12 +79,11 @@ namespace db.Controllers {
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
             // Check whether person who registrates current one exists
-            if (request.RegisterType == RegisterType.Admin)
-                if (await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)
-                    return BadRequest(new {
-                        message = $"Пользователем с именем \"{request.WhoRegister}\", " +
-                        $"который регистрирует нового пользователя не существует"
-                    });
+            if (await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)
+                return BadRequest(new {
+                    message = $"Пользователем с именем \"{request.WhoRegister}\", " +
+                    $"который регистрирует нового пользователя не существует"
+                });
 
             // Whether user with such name exists
             var credential = await _credentialRepository.GetByUserNameAsync(request.UserName);
@@ -88,28 +99,19 @@ namespace db.Controllers {
             if (role == null)
                 return BadRequest(new { message = "Введенные права пользователя не существуют" });
 
-            bool canUpdate, canDelete;
-            if (request.RegisterType != RegisterType.Anonymous) {
-                canUpdate = request.RegisterType != RegisterType.Anonymous;
-                canDelete = request.RegisterType != RegisterType.Anonymous;
-            } else {
-                canUpdate = false;
-                canDelete = false;
-            }
-
             var response = new RegisterResponse {
                 UserName = request.UserName,
                 CanGet = true,
-                CanPost = request.RegisterType == RegisterType.Anonymous ? false : true,
-                CanUpdate = canUpdate,
-                CanDelete = canDelete
+                CanPost = request.RegisterRights != UserRights.Basic,
+                CanUpdate = request.RegisterRights != UserRights.Basic,
+                CanDelete = request.RegisterRights == UserRights.Admin
             };
 
             await _credentialRepository.AddAsync(new Credential {
                 RoleId = role.Id,
                 Username = request.UserName,
                 Password = PasswordHasher.HashPassword(request.Password),
-                WhoAdded = request.RegisterType == RegisterType.Anonymous ? request.UserName : request.WhoRegister,
+                WhoAdded = request.WhoRegister, 
                 WhenAdded = DateTime.Now,
             });
 
@@ -123,12 +125,14 @@ namespace db.Controllers {
 
         // GET: api/{entity}/GetAll
         [HttpGet("GetAll")]
+        [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<IEnumerable<Credential>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
         }
 
         // GET: api/{entity}/GetById
         [HttpGet("GetById")]
+        [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<Credential>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             return entity is null ? NotFound() : Ok(entity);
@@ -136,6 +140,7 @@ namespace db.Controllers {
 
         // POST: api/{entity}/Post
         [HttpPost("Post")]
+        [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<Credential>> Create([FromBody] Credential entity) {
             await _repository.AddAsync(entity);
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
@@ -143,6 +148,7 @@ namespace db.Controllers {
 
         // PUT: api/{entity}/UpdateById
         [HttpPut("UpdateById")]
+        [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Update(TypeId id, [FromBody] Credential entity) {
             if (!id.Equals(GetEntityId(entity))) {
                 return BadRequest();
@@ -154,6 +160,7 @@ namespace db.Controllers {
 
         // DELETE: api/{entity}/DeleteById
         [HttpDelete("DeleteById")]
+        [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Delete(TypeId id) {
             await _repository.SoftDeleteAsync(id);
             return NoContent();
@@ -161,6 +168,7 @@ namespace db.Controllers {
 
         // Update: api/{entity}/RecoverById
         [HttpGet("RecoverById")]
+        [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {

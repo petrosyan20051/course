@@ -19,14 +19,6 @@ namespace db.Contexts {
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            //var config = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile("appsettings.json")
-            //    .Build(); // set appsettings for connectionStrings
-            //optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
-
-            // optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Database=KR;Trusted_Connection=True");
-            //optionsBuilder.UseSqlServer("Server=192.168.1.140;Database=KR;User ID=remote_user;Password=JcGDN9ST5KEG!;Trusted_Connection=True;TrustServerCertificate=True;");
             optionsBuilder.EnableSensitiveDataLogging();
         }
 
