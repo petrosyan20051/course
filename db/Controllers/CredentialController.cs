@@ -43,8 +43,6 @@ namespace db.Controllers {
                 if (role == null || role.IsDeleted != null)
                     return BadRequest(new { message = "Внутренняя ошибка" });
 
-                //var token = _jwtService.GenerateToken(credential, role);
-
                 var response = new LoginResponse {
                     UserId = credential.Id,
                     Username = credential.Username,
