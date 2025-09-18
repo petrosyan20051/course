@@ -1,5 +1,4 @@
 ﻿using db.Classes;
-using db.Interfaces;
 using db.Models;
 using db.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +11,10 @@ namespace db.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class CredentialController : BaseCrudController<Credential, TypeId> {
-
         private readonly RoleRepository _roleRepository;
-        //private readonly IJwtService _jwtService;
 
-        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository
-            /*IJwtService jwtService*/) : base(credentialRepository) {
+        public CredentialController(CredentialRepository credentialRepository, RoleRepository roleRepository) : base(credentialRepository) {
             _roleRepository = roleRepository;
-            //_jwtService = jwtService;
         }
 
         protected int GetEntityId(Credential entity) {
@@ -53,7 +48,6 @@ namespace db.Controllers {
                 var response = new LoginResponse {
                     UserId = credential.Id,
                     Username = credential.Username,
-                    //Token = token,
                     CanGet = role.CanGet,
                     CanPost = role.CanPost,
                     CanUpdate = role.CanUpdate,

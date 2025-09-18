@@ -5,9 +5,6 @@ namespace db.Models {
         public TypeId UserId { get; set; }
         public string Username { get; set; } = string.Empty;
 
-        //public string Token { get; set; }
-        //public DateTime TokenExpiration { get; set; }
-
         public bool CanGet { get; set; }
         public bool CanPost { get; set; }
         public bool CanUpdate { get; set; }
