@@ -1,5 +1,5 @@
 # Ignore build files
 .vs/
-db/bin
-db/obj
-db/Migrations/
+DbAPI/bin
+DbAPI/obj
+DbAPI/Migrations/
