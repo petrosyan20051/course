@@ -2,8 +2,10 @@
 using db.Interfaces;
 using db.Models;
 using db.Repositories;
+using DbAPI.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using static db.Interfaces.IInformation;
 
 using TypeId = int;
@@ -27,7 +29,7 @@ namespace db.Controllers {
         }
 
         [HttpPost("Login")]
-        [ValidateAntiForgeryToken]
+        [EnableRateLimiting("LoginPolicy")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginPrompt request) {
             // Standart checks
             CredentialRepository _credentialRepository = (CredentialRepository)_repository;
@@ -51,13 +53,11 @@ namespace db.Controllers {
 
                 var token = _jwtService.GenerateToken(credential, role);
 
-                //JwtSettings jwtSettings = 
-
                 var response = new LoginResponse {
                     UserId = credential.Id,
                     Username = credential.Username,
                     Token = token,
-                    //TokenLifeTime = DateTime.Now.AddMinutes(_jwtService.ExpiryInMinutes),
+                    TokenExpireTime = DateTime.UtcNow.AddMinutes(_jwtService.GetTokenLifeTime()),
                     CanGet = role.CanGet,
                     CanPost = role.CanPost,
                     CanUpdate = role.CanUpdate,
@@ -66,7 +66,7 @@ namespace db.Controllers {
 
                 return Ok(response);
             } catch (Exception ex) {
-                return StatusCode(500, new { message = "Внутренняя ошбика" });
+                return StatusCode(500, new { message = $"Внутренняя ошибка: {ex.Message}" });
             }
         }
 

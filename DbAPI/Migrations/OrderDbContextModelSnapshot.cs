@@ -8,7 +8,7 @@ using db.Contexts;
 
 #nullable disable
 
-namespace db.Migrations
+namespace DbAPI.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
     partial class OrderDbContextModelSnapshot : ModelSnapshot
@@ -73,6 +73,17 @@ namespace db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Credentials");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Password = "glS3EDJp0lTsOvEaX3Nt5at6DnvKjTLsr2O47iD82/NrxwcBwKq1lNs990gIKDsu",
+                            RoleId = 1,
+                            Username = "admin",
+                            WhenAdded = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            WhoAdded = "admin"
+                        });
                 });
 
             modelBuilder.Entity("db.Models.Customer", b =>
@@ -22998,6 +23009,20 @@ namespace db.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CanDelete = true,
+                            CanGet = true,
+                            CanPost = true,
+                            CanUpdate = true,
+                            Forename = "admin",
+                            Rights = 2,
+                            WhenAdded = new DateTime(2023, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            WhoAdded = "system"
+                        });
                 });
 
             modelBuilder.Entity("db.Models.Route", b =>

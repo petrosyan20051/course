@@ -1,12 +1,12 @@
 ﻿using TypeId = int;
 
-namespace db.Models {
+namespace DbAPI.DTO {
     public class LoginResponse {
         public TypeId UserId { get; set; }
         public string Username { get; set; } = string.Empty;
 
         public string Token { get; set; }
-        public DateTime? TokenLifeTime { get; set; }
+        public DateTime TokenExpireTime { get; set; }
 
         public bool CanGet { get; set; }
         public bool CanPost { get; set; }

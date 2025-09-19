@@ -1,4 +1,4 @@
-﻿namespace db.Models {
+﻿namespace DbAPI.DTO {
     public class RegisterResponse {
         public required string UserName { get; set; }
 

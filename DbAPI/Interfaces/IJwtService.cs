@@ -5,5 +5,6 @@ namespace db.Interfaces {
     public interface IJwtService {
         string GenerateToken(Credential credential, Role role);
         ClaimsPrincipal ValidateToken(string token);
+        int GetTokenLifeTime();
     }
 }

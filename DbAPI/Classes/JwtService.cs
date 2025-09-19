@@ -82,5 +82,8 @@ namespace db.Classes {
             }
         }
 
+        public int GetTokenLifeTime() {
+            return _jwtSettings.ExpiryInMinutes;
+        }
     }
 }
