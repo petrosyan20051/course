@@ -7,8 +7,7 @@ using TypeId = int;
 
 namespace db.Repositories {
 
-    public class DriverRepository : IRepository<Driver, TypeId>,
-        IDeletable<TypeId>, IRecovarable<TypeId> {
+    public class DriverRepository : IRepository<Driver, TypeId> {
         private readonly OrderDbContext _context;
 
         public DriverRepository(OrderDbContext context) {

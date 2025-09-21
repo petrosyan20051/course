@@ -7,8 +7,7 @@ using TypeId = int;
 
 namespace db.Repositories {
     namespace db.Repositories {
-        public class RateRepository : IRepository<Rate, TypeId>,
-        IDeletable<TypeId>, IRecovarable<TypeId> {
+        public class RateRepository : IRepository<Rate, TypeId> {
             private readonly OrderDbContext _context;
 
             public RateRepository(OrderDbContext context) {

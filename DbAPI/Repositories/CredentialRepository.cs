@@ -8,8 +8,7 @@ using static db.Interfaces.IInformation;
 using TypeId = int;
 
 namespace db.Repositories {
-    public class CredentialRepository : IRepository<Credential, TypeId>,
-        IDeletable<TypeId>, IRecovarable<TypeId> {
+    public class CredentialRepository : IRepository<Credential, TypeId> {
         private readonly OrderDbContext _context;
 
         public CredentialRepository(OrderDbContext context) {
