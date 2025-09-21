@@ -1,17 +1,14 @@
 # Ignore everything but Services
 *
 
-# Allow everything
-!*/
-
 # Does not ignore gitignore
 !.gitignore
 
-# Does not ingore gui/Services/
-!/gui/
-!/gui/*
+# Does not ignore gui/Services/
+#!gui/
+#!gui/*
 
-# Does not ingore gui/Services/*
+# Does not ignore gui/Services/*
 !/gui/Services/
 !/gui/Services/**
 
