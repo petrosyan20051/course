@@ -78,31 +78,32 @@ namespace gui.Services {
 
         public override async Task AddAsync(Credential entity) {
             EnsureAuthorized();
-            var response = await _httpClient.PostAsJsonAsync(EntityPath + "Add", entity);
+            var response = await _httpClient.PostAsJsonAsync(EntityPath + "Post", entity);
             response.EnsureSuccessStatusCode();
         }
 
         public override async Task UpdateAsync(Credential entity) {
             EnsureAuthorized();
-            var response = await _httpClient.PutAsJsonAsync($"{EntityPath}UpdateById?id={entity.Id}", entity);
+            var response = await _httpClient.PutAsJsonAsync(EntityPath + $"UpdateById?id={entity.Id}", entity);
             response.EnsureSuccessStatusCode();
         }
 
-        public override async Task DeleteAsync(int id) {
+        /*public override async Task DeleteAsync(int id) {
             EnsureAuthorized();
-            var response = await _httpClient.DeleteAsync(EntityPath + "Delete" + $"?id={id}");
+            var response = await _httpClient.DeleteAsync(EntityPath + "DeleteById" + $"?id={id}");
             response.EnsureSuccessStatusCode();
-        }
+        }*/
 
         public override async Task<bool> RecoverAsync(int id) {
             EnsureAuthorized();
-            var response = await _httpClient.GetAsync(EntityPath + "Recover" + $"?id={id}");
+            var response = await _httpClient.PostAsync(EntityPath + "RecoverById" + $"?id={id}", null);
+            response.EnsureSuccessStatusCode();
             return response.IsSuccessStatusCode;
         }
 
         public override async Task SoftDeleteAsync(int id) {
             EnsureAuthorized();
-            var response = await _httpClient.GetAsync(EntityPath + "SoftDelete" + $"?id={id}");
+            var response = await _httpClient.DeleteAsync(EntityPath + "DeleteById" + $"?id={id}");
             response.EnsureSuccessStatusCode();
         }
 

@@ -8,7 +8,7 @@ namespace gui.Services {
         public abstract Task<IEnumerable<TEntity>?> GetAllAsync();
         public abstract Task AddAsync(TEntity entity);
         public abstract Task UpdateAsync(TEntity entity);
-        public abstract Task DeleteAsync(TKey id);
+        //public abstract Task DeleteAsync(TKey id);
         public abstract Task SoftDeleteAsync(TKey id);
         public abstract Task<bool> RecoverAsync(TKey id);
     }
