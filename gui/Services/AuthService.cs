@@ -1,19 +1,17 @@
-﻿using System.Net.Http.Json;
-using db.Models;
+﻿using db.Models;
 using DbAPI.DTO;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http.Json;
+using System.Text.Json;
 
-namespace gui.Services
-{
-    public class AuthService : BaseApiService<Credential>
-    {
+namespace gui.Services {
+    public class AuthService : BaseApiService<Credential> {
         private readonly HttpClient _httpClient;
         private readonly string BaseUrl;
 
         public const string EntityPath = "Credential/";
 
-        public AuthService()
-        {
+        public AuthService() {
             // Use IP address from appconfig.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -21,13 +19,11 @@ namespace gui.Services
                 .Build();
 
             BaseUrl = config.GetSection("ServerConfig:ServerIP").Value;
-            if (string.IsNullOrEmpty(BaseUrl))
-            {
+            if (string.IsNullOrEmpty(BaseUrl)) {
                 throw new Exception("ServerIP не найден в конфигурации");
             }
 
-            _httpClient = new HttpClient
-            {
+            _httpClient = new HttpClient {
                 BaseAddress = new Uri(BaseUrl)
             };
 
@@ -37,69 +33,74 @@ namespace gui.Services
                 new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<LoginResponse> LoginAsync(string username, string password)
-        {
+        public async Task<LoginResponse> LoginAsync(string username, string password) {
             // Create prompt
-            var loginPrompt = new LoginPrompt
-            {
+            var loginPrompt = new LoginPrompt {
                 Login = username,
                 Password = password
             };
 
-            // Try get access to api/Login
             var response = await _httpClient.PostAsJsonAsync(EntityPath + "Login", loginPrompt);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<LoginResponse>();
         }
 
-        public async Task<RegisterResponse> RegisterAsync(RegisterPrompt registerPrompt)
-        {
-            // Try get access to api/Register
+        public async Task<RegisterResponse> RegisterAsync(RegisterPrompt registerPrompt) {
             var response = await _httpClient.PostAsJsonAsync(EntityPath + "Register", registerPrompt);
-            response.EnsureSuccessStatusCode();
+            return await HandleResponseAsync<RegisterResponse>(response);
+            
+            /*response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<RegisterResponse>();
+            return await response.Content.ReadFromJsonAsync<RegisterResponse>();*/
         }
 
-        public override async Task<IEnumerable<Credential>?> GetAllAsync()
-        {
+        public override async Task<IEnumerable<Credential>?> GetAllAsync() {
             return await _httpClient.GetFromJsonAsync<IEnumerable<Credential>>(EntityPath + "GetAll");
         }
 
-        public override async Task<Credential?> GetByIdAsync(int id)
-        {
+        public override async Task<Credential?> GetByIdAsync(int id) {
             return await _httpClient.GetFromJsonAsync<Credential>(EntityPath + "GetById" + $"?id={id}");
         }
 
-        public override async Task AddAsync(Credential entity)
-        {
+        public override async Task AddAsync(Credential entity) {
             var response = await _httpClient.PostAsJsonAsync(EntityPath + "Add", entity);
             response.EnsureSuccessStatusCode();
         }
 
-        public override async Task UpdateAsync(Credential entity)
-        {
+        public override async Task UpdateAsync(Credential entity) {
             var response = await _httpClient.PutAsJsonAsync($"{EntityPath}UpdateById?id={entity.Id}", entity);
             response.EnsureSuccessStatusCode();
         }
 
-        public override async Task DeleteAsync(int id)
-        {
+        public override async Task DeleteAsync(int id) {
             var response = await _httpClient.DeleteAsync(EntityPath + "Delete" + $"?id={id}");
             response.EnsureSuccessStatusCode();
         }
 
-        public override async Task<bool> RecoverAsync(int id)
-        {
+        public override async Task<bool> RecoverAsync(int id) {
             var response = await _httpClient.GetAsync(EntityPath + "Recover" + $"?id={id}");
             return response.IsSuccessStatusCode;
         }
 
-        public override async Task SoftDeleteAsync(int id)
-        {
+        public override async Task SoftDeleteAsync(int id) {
             var response = await _httpClient.GetAsync(EntityPath + "SoftDelete" + $"?id={id}");
             response.EnsureSuccessStatusCode();
+        }
+
+        private async Task<T> HandleResponseAsync<T>(HttpResponseMessage response) {
+            if (response.IsSuccessStatusCode) {
+                return await response.Content.ReadFromJsonAsync<T>();
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            try {
+                var errorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(content);
+                throw new Exception(errorResponse.Message ?? $"Ошибка: {response.StatusCode}");
+            } catch (JsonException) {
+                throw new Exception($"Ошибка: {content}");
+            }
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using TKey = int;
 
-namespace gui.Services
-{
-    public abstract class BaseApiService<TEntity> where TEntity : class
-    {
+namespace gui.Services {
+    public abstract class BaseApiService<TEntity> where TEntity : class {
         protected readonly HttpClient _httpClient;
 
         public abstract Task<TEntity?> GetByIdAsync(TKey id);
