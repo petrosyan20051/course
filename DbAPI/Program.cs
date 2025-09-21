@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using System.Threading.RateLimiting;
 using TypeId = int;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,8 +52,12 @@ builder.Services.AddScoped<IRepository<Driver, TypeId>, DriverRepository>();
 builder.Services.AddScoped<IRepository<Rate, TypeId>, RateRepository>();
 builder.Services.AddScoped<IRepository<db.Models.Route, TypeId>, RouteRepository>();
 builder.Services.AddScoped<IRepository<TransportVehicle, TypeId>, TransportVehicleRepository>();
-builder.Services.AddScoped<CredentialRepository>();
+
+
+builder.Services.AddScoped<IRepository<Role, TypeId>, RoleRepository>();
+builder.Services.AddScoped<IRepository<Credential, TypeId>, CredentialRepository>();
 builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<CredentialRepository>();
 
 // JWT
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));

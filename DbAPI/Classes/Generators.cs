@@ -208,15 +208,15 @@ namespace db.Tools {
 
         public static List<Role>? GenerateRoles() {
 
-            return Enumerable.Range(1, 1).Select(i => {
+            return Enumerable.Range(1, 2).Select(i => {              
                 return new Role {
-                    Id = 1,
-                    Forename = "admin",
-                    Rights = UserRights.Admin,
+                    Id = i,
+                    Forename = i == 1 ? "admin" : "basic",
+                    Rights = i == 1 ? UserRights.Admin : UserRights.Basic,
                     CanGet = true,
-                    CanPost = true,
-                    CanUpdate = true,
-                    CanDelete = true,
+                    CanPost = i == 2,
+                    CanUpdate = i == 2,
+                    CanDelete = i == 2,
                     WhoAdded = "system",
                     WhenAdded = new DateTime(2023, 1, 1)
                 };
@@ -224,13 +224,13 @@ namespace db.Tools {
         }
 
         public static List<Credential>? GenerateCredentials() {
-            return Enumerable.Range(1, 1).Select(i => {
+            return Enumerable.Range(1, 2).Select(i => {
                 return new Credential {
-                    Id = 1,
-                    Username = "admin",
+                    Id = i,
+                    Username = i == 1 ? "admin" : "basic",
                     Password = PasswordHasher.HashPassword("JcGDN9ST5KEG!"),
-                    RoleId = 1,
-                    WhoAdded = "admin",
+                    RoleId = i,
+                    WhoAdded = "system",
                     WhenAdded = new DateTime(2023, 1, 1)
                 };
             }).ToList();

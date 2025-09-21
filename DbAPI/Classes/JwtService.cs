@@ -17,8 +17,10 @@ namespace db.Classes {
         public string GenerateToken(Credential credential, Role role) {
             // Create claims about user (утверждение, слово как в паспорте)
             var claims = new[] {
+                new Claim(ClaimTypes.NameIdentifier, credential.Id.ToString()),
                 new Claim(ClaimTypes.Name, credential.Username),
 
+                new Claim(ClaimTypes.Role, GetRoleName(role)),
                 new Claim("CanGet", role.CanGet.ToString()),
                 new Claim("CanPost", role.CanPost.ToString()),
                 new Claim("CanUpdate", role.CanUpdate.ToString()),
@@ -43,7 +45,7 @@ namespace db.Classes {
                 issuer: _jwtSettings.Issuer, // Token producer
                 audience: _jwtSettings.Audience, // Audience of token
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpiryInMinutes), // Live time of token
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryInMinutes), // Live time of token
                 signingCredentials: credentials // Sign 
             );
 
@@ -84,6 +86,12 @@ namespace db.Classes {
 
         public int GetTokenLifeTime() {
             return _jwtSettings.ExpiryInMinutes;
+        }
+
+        private string GetRoleName(Role role) {
+            if (role.CanDelete) return "Admin";
+            if (role.CanPost || role.CanUpdate) return "Editor";
+            return "Basic";
         }
     }
 }
