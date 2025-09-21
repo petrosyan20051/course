@@ -164,18 +164,19 @@ namespace db.Controllers {
         }
 
         // Update: api/{entity}/RecoverById
-        [HttpGet("RecoverById")]
+        [HttpPost("RecoverById")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {
                 entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
+                await _repository.UpdateAsync(entity);
 
                 return Ok("Восстановление прошло успешно");
             }
 
-            return NotFound("Сущность не найдено или уже существует");
+            return NotFound("Сущность не найдена или уже существует");
         }
     }
 }
