@@ -112,15 +112,11 @@ namespace db.Controllers {
                 RoleId = role.Id,
                 Username = request.UserName,
                 Password = PasswordHasher.HashPassword(request.Password),
-                WhoAdded = request.WhoRegister.IsNullOrEmpty() ? request.UserName : request.WhoRegister, 
+                WhoAdded = request.WhoRegister.IsNullOrEmpty() ? request.UserName : request.WhoRegister,
                 WhenAdded = DateTime.Now,
             });
 
-            return Ok(new {
-                message = "Пользователь успешно зарегистрирован. Вы можете войти в систему для работы",
-                userName = request.UserName,
-                response
-            });
+            return Ok(response);
         }
 
 

@@ -1,5 +1,4 @@
-﻿using db.Interfaces;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using static db.Interfaces.IInformation;
 
 namespace DbAPI.DTO {
