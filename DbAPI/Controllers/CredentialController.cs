@@ -6,6 +6,7 @@ using DbAPI.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.IdentityModel.Tokens;
 using static db.Interfaces.IInformation;
 
 using TypeId = int;
@@ -44,7 +45,7 @@ namespace db.Controllers {
 
                 // Password verification
                 if (!PasswordHasher.VerifyPassword(request.Password, credential.Password))
-                    return Unauthorized(new { messsage = "Введен неверный пароль" });
+                    return Unauthorized(new { messsage = "Введен неверный логин или пароль" });
 
                 // Whether such role exists 
                 var role = await _roleRepository.GetByIdAsync(credential.RoleId);
@@ -79,7 +80,7 @@ namespace db.Controllers {
                 return StatusCode(500, new { message = "Внутренняя ошибка" });
 
             // Check whether person who registrates current one exists
-            if (await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)
+            if (!request.WhoRegister.IsNullOrEmpty() && await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)
                 return BadRequest(new {
                     message = $"Пользователем с именем \"{request.WhoRegister}\", " +
                     $"который регистрирует нового пользователя не существует"
@@ -111,12 +112,12 @@ namespace db.Controllers {
                 RoleId = role.Id,
                 Username = request.UserName,
                 Password = PasswordHasher.HashPassword(request.Password),
-                WhoAdded = request.WhoRegister, 
+                WhoAdded = request.WhoRegister.IsNullOrEmpty() ? request.UserName : request.WhoRegister, 
                 WhenAdded = DateTime.Now,
             });
 
             return Ok(new {
-                message = "Пользователь успешно зарегестрирован",
+                message = "Пользователь успешно зарегистрирован. Вы можете войти в систему для работы",
                 userName = request.UserName,
                 response
             });
