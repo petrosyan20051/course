@@ -1,5 +1,6 @@
 ﻿using db.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using static db.Interfaces.IInformation;
 
 namespace DbAPI.DTO {
     public class RegisterPrompt {
@@ -9,10 +10,9 @@ namespace DbAPI.DTO {
         [Required(ErrorMessage = "Пароль пользователя обязателен")]
         public required string Password { get; set; }
 
-        [Required(ErrorMessage = "Требуется пользователь, который регистрирует нового")]
-        public required string WhoRegister { get; set; }
+        public string? WhoRegister { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Тип регистрируемого пользователя обязателен")]
-        public IInformation.UserRights RegisterRights { get; set; }
+        public UserRights RegisterRights { get; set; }
     }
 }
