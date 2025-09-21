@@ -1,9 +1,9 @@
 ﻿using db.Models;
 using DbAPI.DTO;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Net.Http.Headers;
 
 namespace gui.Services {
     public class AuthService : BaseApiService<Credential> {
@@ -47,7 +47,7 @@ namespace gui.Services {
             // Get response
             var response = await _httpClient.PostAsJsonAsync(EntityPath + "Login", loginPrompt);
             var loginResponse = await HandleResponseAsync<LoginResponse>(response);
-            
+
             _token = loginResponse.Token; // set current session token
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             IsAuthenticated = true;

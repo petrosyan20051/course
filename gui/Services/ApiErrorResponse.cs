@@ -3,6 +3,6 @@
 namespace gui.Services {
     public class ApiErrorResponse {
         [JsonPropertyName("message")]
-        public string? Message  { get; set; }
+        public string? Message { get; set; }
     }
 }
