@@ -214,9 +214,9 @@ namespace db.Tools {
                     Forename = i == 1 ? "admin" : "basic",
                     Rights = i == 1 ? UserRights.Admin : UserRights.Basic,
                     CanGet = true,
-                    CanPost = i == 2,
-                    CanUpdate = i == 2,
-                    CanDelete = i == 2,
+                    CanPost = i == 1,
+                    CanUpdate = i == 1,
+                    CanDelete = i == 1,
                     WhoAdded = "system",
                     WhenAdded = new DateTime(2023, 1, 1)
                 };
