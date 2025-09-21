@@ -1,6 +1,11 @@
-# Ignore build files
-.vs/
-gui/bin
-gui/obj
-db/bin
-db/obj
+# Ignore everything but Services
+*
+
+# Does not ignore gitignore
+!.gitignore
+
+# Does not ingore gui/Services/
+!/gui/Services/
+
+#Does not ingore gui/Services/*
+!/gui/Services/**
