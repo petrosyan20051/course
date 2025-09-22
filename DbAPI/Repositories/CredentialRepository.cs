@@ -61,23 +61,28 @@ namespace db.Repositories {
             string? note = null, DateTime? isDeleted = null) {
 
             if (username.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Username must be no empty string");
+                throw new ArgumentNullException("Имя пользователя должно быть ненулевой строкой");
             } else if (password.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Password must be no empty string");
+                throw new ArgumentNullException("Пароль должен быть ненулевой строкой");
             } else if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" must be no empty string");
+                throw new ArgumentNullException("\"Who added\" должен быть ненулевой строкой");
             }
 
             if (!PasswordHasher.IsPasswordStrong(password))
-                throw new ArgumentException("Password is not strong. See db.Classes.PasswordHasher.IsPasswordStrong");
+                throw new ArgumentException($"Введенный пароль недопустим.{Environment.NewLine}" +
+                    $"Пароль должен содержать как минимум:{Environment.NewLine}" +
+                    $"1. Одну латинскую букву нижнего и верхнего регистра.{Environment.NewLine}" +
+                    $"2. Одну цифру.{Environment.NewLine}" +
+                    $"3. Один спецсимвол.{Environment.NewLine}" +
+                    $"Длина пароля должен быть не менее 8 символов.");
             else if (await _context.Roles.AnyAsync(r => r.Id == roleId) == false) {
-                throw new ArgumentException($"Role with ID = {roleId} does not exist");
+                throw new ArgumentException($"Роль с ID = {roleId} не существует");
             }
 
             if (id != 0) {
-                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
             } else if (id == null)
-                throw new DbUpdateException("Database has no available id for new entity");
+                throw new DbUpdateException("БД переполнены. Отсутсвует доступный ID для нового пользователя");
         }
 
         public async Task UpdateAsync(Credential entity) {
@@ -101,24 +106,6 @@ namespace db.Repositories {
                 await _context.SaveChangesAsync();
             }
         }
-
-        /*public async Task<TypeId> NewIdToAddAsync() {
-            var entities = await GetAllAsync();
-            if (entities == null)
-                return 0; // entities are not found so can use id = 0
-
-            // Get All deleted Ids in ascending order
-            var Ids = entities
-                .Where(e => e.IsDeleted != null || e.IsDeleted is null)
-                .Select(e => e.Id)
-                .OrderBy(id => id)
-                .ToList();
-            if (Ids.Last() == TypeId.MaxValue) {
-                return -1; // all seats are reserved
-            }
-
-            return Ids.Last() + 1; // maybe all seats are reserved
-        }*/
 
         public async Task<bool> RecoverAsync(TypeId id) {
             var entity = await GetByIdAsync(id);

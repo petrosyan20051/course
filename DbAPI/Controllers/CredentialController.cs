@@ -4,6 +4,7 @@ using db.Models;
 using db.Repositories;
 using DbAPI.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
@@ -132,14 +133,19 @@ namespace db.Controllers {
         [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<Credential>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
-            return entity is null ? NotFound() : Ok(entity);
+            return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
         }
 
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<Credential>> Create([FromBody] Credential entity) {
-            await _repository.AddAsync(entity);
+            try {
+                await _repository.AddAsync(entity);
+            } catch (Exception ex) { 
+                return BadRequest(new {message = ex.Message});
+            }
+            
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         }
 
@@ -148,7 +154,7 @@ namespace db.Controllers {
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Update(TypeId id, [FromBody] Credential entity) {
             if (!id.Equals(GetEntityId(entity))) {
-                return BadRequest();
+                return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
             }
 
             await _repository.UpdateAsync(entity);
@@ -159,6 +165,9 @@ namespace db.Controllers {
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Delete(TypeId id) {
+            if (await _repository.GetByIdAsync(id) == null) {
+                return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
+            }
             await _repository.SoftDeleteAsync(id);
             return NoContent();
         }
@@ -176,7 +185,7 @@ namespace db.Controllers {
                 return Ok("Восстановление прошло успешно");
             }
 
-            return NotFound("Сущность не найдена или уже существует");
+            return NotFound(new { message = $"Сущность с ID = {id} не найдена или уже существует" });
         }
     }
 }
