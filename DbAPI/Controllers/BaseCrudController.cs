@@ -12,26 +12,26 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase {
     }
 
     // GET: api/{entity}/GetAll
-    [HttpGet("GetAll")]
+    [HttpGet]
     public abstract Task<ActionResult<IEnumerable<TEntity>>> GetAll();
 
-    // GET: api/{entity}/GetById
-    [HttpGet("GetById")]
+    // GET: api/{entity}/{id}
+    [HttpGet("{id}")]
     public abstract Task<ActionResult<TEntity>> Get(TKey id);
 
-    // POST: api/{entity}/Post
-    [HttpPost("Post")]
+    // POST: api/{entity}/
+    [HttpPost]
     public abstract Task<ActionResult<TEntity>> Create([FromBody] TEntity entity);
 
-    // PUT: api/{entity}/UpdateById
-    [HttpPut("UpdateById")]
+    // PUT: api/{entity}/{id}
+    [HttpPut("{id}")]
     public abstract Task<IActionResult> Update(TKey id, [FromBody] TEntity entity);
 
-    // DELETE: api/{entity}/DeleteById
-    [HttpDelete("DeleteById")]
+    // DELETE: api/{entity}/{id}
+    [HttpDelete("{id}")]
     public abstract Task<IActionResult> Delete(TKey id);
 
-    // Update: api/{entity}/RecoverById
-    [HttpGet("RecoverById")]
+    // Update: api/{entity}/{id}/recover
+    [HttpPatch("{id}/recover")]
     public abstract Task<IActionResult> RecoverAsync(TKey id);
 }
