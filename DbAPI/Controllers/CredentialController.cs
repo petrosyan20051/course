@@ -29,7 +29,7 @@ namespace db.Controllers {
             return entity.Id;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [EnableRateLimiting("LoginPolicy")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginPrompt request) {
             // Standart checks
@@ -72,7 +72,7 @@ namespace db.Controllers {
         }
 
         // TODO: make registration
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterPrompt request) {
             // Standart checks
             CredentialRepository _credentialRepository = (CredentialRepository)_repository;
@@ -120,31 +120,31 @@ namespace db.Controllers {
         }
 
 
-        // GET: api/{entity}/GetAll
-        [HttpGet("GetAll")]
+        // GET: api/{entity}/
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<IEnumerable<Credential>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
         }
 
-        // GET: api/{entity}/GetById
-        [HttpGet("GetById")]
+        // GET: api/{entity}/{id}
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<Credential>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             return entity is null ? NotFound() : Ok(entity);
         }
 
-        // POST: api/{entity}/Post
-        [HttpPost("Post")]
+        // POST: api/{entity}/
+        [HttpPost]
         [Authorize(Roles = "Admin")]
         public override async Task<ActionResult<Credential>> Create([FromBody] Credential entity) {
             await _repository.AddAsync(entity);
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         }
 
-        // PUT: api/{entity}/UpdateById
-        [HttpPut("UpdateById")]
+        // PUT: api/{entity}/{id}
+        [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Update(TypeId id, [FromBody] Credential entity) {
             if (!id.Equals(GetEntityId(entity))) {
@@ -155,16 +155,16 @@ namespace db.Controllers {
             return NoContent();
         }
 
-        // DELETE: api/{entity}/DeleteById
-        [HttpDelete("DeleteById")]
+        // DELETE: api/{entity}/{id}
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Delete(TypeId id) {
             await _repository.SoftDeleteAsync(id);
             return NoContent();
         }
 
-        // Update: api/{entity}/RecoverById
-        [HttpPost("RecoverById")]
+        // Update: api/{entity}/{id}/recover
+        [HttpPatch("{id}/recover")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
