@@ -11,7 +11,7 @@ public abstract class BaseCrudController<TEntity, TKey> : ControllerBase {
         _repository = repository;
     }
 
-    // GET: api/{entity}/GetAll
+    // GET: api/{entity}/
     [HttpGet]
     public abstract Task<ActionResult<IEnumerable<TEntity>>> GetAll();
 

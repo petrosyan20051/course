@@ -15,50 +15,59 @@ namespace db.Controllers {
             return entity.Id;
         }
 
-        // GET: api/{entity}/GetAll
-        [HttpGet("GetAll")]
-        [Authorize]
+        // GET: api/{entity}/
+        [HttpGet]
+        [Authorize(Roles = "Basic, Editor, Admin")]
         public override async Task<ActionResult<IEnumerable<Models.Route>>> GetAll() {
             return Ok(await _repository.GetAllAsync());
         }
 
-        // GET: api/{entity}/GetById
-        [HttpGet("GetById")]
-        [Authorize]
+        // GET: api/{entity}/{id}
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Basic, Editor, Admin")]
         public override async Task<ActionResult<Models.Route>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
-            return entity is null ? NotFound() : Ok(entity);
+            return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
         }
 
-        // POST: api/{entity}/Post
-        [HttpPost("Post")]
+        // POST: api/{entity}/
+        [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
         public override async Task<ActionResult<Models.Route>> Create([FromBody] Models.Route entity) {
-            await _repository.AddAsync(entity);
+            try {
+                await _repository.AddAsync(entity);
+            } catch (Exception ex) {
+                return BadRequest(new { message = ex.Message });
+            }
+
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         }
 
-        // PUT: api/{entity}/UpdateById
-        [HttpPut("UpdateById")]
+        // PUT: api/{entity}/{id}
+        [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
         public override async Task<IActionResult> Update(TypeId id, [FromBody] Models.Route entity) {
             if (!id.Equals(GetEntityId(entity))) {
-                return BadRequest();
+                return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
             }
 
             await _repository.UpdateAsync(entity);
             return NoContent();
         }
 
-        // DELETE: api/{entity}/DeleteById
-        [HttpDelete("DeleteById")]
+        // DELETE: api/{entity}/{id}
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Delete(TypeId id) {
+            if (await _repository.GetByIdAsync(id) == null) {
+                return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
+            }
             await _repository.SoftDeleteAsync(id);
             return NoContent();
         }
 
-        [HttpPost("RecoverById")]
+        // Update: api/{entity}/{id}/recover
+        [HttpPatch("{id}/recover")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
@@ -66,10 +75,11 @@ namespace db.Controllers {
                 entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _repository.UpdateAsync(entity);
-                return Ok(new string("Восстановление прошло успешно"));
+
+                return Ok("Восстановление прошло успешно");
             }
 
-            return NotFound(new string("Сущность не удалена или не найдена"));
+            return NotFound(new { message = $"Сущность с ID = {id} не найдена или уже существует" });
         }
     }
 }
