@@ -44,9 +44,9 @@ namespace gui.Services {
                 Password = password
             };
 
-            // Get response
-            var response = await _httpClient.PostAsJsonAsync(EntityPath + "Login", loginPrompt);
-            var loginResponse = await HandleResponseAsync<LoginResponse>(response);
+            // Get response            
+            var loginResponse = await ExecuteApiCallAsync<LoginResponse>(() =>
+                _httpClient.PostAsJsonAsync(EntityPath + "login", loginPrompt));
 
             _token = loginResponse.Token; // set current session token
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -62,64 +62,41 @@ namespace gui.Services {
         }
 
         public async Task<RegisterResponse> RegisterAsync(RegisterPrompt registerPrompt) {
-            var response = await _httpClient.PostAsJsonAsync(EntityPath + "Register", registerPrompt);
-            return await HandleResponseAsync<RegisterResponse>(response);
+            return await ExecuteApiCallAsync<RegisterResponse>(() =>
+                _httpClient.PostAsJsonAsync(EntityPath + "register", registerPrompt));
         }
 
         public override async Task<IEnumerable<Credential>?> GetAllAsync() {
             EnsureAuthorized();
-            return await _httpClient.GetFromJsonAsync<IEnumerable<Credential>>(EntityPath + "GetAll");
+            return await ExecuteApiCallAsync<IEnumerable<Credential>>(() =>
+                _httpClient.GetAsync(EntityPath));
         }
 
         public override async Task<Credential?> GetByIdAsync(int id) {
             EnsureAuthorized();
-            return await _httpClient.GetFromJsonAsync<Credential>(EntityPath + "GetById" + $"?id={id}");
+            return await ExecuteApiCallAsync<Credential>(() =>
+                _httpClient.GetAsync($"{EntityPath}{id}"));
         }
 
         public override async Task AddAsync(Credential entity) {
             EnsureAuthorized();
-            var response = await _httpClient.PostAsJsonAsync(EntityPath + "Post", entity);
-            response.EnsureSuccessStatusCode();
+            await ExecuteApiCallAsync(() => _httpClient.PostAsJsonAsync(EntityPath, entity));
         }
 
         public override async Task UpdateAsync(Credential entity) {
             EnsureAuthorized();
-            var response = await _httpClient.PutAsJsonAsync(EntityPath + $"UpdateById?id={entity.Id}", entity);
-            response.EnsureSuccessStatusCode();
-        }
-
-        /*public override async Task DeleteAsync(int id) {
-            EnsureAuthorized();
-            var response = await _httpClient.DeleteAsync(EntityPath + "DeleteById" + $"?id={id}");
-            response.EnsureSuccessStatusCode();
-        }*/
-
-        public override async Task<bool> RecoverAsync(int id) {
-            EnsureAuthorized();
-            var response = await _httpClient.PostAsync(EntityPath + "RecoverById" + $"?id={id}", null);
-            response.EnsureSuccessStatusCode();
-            return response.IsSuccessStatusCode;
+            await ExecuteApiCallAsync(() => _httpClient.PutAsJsonAsync($"{EntityPath}{entity.Id}", entity));
         }
 
         public override async Task SoftDeleteAsync(int id) {
             EnsureAuthorized();
-            var response = await _httpClient.DeleteAsync(EntityPath + "DeleteById" + $"?id={id}");
-            response.EnsureSuccessStatusCode();
+            await ExecuteApiCallAsync(() => _httpClient.DeleteAsync($"{EntityPath}{id}"));
         }
 
-        private async Task<T> HandleResponseAsync<T>(HttpResponseMessage response) {
-            if (response.IsSuccessStatusCode) {
-                return await response.Content.ReadFromJsonAsync<T>();
-            }
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            try {
-                var errorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(content);
-                throw new Exception(errorResponse.Message ?? $"Ошибка: {response.StatusCode}");
-            } catch (JsonException) {
-                throw new Exception($"Ошибка: {content}");
-            }
+        public override async Task RecoverAsync(int id) {
+            EnsureAuthorized();
+            await ExecuteApiCallAsync(() =>
+                _httpClient.PatchAsync($"{EntityPath}{id}/recover", null));
         }
 
         private void EnsureAuthorized() {
