@@ -62,26 +62,26 @@ namespace db.Repositories {
             DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
 
                 if (forename.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Forename must be no empty string");
+                    throw new ArgumentNullException("Название тарифа должно быть непустой строкой");
                 } else if (whoAdded.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("\"Who added\" must be no empty string");
+                    throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
                 }
 
                 if (!Rate.MovePriceValidate(movePrice))
-                    throw new ArgumentException("Move price must be positive integer");
+                    throw new ArgumentException("Цена поездки должна быть положительным целым числом");
                 else if (!Rate.IdlePriceValidate(idlePrice))
-                    throw new ArgumentException("Idle price must be positive integer");
+                    throw new ArgumentException("Цена простоя должна быть положительным целым числом");
 
                 if (await _context.Drivers.AnyAsync(d => d.Id == driverId) == false) {
-                    throw new InvalidDataException($"Driver with id = {driverId} does not exist");
+                    throw new InvalidDataException($"Водитель с ID = {driverId} не существует");
                 } else if (await _context.TransportVehicles.AnyAsync(t => t.Id == vehicleId) == false) {
-                    throw new InvalidDataException($"Transport vehicle with id = {vehicleId} does not exist");
+                    throw new InvalidDataException($"Транспортное средство с ID = {vehicleId} не существует");
                 }
 
                 if (id != 0) {
-                    throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                    throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
                 } else if (id == null)
-                    throw new DbUpdateException("Database has no available id for new entity");
+                    throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для новой сущности");
             }
 
             public async Task UpdateAsync(Rate entity) {

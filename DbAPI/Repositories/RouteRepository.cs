@@ -57,17 +57,17 @@ namespace db.Repositories {
             DateTime? isDeleted = null) {
 
                 if (boardingAddress.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Boarding address must be no empty string");
+                    throw new ArgumentNullException("Адрес посадки должен быть непустой строкой");
                 } else if (dropAddress.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("Drop address must be no empty string");
+                    throw new ArgumentNullException("Адрес высадки должен быть непустой строкой");
                 } else if (whoAdded.IsNullOrEmpty()) {
-                    throw new ArgumentNullException("\"Who added\" must be no empty string");
+                    throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
                 }
 
                 if (id != 0) {
-                    throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                    throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
                 } else if (id == null)
-                    throw new DbUpdateException("Database has no available id for new entity");
+                    throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для новой сущности");
             }
 
             public async Task UpdateAsync(Models.Route entity) {

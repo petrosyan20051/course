@@ -60,27 +60,27 @@ namespace db.Repositories {
             DateTime? whenChanged = null, string? note = null, DateTime? isDeleted = null) {
 
             if (forename.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Forename must be no empty string");
+                throw new ArgumentNullException("Фамилия заказчика должна быть непустой строкой");
             } else if (surname.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Surname must be no empty string");
+                throw new ArgumentNullException("Имя заказчика должно быть непустой строкой");
             } else if (phoneNumber.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Phone number must be no empty string");
+                throw new ArgumentNullException("Номер телефона заказчика должен быть непустой строкой");
             } else if (email.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Email must be no empty string");
+                throw new ArgumentNullException("Электронная почта заказчика должна быть непустой строкой");
             } else if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" must be no empty string");
+                throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
             }
 
             if (!Customer.PhoneNumberValidate(phoneNumber)) {
-                throw new InvalidDataException("Ivalid phone number");
+                throw new InvalidDataException("Введенный номер телефона заказчика некорректный");
             } else if (!Customer.EmailValidate(email)) {
-                throw new InvalidDataException("Ivalid phone email");
+                throw new InvalidDataException("Введенная Электронная почта заказчика некорректная");
             }
 
             if (id != 0) {
-                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
             } else if (id == null)
-                throw new DbUpdateException("Database has no available id for new entity");
+                throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для новой сущности");
         }
 
         public async Task UpdateAsync(Customer entity) {

@@ -66,31 +66,31 @@ namespace db.Repositories {
             string? note = null, DateTime? isDeleted = null) {
 
             if (number.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Number must be no empty string");
+                throw new ArgumentNullException("Номер транспортного средства должен быть непустой строкой");
             } else if (series.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Series must be no empty string");
+                throw new ArgumentNullException("Серия транспортного средства должна быть непустой строкой");
             } else if (model.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Model must be no empty string");
+                throw new ArgumentNullException("Модель транспортного средства должна быть непустой строкой");
             } else if (color.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Color must be no empty string");
+                throw new ArgumentNullException("Цвет транспортного средства должен быть непустой строкой");
             } else if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" must be no empty string");
+                throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
             }
 
             if (!TransportVehicle.NumberValidate(number)) {
-                throw new InvalidDataException("Number is invalid");
+                throw new InvalidDataException("Введенный номер транспортного средства некорректный");
             } else if (!TransportVehicle.SeriesValidate(series)) {
-                throw new InvalidDataException("Series is invalid");
+                throw new InvalidDataException("Введенная серия транспортного средства некорректная");
             } else if (!TransportVehicle.RegistrationCodeValidate(registrationCode)) {
-                throw new InvalidDataException("Registration code is invalid");
+                throw new InvalidDataException("Регистрационный код некорректный");
             } else if (!TransportVehicle.ReleaseYearValidate(releaseYear)) {
-                throw new InvalidDataException("Release year is invalid");
+                throw new InvalidDataException("Год выпуска некорректный");
             }
 
             if (id != 0) {
-                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
-            } else if (id == null && await NewIdToAddAsync() == -1)
-                throw new DbUpdateException("Database has no available id for new entity");
+                throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
+            } else if (id == null)
+                throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для новой сущности");
         }
 
         public async Task UpdateAsync(TransportVehicle entity) {

@@ -60,24 +60,24 @@ namespace db.Repositories {
             string? note = null, DateTime? isDeleted = null) {
 
             if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" must be no empty string");
+                throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
             }
 
             if (!Order.DistanceValidate(distance))
-                throw new ArgumentException("Distance must be positive integer");
+                throw new ArgumentException("Расстояние должно быть положительным целым числом");
 
             if (await _context.Customers.AnyAsync(c => c.Id == customerId) == false) {
-                throw new InvalidDataException($"Customer with id = {customerId} does not exist");
+                throw new InvalidDataException($"Заказчик с ID = {customerId} не существует");
             } else if (await _context.Routes.AnyAsync(r => r.Id == routeId) == false) {
-                throw new InvalidDataException($"Route with id = {routeId} does not exist");
+                throw new InvalidDataException($"Маршрут с ID = {routeId} не существует");
             } else if (await _context.Rates.AnyAsync(r => r.Id == rateId) == false) {
-                throw new InvalidDataException($"Rate with id = {rateId} does not exist");
+                throw new InvalidDataException($"Тариф с ID = {rateId} не существует");
             }
 
             if (id != 0) {
-                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
             } else if (id == null)
-                throw new DbUpdateException("Database has no available id for new entity");
+                throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для новой сущности");
         }
 
         public async Task UpdateAsync(Order entity) {

@@ -64,31 +64,31 @@ namespace db.Repositories {
             string? note = null, DateTime? isDeleted = null) {
 
             if (forename.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Forename must be no empty string");
+                throw new ArgumentNullException("Фамилия водителя должна быть непустой строкой");
             } else if (surname.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Surname must be no empty string");
+                throw new ArgumentNullException("Имя водителя должно быть непустой строкой");
             } else if (phoneNumber.IsNullOrEmpty()) {
-                throw new ArgumentNullException("phone number must be no empty string");
+                throw new ArgumentNullException("Номер телефона водителя должен быть непустой строкой");
             } else if (driverLicenceSeries.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Driver licence series must be no empty string");
+                throw new ArgumentNullException("Серия водительских прав водителя должна быть непустой строкой");
             } else if (driverLicenceNumber.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Driver licence number year must be no empty string");
+                throw new ArgumentNullException("Номер водительских прав водителя должен быть непустой строкой");
             } else if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" must be no empty string");
+                throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
             }
 
             if (!Driver.PhoneNumberValidate(phoneNumber)) {
-                throw new ArgumentException("Invalid phone number");
+                throw new ArgumentException("Введенный номер телефона водителя некорректный");
             } else if (!Driver.DriverLicenceSeriesValidate(driverLicenceSeries)) {
-                throw new ArgumentException("Invalid driver licence series");
+                throw new ArgumentException("Введенная серия водительских прав водителя некорректная");
             } else if (!Driver.DriverLicenceNumberValidate(driverLicenceNumber)) {
-                throw new ArgumentException("Invalid driver licence number");
+                throw new ArgumentException("Введенный номер водительских прав водителя некорректный");
             }
 
             if (id != 0) {
-                throw new InvalidDataException("Entity must contain zero ID. Auto generation of ID is used");
+                throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
             } else if (id == null)
-                throw new DbUpdateException("Database has no available id for new entity");
+                throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для новой сущности");
         }
 
         public async Task UpdateAsync(Driver entity) {

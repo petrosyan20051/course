@@ -61,11 +61,11 @@ namespace db.Repositories {
             string? note = null, DateTime? isDeleted = null) {
 
             if (username.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Имя пользователя должно быть ненулевой строкой");
+                throw new ArgumentNullException("Имя пользователя должно быть непустой строкой");
             } else if (password.IsNullOrEmpty()) {
-                throw new ArgumentNullException("Пароль должен быть ненулевой строкой");
+                throw new ArgumentNullException("Пароль должен быть непустой строкой");
             } else if (whoAdded.IsNullOrEmpty()) {
-                throw new ArgumentNullException("\"Who added\" должен быть ненулевой строкой");
+                throw new ArgumentNullException("\"Who added\" должен быть непустой строкой");
             }
 
             if (!PasswordHasher.IsPasswordStrong(password))
@@ -82,7 +82,7 @@ namespace db.Repositories {
             if (id != 0) {
                 throw new InvalidDataException("Сущность должна содержать ненулевой ID. Автогенерация включена");
             } else if (id == null)
-                throw new DbUpdateException("БД переполнены. Отсутсвует доступный ID для нового пользователя");
+                throw new DbUpdateException("БД переполнена. Отсутствует доступный ID для нового пользователя");
         }
 
         public async Task UpdateAsync(Credential entity) {
