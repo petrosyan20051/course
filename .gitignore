@@ -10,7 +10,8 @@
 
 # Does not ignore gui/Services/*
 !/gui/Services/
-!/gui/Services/**
+
+!/gui/appconfig.json
 
 
 
