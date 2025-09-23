@@ -1,5 +1,5 @@
 {
   "ServerConfig": {
-    "ServerIP": "localhost:5091"
+    "ServerIP": "http://localhost:5091/api/"
   }
 }
