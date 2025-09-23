@@ -1,17 +1,13 @@
-# Ignore everything but Services
-*
+# Ignore
 
-# Does not ignore gitignore
-!.gitignore
-
-# Does not ignore gui/Services/
-#!gui/
-#!gui/*
-
-# Does not ignore gui/Services/*
-!/gui/Services/
-
-!/gui/appconfig.json
+gui/.vs
+gui/bin
+gui/obj
+gui/gui.csproj
+gui/gui.csproj.user
+gui/gui.sln
+gui/gui.slnLaunch.user
+gui/Program.cs
 
 
 
