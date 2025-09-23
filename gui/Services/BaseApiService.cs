@@ -1,6 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
-using System.Net;
 using TKey = int;
 
 namespace gui.Services {
@@ -38,7 +38,7 @@ namespace gui.Services {
         }
 
         protected async Task<T?> HandleResponseAsync<T>(HttpResponseMessage response) {
-            
+
             if (response.IsSuccessStatusCode) {
                 if (response.StatusCode == HttpStatusCode.OK) {
                     return await response.Content.ReadFromJsonAsync<T>();

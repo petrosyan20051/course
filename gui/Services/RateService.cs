@@ -5,16 +5,16 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace gui.Services {
-    public class AuthService : BaseApiService<Credential> {
+    public class RateService : BaseApiService<Rate> {
         private readonly HttpClient _httpClient;
         private readonly string BaseUrl;
-        private string? _token;
+        private string _token;
 
         public bool IsAuthenticated { get; private set; }
 
-        public const string EntityPath = "Credential/";
+        public const string EntityPath = "Rate/";
 
-        public AuthService() {
+        public RateService() {
             // Use IP address from appconfig.json
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -36,22 +36,10 @@ namespace gui.Services {
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<LoginResponse> LoginAsync(string username, string password) {
-            // Create prompt
-            var loginPrompt = new LoginPrompt {
-                Login = username,
-                Password = password
-            };
-
-            // Get response            
-            var loginResponse = await ExecuteApiCallAsync<LoginResponse>(() =>
-                _httpClient.PostAsJsonAsync(EntityPath + "login", loginPrompt));
-
-            _token = loginResponse.Token; // set current session token
+        public void Login(string token) {
+            _token = token;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             IsAuthenticated = true;
-
-            return loginResponse;
         }
 
         public void LogOut() {
@@ -60,31 +48,24 @@ namespace gui.Services {
             IsAuthenticated = false;
         }
 
-        public string? GetToken() { return _token; }
-
-        public async Task<RegisterResponse> RegisterAsync(RegisterPrompt registerPrompt) {
-            return await ExecuteApiCallAsync<RegisterResponse>(() =>
-                _httpClient.PostAsJsonAsync(EntityPath + "register", registerPrompt));
-        }
-
-        public override async Task<IEnumerable<Credential>?> GetAllAsync() {
+        public override async Task<IEnumerable<Rate>?> GetAllAsync() {
             EnsureAuthorized();
-            return await ExecuteApiCallAsync<IEnumerable<Credential>>(() =>
+            return await ExecuteApiCallAsync<IEnumerable<Rate>>(() =>
                 _httpClient.GetAsync(EntityPath));
         }
 
-        public override async Task<Credential?> GetByIdAsync(int id) {
+        public override async Task<Rate?> GetByIdAsync(int id) {
             EnsureAuthorized();
-            return await ExecuteApiCallAsync<Credential>(() =>
+            return await ExecuteApiCallAsync<Rate>(() =>
                 _httpClient.GetAsync($"{EntityPath}{id}"));
         }
 
-        public override async Task AddAsync(Credential entity) {
+        public override async Task AddAsync(Rate entity) {
             EnsureAuthorized();
             await ExecuteApiCallAsync(() => _httpClient.PostAsJsonAsync(EntityPath, entity));
         }
 
-        public override async Task UpdateAsync(Credential entity) {
+        public override async Task UpdateAsync(Rate entity) {
             EnsureAuthorized();
             await ExecuteApiCallAsync(() => _httpClient.PutAsJsonAsync($"{EntityPath}{entity.Id}", entity));
         }
