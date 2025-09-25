@@ -4,6 +4,7 @@ using db.Interfaces;
 using db.Models;
 using db.Repositories;
 using db.Repositories.db.Repositories;
+using DbAPI.Classes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,30 @@ using System.Text;
 using TypeId = int;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add logging
+builder.Logging.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "logs"));
+
+
+// Disable system debug requests
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.None); // SQL requests
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Connection", LogLevel.Error); // SQL connection
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.None);
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Update", LogLevel.None);
+
+// Min level for system logs
+builder.Logging.AddFilter("Microsoft", LogLevel.Error);
+builder.Logging.AddFilter("System", LogLevel.Error);
+
+// Swagger logs only for errors
+builder.Logging.AddFilter("Microsoft.AspNetCore.Hosting", LogLevel.Warning);
+builder.Logging.AddFilter("Microsoft.AspNetCore.Routing", LogLevel.Warning);
+builder.Logging.AddFilter("Swashbuckle.AspNetCore", LogLevel.Warning);
+
+// My log categories - all levels to log
+builder.Logging.AddFilter("DbAPI", LogLevel.Debug);
+builder.Logging.AddFilter("db", LogLevel.Debug); // my controllers
+builder.Logging.AddFilter("db.Controllers", LogLevel.Information);
 
 // Add services to the container.
 builder.Services.AddControllers();

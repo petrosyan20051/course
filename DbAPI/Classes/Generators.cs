@@ -208,7 +208,7 @@ namespace db.Tools {
 
         public static List<Role>? GenerateRoles() {
 
-            return Enumerable.Range(1, 2).Select(i => {              
+            return Enumerable.Range(1, 2).Select(i => {
                 return new Role {
                     Id = i,
                     Forename = i == 1 ? "admin" : "basic",
