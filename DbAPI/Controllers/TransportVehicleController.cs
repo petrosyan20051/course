@@ -23,7 +23,7 @@ namespace db.Controllers {
         // GET: api/{entity}/
         [HttpGet]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<IEnumerable<TransportVehicle>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<TransportVehicle>>> GetAllAsync() {
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"TransportVehicle.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
@@ -31,7 +31,7 @@ namespace db.Controllers {
         // GET: api/{entity}/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<TransportVehicle>> Get(TypeId id) {
+        public override async Task<ActionResult<TransportVehicle>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"TransportVehicle.Get({id})\"");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
@@ -40,7 +40,7 @@ namespace db.Controllers {
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<ActionResult<TransportVehicle>> Create([FromBody] TransportVehicle entity) {
+        public override async Task<ActionResult<TransportVehicle>> CreateAsync([FromBody] TransportVehicle entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"TransportVehicle.Create()\"");
             try {
                 await _repository.AddAsync(entity);
@@ -50,13 +50,13 @@ namespace db.Controllers {
             }
 
             _logger.LogInformation($"Запрос \"TransportVehicle.Create()\" пользователя \"{User.Identity.Name}\" успешен");
-            return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+            return CreatedAtAction(nameof(GetAsync), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] TransportVehicle entity) {
+        public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] TransportVehicle entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"TransportVehicle.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
                 _logger.LogError($"Запрос \"TransportVehicle.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
@@ -72,7 +72,7 @@ namespace db.Controllers {
         // DELETE: api/{entity}/{id}
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Delete(TypeId id) {
+        public override async Task<IActionResult> DeleteAsync(TypeId id) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"TransportVehicle.Delete({id})\"");
             if (await _repository.GetByIdAsync(id) == null) {
                 _logger.LogError($"Запрос \"TransportVehicle.Delete({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +

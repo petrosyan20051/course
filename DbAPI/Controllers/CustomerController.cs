@@ -23,7 +23,7 @@ namespace db.Controllers {
         // GET: api/{entity}/
         [HttpGet]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<IEnumerable<Customer>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Customer>>> GetAllAsync() {
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Customer.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
@@ -31,7 +31,7 @@ namespace db.Controllers {
         // GET: api/{entity}/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<Customer>> Get(TypeId id) {
+        public override async Task<ActionResult<Customer>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Customer.Get({id})\"");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
@@ -40,7 +40,7 @@ namespace db.Controllers {
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<ActionResult<Customer>> Create([FromBody] Customer entity) {
+        public override async Task<ActionResult<Customer>> CreateAsync([FromBody] Customer entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Customer.Create()\"");
             try {
                 await _repository.AddAsync(entity);
@@ -50,13 +50,13 @@ namespace db.Controllers {
             }
 
             _logger.LogInformation($"Запрос \"Customer.Create()\" пользователя \"{User.Identity.Name}\" успешен");
-            return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+            return CreatedAtAction(nameof(GetAsync), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Customer entity) {
+        public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] Customer entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Customer.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
                 _logger.LogError($"Запрос \"Customer.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
@@ -72,7 +72,7 @@ namespace db.Controllers {
         // DELETE: api/{entity}/{id}
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Delete(TypeId id) {
+        public override async Task<IActionResult> DeleteAsync(TypeId id) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Customer.Delete({id})\"");
             if (await _repository.GetByIdAsync(id) == null) {
                 _logger.LogError($"Запрос \"Customer.Delete({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +

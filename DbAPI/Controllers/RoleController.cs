@@ -24,7 +24,7 @@ namespace DbAPI.Controllers {
         // GET: api/{entity}/
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public override async Task<ActionResult<IEnumerable<Role>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Role>>> GetAllAsync() {
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Role.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
@@ -32,7 +32,7 @@ namespace DbAPI.Controllers {
         // GET: api/{entity}/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<ActionResult<Role>> Get(TypeId id) {
+        public override async Task<ActionResult<Role>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Role.Get({id})\"");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
@@ -41,7 +41,7 @@ namespace DbAPI.Controllers {
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public override async Task<ActionResult<Role>> Create([FromBody] Role entity) {
+        public override async Task<ActionResult<Role>> CreateAsync([FromBody] Role entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Role.Create()\"");
             try {
                 await _repository.AddAsync(entity);
@@ -51,13 +51,13 @@ namespace DbAPI.Controllers {
             }
 
             _logger.LogInformation($"Запрос \"Role.Create()\" пользователя \"{User.Identity.Name}\" успешен");
-            return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+            return CreatedAtAction(nameof(GetAsync), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Role entity) {
+        public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] Role entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Role.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
                 _logger.LogError($"Запрос \"Role.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
@@ -73,7 +73,7 @@ namespace DbAPI.Controllers {
         // DELETE: api/{entity}/{id}
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Delete(TypeId id) {
+        public override async Task<IActionResult> DeleteAsync(TypeId id) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Role.Delete({id})\"");
             if (await _repository.GetByIdAsync(id) == null) {
                 _logger.LogError($"Запрос \"Role.Delete({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +

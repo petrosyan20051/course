@@ -22,7 +22,7 @@ namespace db.Controllers {
         // GET: api/{entity}/
         [HttpGet]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<IEnumerable<Driver>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Driver>>> GetAllAsync() {
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Driver.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
@@ -30,7 +30,7 @@ namespace db.Controllers {
         // GET: api/{entity}/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<Driver>> Get(TypeId id) {
+        public override async Task<ActionResult<Driver>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Driver.Get({id})\"");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
@@ -39,7 +39,7 @@ namespace db.Controllers {
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<ActionResult<Driver>> Create([FromBody] Driver entity) {
+        public override async Task<ActionResult<Driver>> CreateAsync([FromBody] Driver entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Driver.Create()\"");
             try {
                 await _repository.AddAsync(entity);
@@ -49,13 +49,13 @@ namespace db.Controllers {
             }
 
             _logger.LogInformation($"Запрос \"Driver.Create()\" пользователя \"{User.Identity.Name}\" успешен");
-            return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+            return CreatedAtAction(nameof(GetAsync), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Driver entity) {
+        public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] Driver entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Driver.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
                 _logger.LogError($"Запрос \"Driver.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
@@ -71,7 +71,7 @@ namespace db.Controllers {
         // DELETE: api/{entity}/{id}
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Delete(TypeId id) {
+        public override async Task<IActionResult> DeleteAsync(TypeId id) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Driver.Delete({id})\"");
             if (await _repository.GetByIdAsync(id) == null) {
                 _logger.LogError($"Запрос \"Driver.Delete({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +

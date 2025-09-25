@@ -22,7 +22,7 @@ namespace db.Controllers {
         // GET: api/{entity}/
         [HttpGet]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<IEnumerable<Models.Route>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Models.Route>>> GetAllAsync() {
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Route.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
@@ -30,7 +30,7 @@ namespace db.Controllers {
         // GET: api/{entity}/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Basic, Editor, Admin")]
-        public override async Task<ActionResult<Models.Route>> Get(TypeId id) {
+        public override async Task<ActionResult<Models.Route>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Route.Get({id})\"");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
@@ -39,7 +39,7 @@ namespace db.Controllers {
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<ActionResult<Models.Route>> Create([FromBody] Models.Route entity) {
+        public override async Task<ActionResult<Models.Route>> CreateAsync([FromBody] Models.Route entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.Create()\"");
             try {
                 await _repository.AddAsync(entity);
@@ -49,13 +49,13 @@ namespace db.Controllers {
             }
 
             _logger.LogInformation($"Запрос \"Route.Create()\" пользователя \"{User.Identity.Name}\" успешен");
-            return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+            return CreatedAtAction(nameof(GetAsync), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Models.Route entity) {
+        public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] Models.Route entity) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
                 _logger.LogError($"Запрос \"Route.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
@@ -71,7 +71,7 @@ namespace db.Controllers {
         // DELETE: api/{entity}/{id}
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Delete(TypeId id) {
+        public override async Task<IActionResult> DeleteAsync(TypeId id) {
             _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.Delete({id})\"");
             if (await _repository.GetByIdAsync(id) == null) {
                 _logger.LogError($"Запрос \"Route.Delete({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +

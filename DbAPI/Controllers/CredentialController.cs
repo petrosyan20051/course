@@ -165,7 +165,7 @@ namespace db.Controllers {
         // GET: api/{entity}/
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public override async Task<ActionResult<IEnumerable<Credential>>> GetAll() {
+        public override async Task<ActionResult<IEnumerable<Credential>>> GetAllAsync() {
             _logger.LogWarning($"Администратор {User.Identity.Name} сделал запрос ко всем учетным записям");
             return Ok(await _repository.GetAllAsync());
         }
@@ -173,7 +173,7 @@ namespace db.Controllers {
         // GET: api/{entity}/{id}
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<ActionResult<Credential>> Get(TypeId id) {
+        public override async Task<ActionResult<Credential>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
             _logger.LogWarning($"Администратор {User.Identity.Name} сделал запрос учетной записи с ID = {id}");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
@@ -182,7 +182,7 @@ namespace db.Controllers {
         // POST: api/{entity}/
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public override async Task<ActionResult<Credential>> Create([FromBody] Credential entity) {
+        public override async Task<ActionResult<Credential>> CreateAsync([FromBody] Credential entity) {
             try {
                 await _repository.AddAsync(entity);
                 _logger.LogInformation($"Администратор {User.Identity.Name} создал новую учетную запись с ID = {entity.Id}");
@@ -192,13 +192,13 @@ namespace db.Controllers {
                 return BadRequest(new { message = ex.Message });
             }
 
-            return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
+            return CreatedAtAction(nameof(GetAsync), new { id = GetEntityId(entity) }, entity);
         }
 
         // PUT: api/{entity}/{id}
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Update(TypeId id, [FromBody] Credential entity) {
+        public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] Credential entity) {
             _logger.LogWarning($"Администратор {User.Identity.Name} пытается обновить данные учетной записи с ID = {entity.Id}");
             if (!id.Equals(GetEntityId(entity))) {
                 _logger.LogError($"Администратору {User.Identity.Name} не удалось обновить данные учетной записи с ID = {entity.Id}. " +
@@ -214,7 +214,7 @@ namespace db.Controllers {
         // DELETE: api/{entity}/{id}
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public override async Task<IActionResult> Delete(TypeId id) {
+        public override async Task<IActionResult> DeleteAsync(TypeId id) {
             _logger.LogWarning($"Администратор {User.Identity.Name} пытается удалить учетную запись с ID = {id}");
             if (await _repository.GetByIdAsync(id) == null) {
                 _logger.LogError($"Администратору {User.Identity.Name} не удалось удалить учетную запись с ID = {id}. " +
