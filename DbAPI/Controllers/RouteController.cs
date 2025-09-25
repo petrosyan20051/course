@@ -14,7 +14,7 @@ namespace db.Controllers {
         public RouteController(IRepository<Models.Route, int> repository, ILogger<RouteController> logger) : base(repository) {
             _logger = logger;
         }
-        
+
         protected int GetEntityId(Models.Route entity) {
             return entity.Id;
         }

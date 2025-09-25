@@ -50,14 +50,14 @@ namespace db.Controllers {
                     _logger.LogError($"Пользователем с именем \"{request.Login}\" не существует");
                     return Unauthorized(new { message = $"Пользователем с именем \"{request.Login}\" не существует" });
                 }
-                    
+
 
                 // Password verification
                 if (!PasswordHasher.VerifyPassword(request.Password, credential.Password)) {
                     _logger.LogError($"Введен неверный логин или пароль пользователя \"{request.Login}\"");
                     return Unauthorized(new { messsage = "Введен неверный логин или пароль" });
                 }
-                    
+
 
                 // Whether such role exists 
                 var role = await _roleRepository.GetByIdAsync(credential.RoleId);
@@ -109,14 +109,14 @@ namespace db.Controllers {
 
 
             // Check whether person who registrates current one exists
-            if (request.RegisterRights != UserRights.Basic && (request.WhoRegister.IsNullOrEmpty() || 
+            if (request.RegisterRights != UserRights.Basic && (request.WhoRegister.IsNullOrEmpty() ||
                 await _credentialRepository.GetByUserNameAsync(request.WhoRegister) == null)) {
                 _logger.LogError($"Администратор с именем \"{request.WhoRegister}\", " +
                     $"который регистрирует нового пользователя не существует");
                 return BadRequest(new {
                     message = $"Администратор с именем \"{request.WhoRegister}\", " +
                     $"который регистрирует нового пользователя не существует"
-                }); 
+                });
             }
 
             // Whether user with such name exists
@@ -125,20 +125,20 @@ namespace db.Controllers {
                 _logger.LogError($"Пользователь с именем \"{request.UserName}\" уже существует");
                 return BadRequest(new { message = $"Пользователь с именем \"{request.UserName}\" уже существует" });
             }
-                
+
             // Check whether password is strong
             if (!PasswordHasher.IsPasswordStrong(request.Password)) {
                 _logger.LogError("Введенный пароль ненадёжен");
                 return BadRequest(new { message = "Введенный пароль ненадёжен" });
             }
-                
+
             // Whether selected role exists
             var role = await _roleRepository.GetByUserRights(request.RegisterRights);
             if (role == null) {
                 _logger.LogError("\"Введенные права пользователя не существуют\"");
-                return BadRequest(new { message = "Введенные права пользователя не существуют" }); 
+                return BadRequest(new { message = "Введенные права пользователя не существуют" });
             }
-                
+
 
             var response = new RegisterResponse {
                 UserName = request.UserName,

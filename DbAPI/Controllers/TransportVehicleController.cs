@@ -11,7 +11,7 @@ namespace db.Controllers {
     public class TransportVehicleController : BaseCrudController<TransportVehicle, TypeId> {
         private readonly ILogger<TransportVehicleController> _logger;
 
-        public TransportVehicleController(IRepository<TransportVehicle, TypeId> repository, 
+        public TransportVehicleController(IRepository<TransportVehicle, TypeId> repository,
             ILogger<TransportVehicleController> logger) : base(repository) {
             _logger = logger;
         }

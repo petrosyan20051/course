@@ -1,5 +1,4 @@
-﻿using db.Controllers;
-using db.Interfaces;
+﻿using db.Interfaces;
 using db.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +12,10 @@ namespace DbAPI.Controllers {
     public class RoleController : BaseCrudController<Role, TypeId> {
         private readonly ILogger<Role> _logger;
 
-        public RoleController(IRepository<Role, TypeId> repository, ILogger<Role> logger) : base(repository) { 
+        public RoleController(IRepository<Role, TypeId> repository, ILogger<Role> logger) : base(repository) {
             _logger = logger;
         }
-        
+
         protected int GetEntityId(Role entity) {
             return entity.Id;
         }

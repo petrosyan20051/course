@@ -11,8 +11,8 @@ namespace db.Controllers {
     public class DriverController : BaseCrudController<Driver, TypeId> {
         private readonly ILogger<Driver> _logger;
 
-        public DriverController(IRepository<Driver, int> repository, ILogger<Driver> logger) : base(repository) { 
-            _logger = logger; 
+        public DriverController(IRepository<Driver, int> repository, ILogger<Driver> logger) : base(repository) {
+            _logger = logger;
         }
 
         protected int GetEntityId(Driver entity) {

@@ -13,7 +13,7 @@ namespace db.Controllers {
         private readonly ILogger<Customer> _logger;
 
         public CustomerController(IRepository<Customer, TypeId> repository, ILogger<Customer> logger) : base(repository) {
-            _logger = logger; 
+            _logger = logger;
         }
 
         protected int GetEntityId(Customer entity) {
