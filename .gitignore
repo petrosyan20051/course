@@ -1,5 +1,7 @@
 # Ignore build files
 .vs/
+.github/
 DbAPI/bin
 DbAPI/obj
 DbAPI/Migrations/
+DbAPI/Properties/
