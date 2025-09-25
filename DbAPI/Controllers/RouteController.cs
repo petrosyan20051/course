@@ -9,8 +9,12 @@ namespace db.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class RouteController : BaseCrudController<Models.Route, TypeId> {
-        public RouteController(IRepository<Models.Route, int> repository) : base(repository) { }
+        private readonly ILogger<RouteController> _logger;
 
+        public RouteController(IRepository<Models.Route, int> repository, ILogger<RouteController> logger) : base(repository) {
+            _logger = logger;
+        }
+        
         protected int GetEntityId(Models.Route entity) {
             return entity.Id;
         }
@@ -19,6 +23,7 @@ namespace db.Controllers {
         [HttpGet]
         [Authorize(Roles = "Basic, Editor, Admin")]
         public override async Task<ActionResult<IEnumerable<Models.Route>>> GetAll() {
+            _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Route.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
 
@@ -27,6 +32,7 @@ namespace db.Controllers {
         [Authorize(Roles = "Basic, Editor, Admin")]
         public override async Task<ActionResult<Models.Route>> Get(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
+            _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Route.Get({id})\"");
             return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
         }
 
@@ -34,12 +40,15 @@ namespace db.Controllers {
         [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
         public override async Task<ActionResult<Models.Route>> Create([FromBody] Models.Route entity) {
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.Create()\"");
             try {
                 await _repository.AddAsync(entity);
             } catch (Exception ex) {
+                _logger.LogError($"Запрос \"Route.Create()\" пользователя \"{User.Identity.Name}\" завершился ошибкой. Причина: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
 
+            _logger.LogInformation($"Запрос \"Route.Create()\" пользователя \"{User.Identity.Name}\" успешен");
             return CreatedAtAction(nameof(Get), new { id = GetEntityId(entity) }, entity);
         }
 
@@ -47,11 +56,15 @@ namespace db.Controllers {
         [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
         public override async Task<IActionResult> Update(TypeId id, [FromBody] Models.Route entity) {
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
+                _logger.LogError($"Запрос \"Route.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
+                    $"Причина: сущность не найдена");
                 return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
             }
 
             await _repository.UpdateAsync(entity);
+            _logger.LogInformation($"Запрос \"Route.Update({id})\" пользователя \"{User.Identity.Name}\" успешен");
             return NoContent();
         }
 
@@ -59,10 +72,14 @@ namespace db.Controllers {
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> Delete(TypeId id) {
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.Delete({id})\"");
             if (await _repository.GetByIdAsync(id) == null) {
+                _logger.LogError($"Запрос \"Route.Delete({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
+                    $"Причина: сущность не найдена");
                 return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
             }
             await _repository.SoftDeleteAsync(id);
+            _logger.LogInformation($"Запрос \"Route.Delete({id})\" пользователя \"{User.Identity.Name}\" успешен");
             return NoContent();
         }
 
@@ -70,15 +87,19 @@ namespace db.Controllers {
         [HttpPatch("{id}/recover")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Route.RecoverAsync({id})\"");
             var entity = await _repository.GetByIdAsync(id);
             if (entity != null) {
                 entity.IsDeleted = null;
                 entity.WhenChanged = DateTime.Now;
                 await _repository.UpdateAsync(entity);
 
+                _logger.LogInformation($"Запрос \"Route.RecoverAsync({id})\" пользователя \"{User.Identity.Name}\" успешен");
                 return Ok("Восстановление прошло успешно");
             }
 
+            _logger.LogError($"Запрос \"Route.RecoverAsync({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
+                    $"Причина: сущность не найдена или уже существует");
             return NotFound(new { message = $"Сущность с ID = {id} не найдена или уже существует" });
         }
     }
