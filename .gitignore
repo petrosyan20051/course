@@ -1,8 +1,16 @@
-# Ignore build files
+# Ignore root folder files
 .vs/
 .github/
+
+DbAPi.sln
+
+# Ignore project folder files
+
 DbAPI/bin
 DbAPI/obj
 DbAPI/Migrations/
 DbAPI/Properties/
 DbAPI/logs/
+
+DbAPI/DbAPI.csproj
+DbAPI/DbAPI.csproj.user
