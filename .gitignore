@@ -5,3 +5,4 @@ DbAPI/bin
 DbAPI/obj
 DbAPI/Migrations/
 DbAPI/Properties/
+DbAPI/logs/
