@@ -19,8 +19,8 @@ Create folder for your project. Go to your project folder.
 
 Create ASP.NET WEB API project
 <code>
-dotnet new webapi -o DbAPI -f net8.0<br>
-cd DbAPI
+dotnet new webapi -o src -f net8.0<br>
+cd src
 </code>
 
 <h2>4. Configuring meta data</h2>
@@ -46,7 +46,7 @@ Configure "appsettings.json" file. Obligating prerequestes are showed below:
 }
 </small></pre>
 
-<h2>5. Update DbAPI.csproj</h2>
+<h2>5. Update src.csproj</h2>
 
 If you are going to use ONLY Docker Desktop add following code:
 
@@ -120,7 +120,7 @@ Clone repository in any place where "course" directory does not exist (or it is 
 <code>
 git clone https://github.com/petrosyan20051/course.git<br>
 cd course
-git switch DBAPI
+git switch src
 </code>
 
 <h1>9. Cut and paste all files from repos to &lt;your_project_folder_name&gt; folder. Accept rewriting case neccessary.</h1>

@@ -1,8 +1,8 @@
-﻿using DbAPI.Core.Entities;
-using DbAPI.Infrastructure.Classes;
+﻿using src.Core.Entities;
+using src.Infrastructure.Classes;
 using Microsoft.EntityFrameworkCore;
 
-namespace DbAPI.Infrastructure.Contexts {
+namespace src.Infrastructure.Contexts {
 
     public class CredentialDbContext : DbContext {
         public DbSet<Credential> Credentials { get; set; }

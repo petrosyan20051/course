@@ -25,9 +25,9 @@ services:
       - 8003:1433
     networks:
       - fullstack  
- dbapi:
-    container_name: DbAPI
-    image: ${DOCKER_REGISTRY-}dbapi
+ src:
+    container_name: src
+    image: ${DOCKER_REGISTRY-}src
     build:
       context: ../../../
       dockerfile: Infrastructure/Docker/Dockerfile
@@ -56,6 +56,6 @@ services:
     ports:
       - 5000:81
     depends_on:
-      - dbapi
+      - src
     networks:
       - fullstack

@@ -1,10 +1,10 @@
-﻿using DbAPI.Core.Entities;
-using DbAPI.Infrastructure.Interfaces;
-using DbAPI.Infrastructure.Repositories;
+﻿using src.Core.Entities;
+using src.Infrastructure.Interfaces;
+using src.Infrastructure.Repositories;
 using Microsoft.Extensions.FileProviders;
 using TypeId = int;
 
-namespace DbAPI.Infrastructure.Services {
+namespace src.Infrastructure.Services {
     public static class DependencyInjection {
         private static readonly string EMAIL_SECRETS_PATH = "Infrastructure/Secrets/EmailSettings.json";
         private static readonly string JWT_SECRETS_PATH = "Infrastructure/Secrets/JwtSettings.json";
@@ -17,7 +17,7 @@ namespace DbAPI.Infrastructure.Services {
             services.AddScoped<IRepository<Customer, TypeId>, CustomerRepository>();
             services.AddScoped<IRepository<Driver, TypeId>, DriverRepository>();
             services.AddScoped<IRepository<Rate, TypeId>, RateRepository>();
-            services.AddScoped<IRepository<DbAPI.Core.Entities.Route, TypeId>, RouteRepository>();
+            services.AddScoped<IRepository<src.Core.Entities.Route, TypeId>, RouteRepository>();
             services.AddScoped<IRepository<TransportVehicle, TypeId>, TransportVehicleRepository>();
 
             // Reposes registration for user credentials database

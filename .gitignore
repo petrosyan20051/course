@@ -3,7 +3,7 @@
 .vs/
 .github/
 
-DbAPi.sln
+src.sln
 
 # Ignore project folder files
 
@@ -11,13 +11,13 @@ DbAPi.sln
 *bin*
 *obj*
 *Migrations*
-DbAPI/Properties/
+src/Properties/
 *logs*
 
-DbAPI/DbAPI.csproj
-DbAPI/DbAPI.csproj.user
-DbAPI/appsettings.json
+src/src.csproj
+src/src.csproj.user
+src/appsettings.json
 
 # Ignore secrets directory
-DbAPI/Infrastructure/Secrets/EmailSettings.json
-DbAPI/Infrastructure/Secrets/JwtSettings.json
+src/Infrastructure/Secrets/EmailSettings.json
+src/Infrastructure/Secrets/JwtSettings.json
