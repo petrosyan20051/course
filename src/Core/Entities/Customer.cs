@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using TypeId = int;
 
-namespace src.Core.Entities {
+namespace DbAPI.Core.Entities {
 
     public class Customer {
 

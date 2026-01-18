@@ -1,12 +1,12 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Classes;
-using src.Infrastructure.Interfaces;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Classes;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using TypeId = int;
 
-namespace src.Infrastructure.Controllers {
+namespace DbAPI.Infrastructure.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using static src.Infrastructure.Interfaces.IInformation;
+using static DbAPI.Infrastructure.Interfaces.IInformation;
 
-namespace src.Infrastructure.DTO {
+namespace DbAPI.Infrastructure.DTO {
     public class RegisterPrompt {
         [Required(ErrorMessage = "Имя пользователя обязательно")]
         public required string UserName { get; set; }

@@ -1,7 +1,7 @@
-﻿using static src.Infrastructure.Interfaces.IInformation;
+﻿using static DbAPI.Infrastructure.Interfaces.IInformation;
 using TypeId = int;
 
-namespace src.Infrastructure.DTO {
+namespace DbAPI.Infrastructure.DTO {
     public class LoginResponse {
         public TypeId UserId { get; set; }
         public string Username { get; set; } = string.Empty;

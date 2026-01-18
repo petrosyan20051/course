@@ -1,6 +1,6 @@
 ﻿using TypeId = int;
 
-namespace src.Infrastructure.DTO {
+namespace DbAPI.Infrastructure.DTO {
     public class RegisterResponse {
         public required TypeId? Id { get; set; }
         public required string UserName { get; set; }

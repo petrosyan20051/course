@@ -1,11 +1,11 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Interfaces;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using TypeId = int;
 
-namespace src.Infrastructure.Controllers {
+namespace DbAPI.Infrastructure.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class StatisticsController : ControllerBase {

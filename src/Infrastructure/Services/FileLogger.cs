@@ -1,4 +1,4 @@
-﻿namespace src.Infrastructure.Services {
+﻿namespace DbAPI.Infrastructure.Services {
     public class FileLogger : ILogger, IDisposable {
         private readonly string _logDirectory;
         private static readonly object _lock = new object();

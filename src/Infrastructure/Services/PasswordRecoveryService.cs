@@ -1,7 +1,7 @@
-﻿using src.Infrastructure.Interfaces;
+﻿using DbAPI.Infrastructure.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace src.Infrastructure.Services {
+namespace DbAPI.Infrastructure.Services {
     public class PasswordRecoveryService : IPasswordRecoveryService {
         private readonly IMemoryCache _cache;
         private readonly ILogger<PasswordRecoveryService> _logger;

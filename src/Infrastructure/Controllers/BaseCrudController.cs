@@ -1,5 +1,5 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Interfaces;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

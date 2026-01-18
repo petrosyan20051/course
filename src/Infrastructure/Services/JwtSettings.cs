@@ -1,4 +1,4 @@
-﻿namespace src.Infrastructure.Services {
+﻿namespace DbAPI.Infrastructure.Services {
     public class JwtSettings {
         public string SecretKey { get; set; }
         public string Issuer { get; set; }

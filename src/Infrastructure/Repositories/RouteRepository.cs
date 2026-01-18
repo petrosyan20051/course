@@ -1,11 +1,11 @@
-﻿using src.Infrastructure.Contexts;
-using src.Infrastructure.Interfaces;
+﻿using DbAPI.Infrastructure.Contexts;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Route = src.Core.Entities.Route;
+using Route = DbAPI.Core.Entities.Route;
 using TypeId = int;
 
-namespace src.Infrastructure.Repositories {
+namespace DbAPI.Infrastructure.Repositories {
     public class RouteRepository : IRepository<Route, TypeId> {
         private readonly OrderDbContext _context;
 

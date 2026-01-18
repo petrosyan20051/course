@@ -1,4 +1,4 @@
-﻿namespace src.Infrastructure.Services {
+﻿namespace DbAPI.Infrastructure.Services {
     public class FileLoggerProvider : ILoggerProvider {
         string filePath;
 

@@ -1,12 +1,12 @@
-using src.Core.Entities;
-using src.Infrastructure.Classes;
-using src.Infrastructure.Interfaces;
+using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Classes;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using TypeId = int;
 
-namespace src.Infrastructure.Controllers {
+namespace DbAPI.Infrastructure.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
@@ -37,7 +37,7 @@ namespace src.Infrastructure.Controllers {
         [HttpGet]
         [Authorize(Roles = "Basic, Editor, Admin")]
         public override async Task<ActionResult<IEnumerable<Order>>> GetAllAsync() {
-            _logger.LogInformation($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.GetAll()\"");
+            _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Order.GetAll()\"");
             return Ok(await _repository.GetAllAsync());
         }
 
@@ -45,7 +45,7 @@ namespace src.Infrastructure.Controllers {
         [HttpGet("merge")]
         [Authorize(Roles = "Basic, Editor, Admin")]
         public async Task<ActionResult<IEnumerable<Order>>> GetAllMergedAsync() {
-            _logger.LogInformation($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.GetAllMerged()\"");
+            _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Order.GetAllMerged()\"");
 
             var orders = await _repository.GetAllAsync();
             var customers = await _customerRepository.GetAllAsync();
@@ -133,15 +133,15 @@ namespace src.Infrastructure.Controllers {
         [Authorize(Roles = "Basic, Editor, Admin")]
         public override async Task<ActionResult<Order>> GetAsync(TypeId id) {
             var entity = await _repository.GetByIdAsync(id);
-            _logger.LogInformation($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Get({id})\"");
-            return entity is null ? NotFound(new { message = $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ID = {id} пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" }) : Ok(entity);
+            _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Order.Get({id})\"");
+            return entity is null ? NotFound(new { message = $"Сущность с ID = {id} не найдена" }) : Ok(entity);
         }
 
         // GET: api/{entity}/merge
         [HttpGet("{id}/merge")]
         [Authorize(Roles = "Basic, Editor, Admin")]
         public async Task<ActionResult<Order>> GetMergedAsync(TypeId id) {
-            _logger.LogInformation($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.GetMerged({id})\"");
+            _logger.LogInformation($"\"{User.Identity.Name}\" сделал запрос \"Order.GetMerged({id})\"");
 
             var order = await _repository.GetByIdAsync(id);
 
@@ -177,17 +177,17 @@ namespace src.Infrastructure.Controllers {
         [HttpPost]
         [Authorize(Roles = "Editor, Admin")]
         public override async Task<IActionResult> CreateAsync([FromBody] Order entity) {
-            _logger.LogWarning($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Create()\"");
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Order.Create()\"");
             TypeId? id;
             entity.WhoAdded = User.Identity.Name;
             try {
                 id = await _repository.AddAsync(entity);
             } catch (Exception ex) {
-                _logger.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Create()\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {ex.Message}");
+                _logger.LogError($"Запрос \"Order.Create()\" пользователя \"{User.Identity.Name}\" завершился ошибкой. Причина: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
 
-            _logger.LogInformation($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Create()\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+            _logger.LogInformation($"Запрос \"Order.Create()\" пользователя \"{User.Identity.Name}\" успешен");
             return Ok(new { hash = UpdateTableHash(), id });
         }
 
@@ -195,11 +195,11 @@ namespace src.Infrastructure.Controllers {
         [HttpPut("{id}")]
         [Authorize(Roles = "Editor, Admin")]
         public override async Task<IActionResult> UpdateAsync(TypeId id, [FromBody] Order entity) {
-            _logger.LogWarning($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Update({id})\"");
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Order.Update({id})\"");
             if (!id.Equals(GetEntityId(entity))) {
-                _logger.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Update({id})\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. " +
-                    $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
-                return BadRequest(new { message = $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ID = {id} пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ" });
+                _logger.LogError($"Запрос \"Order.Update({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
+                    $"Причина: сущность не найдена");
+                return BadRequest(new { message = $"Сущность с ID = {id} не найдена" });
             }
 
             entity.WhoChanged = User.Identity.Name;
@@ -207,10 +207,10 @@ namespace src.Infrastructure.Controllers {
                 await _repository.UpdateAsync(entity);
             } catch (Exception ex) {
                 _logger.LogError($"Order:UpdateAsync({id}): {ex.Message}");
-                return BadRequest(new { message = $"пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {ex.Message}" });
+                return BadRequest(new { message = $"Ошибка сохранения: {ex.Message}" });
             }
 
-            _logger.LogInformation($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Update({id})\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
+            _logger.LogInformation($"Запрос \"Order.Update({id})\" пользователя \"{User.Identity.Name}\" успешен");
             return Ok(new { hash = UpdateTableHash() });
         }
 
@@ -218,43 +218,43 @@ namespace src.Infrastructure.Controllers {
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> DeleteAsync(TypeId id) {
-            _logger.LogWarning($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.Delete({id})\"");
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Order.Delete({id})\"");
 
             try {
                 await _repository.SoftDeleteAsync(id, User.Identity.Name);
             } catch (Exception ex) {
-                _logger.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.DeleteAsync({id})\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. " +
-                    $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {ex.Message}");
+                _logger.LogError($"Запрос \"Order.DeleteAsync({id})\" администратора \"{User.Identity.Name}\" завершился ошибкой. " +
+                    $"Причина: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
 
-            _logger.LogInformation($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.DeleteAsync({id})\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
-            return Ok(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", hash = UpdateTableHash() });
+            _logger.LogInformation($"Запрос \"Order.DeleteAsync({id})\" администратора \"{User.Identity.Name}\" успешен");
+            return Ok(new { message = "Восстановление прошло успешно", hash = UpdateTableHash() });
         }
 
         // Update: api/{entity}/{id}/recover
         [HttpPatch("{id}/recover")]
         [Authorize(Roles = "Admin")]
         public override async Task<IActionResult> RecoverAsync(TypeId id) {
-            _logger.LogWarning($"\"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.RecoverAsync({id})\"");
+            _logger.LogWarning($"\"{User.Identity.Name}\" сделал запрос \"Order.RecoverAsync({id})\"");
 
             try {
                 await _repository.RecoverAsync(id, User.Identity.Name);
             } catch (Exception ex) {
-                _logger.LogError($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.RecoverAsync({id})\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. " +
-                    $"пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {ex.Message}");
+                _logger.LogError($"Запрос \"Order.RecoverAsync({id})\" пользователя \"{User.Identity.Name}\" завершился ошибкой. " +
+                    $"Причина: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
 
-            _logger.LogInformation($"пїЅпїЅпїЅпїЅпїЅпїЅ \"Order.RecoverAsync({id})\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"{User.Identity.Name}\" пїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
-            return Ok(new { message = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ", hash = UpdateTableHash() });
+            _logger.LogInformation($"Запрос \"Order.RecoverAsync({id})\" пользователя \"{User.Identity.Name}\" успешен");
+            return Ok(new { message = "Восстановление прошло успешно", hash = UpdateTableHash() });
         }
 
         // api/{entity}/generate-table-state-hash
         [HttpGet("generate-table-state-hash")]
         [Authorize]
         public IActionResult GenerateTableStateHash() {
-            _logger.LogInformation($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ \"Credential\"");
+            _logger.LogInformation($"Перегенерация хэша актульности таблицы \"Credential\"");
 
             return Ok(new { hash = UpdateTableHash() });
         }

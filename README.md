@@ -17,10 +17,10 @@ Create folder for your project. Go to your project folder.
 
 <h2>3. Creating project</h2>
 
-Create ASP.NET WEB API project
+Create ASP.NET WEB API project<br>
 <code>
-dotnet new webapi -o src -f net8.0<br>
-cd src
+dotnet new webapi -o DbAPI -f net8.0<br>
+cd DbAPI
 </code>
 
 <h2>4. Configuring meta data</h2>
@@ -36,6 +36,7 @@ Configure "appsettings.json" file. Obligating prerequestes are showed below:
   },
 
   "ConnectionStrings": {
+    // Swagger connection strings
     "DefaultDataConnection": "Server=&lt;Your_server_IP_or_name&gt;;Database=&lt;Your_DB_name&gt;;User ID=&lt;Your_DB_login&gt;;Password=&lt;Your_DB_password&gt;;Trusted_Connection=True;TrustServerCertificate=True;", // Main Db
     "DefaultCredentialConnection": "Server=&lt;Your_server_IP_or_name&gt;;Database=&lt;Your_DB_name&gt;;User ID=&lt;Your_DB_login&gt;;Password=&lt;Your_DB_password&gt;;Trusted_Connection=True;TrustServerCertificate=True;", // User data Db
   },
@@ -46,7 +47,9 @@ Configure "appsettings.json" file. Obligating prerequestes are showed below:
 }
 </small></pre>
 
-<h2>5. Update src.csproj</h2>
+Note: Docker environment variables - data source, initial catalog, user id, password - are set by "DbAPI/Core/Docker/DockerCompose/docker-compose.core.yml".
+
+<h2>5. Update DbAPI.csproj</h2>
 
 If you are going to use ONLY Docker Desktop add following code:
 
@@ -68,6 +71,8 @@ If you are going to use ONLY Swagger add following code:
   <DefineConstants>$(DefineConstants);SWAGGER</DefineConstants>
 </PropertyGroup>
 ```
+
+Note: using both constants may cause compile/logic errors
 
 <h2>6. Secrets files</h2>
 
@@ -120,7 +125,7 @@ Clone repository in any place where "course" directory does not exist (or it is 
 <code>
 git clone https://github.com/petrosyan20051/course.git<br>
 cd course
-git switch src
+git switch DBAPI
 </code>
 
 <h1>9. Cut and paste all files from repos to &lt;your_project_folder_name&gt; folder. Accept rewriting case neccessary.</h1>

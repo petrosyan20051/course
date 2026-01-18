@@ -1,6 +1,6 @@
 ﻿using TypeId = int;
 
-namespace src.Infrastructure.Interfaces {
+namespace DbAPI.Infrastructure.Interfaces {
     public interface IPasswordRecoveryService {
         Task<string> GenerateRecoveryToken(TypeId id);
         Task<int?> ValidateRecoveryToken(string token);

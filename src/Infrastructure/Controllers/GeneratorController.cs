@@ -1,13 +1,13 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Classes;
-using src.Infrastructure.Repositories;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Classes;
+using DbAPI.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Route = src.Core.Entities.Route;
+using Route = DbAPI.Core.Entities.Route;
 
 using TypeId = int;
 
-namespace src.Infrastructure.Controllers {
+namespace DbAPI.Infrastructure.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class GeneratorController : ControllerBase {

@@ -1,8 +1,8 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Classes;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Classes;
 using Microsoft.EntityFrameworkCore;
 
-namespace src.Infrastructure.Contexts {
+namespace DbAPI.Infrastructure.Contexts {
     public class OrderDbContext : DbContext {
         private readonly IConfiguration _configuration;
 

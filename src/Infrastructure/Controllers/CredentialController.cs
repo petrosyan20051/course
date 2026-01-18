@@ -1,18 +1,18 @@
-﻿using src.Core.Entities;
-using src.DTO;
-using src.Infrastructure.Classes;
-using src.Infrastructure.DTO;
-using src.Infrastructure.Interfaces;
-using src.Infrastructure.Repositories;
+﻿using DbAPI.Core.Entities;
+using DbAPI.DTO;
+using DbAPI.Infrastructure.Classes;
+using DbAPI.Infrastructure.DTO;
+using DbAPI.Infrastructure.Interfaces;
+using DbAPI.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
-using static src.Infrastructure.Interfaces.IInformation;
+using static DbAPI.Infrastructure.Interfaces.IInformation;
 using TypeId = int;
 
-namespace src.Infrastructure.Controllers {
+namespace DbAPI.Infrastructure.Controllers {
 
     [ApiController]
     [Route("api/[controller]")]
@@ -217,7 +217,7 @@ namespace src.Infrastructure.Controllers {
             _logger.LogInformation($"Запрос на сброс пароля создан для токена {token}");
 
 #if SWAGGER
-            string path = Path.Combine(Directory.GetCurrentDirectory(), "..", "src", "Presentation", "wwwroot", "reset-password.html");
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "..", "DbAPI", "Presentation", "wwwroot", "reset-password.html");
 #endif
 #if DOCKER
                 string path = Path.Combine(Directory.GetCurrentDirectory(), "Presentation", "wwwroot", "reset-password.html");

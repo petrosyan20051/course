@@ -1,6 +1,6 @@
 ﻿using TypeId = int;
 
-namespace src.Infrastructure.Interfaces {
+namespace DbAPI.Infrastructure.Interfaces {
     public interface IRepository<TEntity, TKey> {
 
         // Async versions

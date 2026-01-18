@@ -2,6 +2,12 @@ import { deleteUserData, getToken } from "./cookie.js";
 import { ApiService} from "./api.js";
 import { MessageBox } from "./form-utils.js";
 
+const protocol = 'http';
+const domain = '127.0.0.1';
+const port = '5001';
+
+const BASE_FORM_URL = `${protocol}://${domain}:${port}`;
+
 // Выход из системы
 window.quitSystem = function quitSystem() {       
     deleteUserData();
@@ -16,7 +22,7 @@ window.quitSystem = function quitSystem() {
         quitItem.style.display = 'none';
     }, 100);
 
-    window.location.href = '../../authorize-form/authorize.html';
+    window.location.href = '../authorize-form/authorize.html';
 }
 
 // При загрузке формы проверяется актуальность сессии
@@ -30,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Токен отсутствует или просрочен
         // Проброс пользователя в окно авторизации и удаление кэшированных данных
         deleteUserData();
-        window.location.href = '../../authorize-form/authorize.html';
+        window.location.href = `${BASE_FORM_URL}/authorize-form/authorize.html`;
     } finally {
         MessageBox.RemoveAwait();
     }

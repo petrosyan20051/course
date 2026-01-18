@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace src.DTO {
+namespace DbAPI.DTO {
     public class LoginPrompt {
         [Required(ErrorMessage = "Имя пользователя обязательно")]
         public required string Login { get; set; }

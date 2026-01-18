@@ -1,6 +1,6 @@
-﻿using src.Infrastructure.Contexts;
-using src.Infrastructure.Interfaces;
-using src.Infrastructure.Services;
+﻿using DbAPI.Infrastructure.Contexts;
+using DbAPI.Infrastructure.Interfaces;
+using DbAPI.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -36,7 +36,7 @@ builder.Logging.AddFilter("Microsoft.AspNetCore.Routing", LogLevel.Warning);
 builder.Logging.AddFilter("Swashbuckle.AspNetCore", LogLevel.Warning);
 
 // My log categories - all levels to log
-builder.Logging.AddFilter("src", LogLevel.Debug);
+builder.Logging.AddFilter("DbAPI", LogLevel.Debug);
 builder.Logging.AddFilter("db", LogLevel.Debug); // my controllers
 builder.Logging.AddFilter("db.Controllers", LogLevel.Information);
 

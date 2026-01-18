@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace src.Infrastructure.Classes {
+namespace DbAPI.Infrastructure.Classes {
     public static class Hasher {
         // Salt size (bytes)
         private static readonly int SaltSize = 16;

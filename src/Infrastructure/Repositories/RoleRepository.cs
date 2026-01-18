@@ -1,12 +1,12 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Contexts;
-using src.Infrastructure.Interfaces;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Contexts;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using static src.Infrastructure.Interfaces.IInformation;
+using static DbAPI.Infrastructure.Interfaces.IInformation;
 
 using TypeId = int;
 
-namespace src.Infrastructure.Repositories {
+namespace DbAPI.Infrastructure.Repositories {
     public class RoleRepository : IRepository<Role, TypeId> {
         private readonly CredentialDbContext _context;
 

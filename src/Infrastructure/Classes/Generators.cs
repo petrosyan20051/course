@@ -1,9 +1,9 @@
-﻿using src.Core.Entities;
-using static src.Infrastructure.Interfaces.IInformation;
-using Route = src.Core.Entities.Route;
+﻿using DbAPI.Core.Entities;
+using static DbAPI.Infrastructure.Interfaces.IInformation;
+using Route = DbAPI.Core.Entities.Route;
 using TypeId = int;
 
-namespace src.Infrastructure.Classes {
+namespace DbAPI.Infrastructure.Classes {
     public static class Generators {
         private static readonly Random _random = new Random(1000);
         private static readonly string PERSON_DATA_PATH = @"Core/Person_Data";

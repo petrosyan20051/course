@@ -6,9 +6,9 @@ networks:
     external: true
   
 services:
- src:
-    container_name: src
-    image: ${DOCKER_REGISTRY-}src
+ dbapi:
+    container_name: DbAPI
+    image: ${DOCKER_REGISTRY-}dbapi
     build:
       context: ../../../
       dockerfile: Infrastructure/Docker/Dockerfile

@@ -1,11 +1,11 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Contexts;
-using src.Infrastructure.Interfaces;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Contexts;
+using DbAPI.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TypeId = int;
 
-namespace src.Infrastructure.Repositories {
+namespace DbAPI.Infrastructure.Repositories {
     public class TransportVehicleRepository : IRepository<TransportVehicle, TypeId> {
 
         private readonly OrderDbContext _context;

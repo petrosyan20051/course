@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using TypeId = int;
 
-namespace src.Core.Entities {
+namespace DbAPI.Core.Entities {
 
     public class TransportVehicle {
 

@@ -1,11 +1,11 @@
-﻿using src.Core.Entities;
-using src.Infrastructure.Interfaces;
-using src.Infrastructure.Repositories;
+﻿using DbAPI.Core.Entities;
+using DbAPI.Infrastructure.Interfaces;
+using DbAPI.Infrastructure.Repositories;
 using Microsoft.Extensions.FileProviders;
-using Route = src.Core.Entities.Route;
+using Route = DbAPI.Core.Entities.Route;
 using TypeId = int;
 
-namespace src.Infrastructure.Services {
+namespace DbAPI.Infrastructure.Services {
     public static class DependencyInjection {
         private static readonly string EMAIL_SECRETS_PATH = "Infrastructure/Secrets/EmailSettings.json";
         private static readonly string JWT_SECRETS_PATH = "Infrastructure/Secrets/JwtSettings.json";

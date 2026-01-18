@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace src.Infrastructure.Interfaces {
+namespace DbAPI.Infrastructure.Interfaces {
     public interface ITableState {
         IActionResult GenerateTableStateHash();
         IActionResult VerifyTableStateHash([FromBody] string hash);

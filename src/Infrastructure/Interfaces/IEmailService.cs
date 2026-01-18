@@ -1,4 +1,4 @@
-﻿namespace src.Infrastructure.Interfaces {
+﻿namespace DbAPI.Infrastructure.Interfaces {
     public interface IEmailService {
         Task SendRecoveryEmailAsync(string email, string recoveryUrl, string username);
     }
